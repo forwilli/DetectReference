@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Bash(npm install:*)",
+      "Bash(curl:*)",
+      "Bash(node:*)",
+      "Bash(cmd.exe /c \"cd /d C:\\Users\\K3i\\Desktop\\DetectReference\\backend && npm install https-proxy-agent\")",
+      "Bash(pkill:*)",
+      "Bash(true)",
+      "Bash(npm run dev:*)",
+      "Bash(cmd.exe /c \"cd /d C:\\Users\\K3i\\Desktop\\DetectReference\\backend && npm run dev\")",
+      "Bash(ls:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm test:*)",
+      "Bash(cat:*)",
+      "Bash(kill:*)",
+      "Bash(ss:*)",
+      "Bash(npm start)",
+      "Bash(env)",
+      "Bash(NO_PROXY=127.0.0.1,localhost no_proxy=127.0.0.1,localhost node final-demo.js)",
+      "Bash(NO_PROXY=127.0.0.1,localhost node final-demo.js)"
+    ],
+    "deny": []
+  }
+}
