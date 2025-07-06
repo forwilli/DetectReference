@@ -4,7 +4,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
 export const analyzeReference = async (reference) => {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-latest' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
     
     const prompt = `请分析以下学术参考文献，提取其中的关键信息。请以JSON格式返回，包含以下字段：
     - authors: 作者列表（数组）
@@ -32,8 +32,7 @@ export const analyzeReference = async (reference) => {
       throw new Error('Failed to parse reference information')
     }
   } catch (error) {
-    console.error('Gemini API error:', error.message)
-    console.error('Full error:', error)
-    throw new Error(`Failed to analyze reference: ${error.message}`)
+    console.error('Gemini API error:', error)
+    throw new Error('Failed to analyze reference')
   }
 }

@@ -9,6 +9,10 @@ function ResultCard({ result }) {
         return 'bg-red-50 border-red-200'
       case 'mismatch':
         return 'bg-yellow-50 border-yellow-200'
+      case 'ambiguous':
+        return 'bg-orange-50 border-orange-200'
+      case 'error':
+        return 'bg-red-50 border-red-200'
       default:
         return 'bg-gray-50 border-gray-200'
     }
@@ -22,6 +26,10 @@ function ResultCard({ result }) {
         return '❌'
       case 'mismatch':
         return '⚠️'
+      case 'ambiguous':
+        return '🔍'
+      case 'error':
+        return '❗'
       default:
         return '❓'
     }
@@ -35,6 +43,10 @@ function ResultCard({ result }) {
         return 'NOT FOUND'
       case 'mismatch':
         return 'MISMATCH'
+      case 'ambiguous':
+        return 'AMBIGUOUS'
+      case 'error':
+        return 'ERROR'
       default:
         return 'UNKNOWN'
     }
@@ -58,7 +70,9 @@ function ResultCard({ result }) {
           )}
           <p className={`text-sm font-semibold mt-2 ${
             result.status === 'verified' ? 'text-green-600' : 
-            result.status === 'not_found' ? 'text-red-600' : 'text-yellow-600'
+            result.status === 'not_found' ? 'text-red-600' : 
+            result.status === 'error' ? 'text-red-600' :
+            result.status === 'ambiguous' ? 'text-orange-600' : 'text-yellow-600'
           }`}>
             {getStatusLabel(result.status)}
             {result.message && ` - ${result.message}`}

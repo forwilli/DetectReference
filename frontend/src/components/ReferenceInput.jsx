@@ -14,7 +14,8 @@ function ReferenceInput() {
     addVerificationResult,
     updateProgress,
     resetState,
-    useStreaming 
+    useStreaming,
+    error 
   } = useStore()
   
   const exampleText = `Linnenluecke, M. K., & Griffiths, A. (2015). The climate resilient organization: Adaptation and resilience to climate change and weather extremes. Edward Elgar Publishing.
@@ -93,6 +94,14 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
             automatically formatted.
           </p>
         </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-4">
+            <p className="text-red-800">
+              Verification request failed. Please try again later.
+            </p>
+          </div>
+        )}
 
         <textarea
           className="w-full h-64 p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
