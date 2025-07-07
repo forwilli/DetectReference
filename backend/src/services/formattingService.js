@@ -2,12 +2,13 @@ import Cite from 'citation-js'
 
 /**
  * Supported citation formats with their CSL template names
+ * Note: citation-js has limited built-in styles, so we use custom formatting for some
  */
 export const SUPPORTED_FORMATS = {
   'APA': 'apa',
-  'MLA': 'modern-language-association',
-  'Chicago': 'chicago-author-date',
-  'Harvard': 'harvard-cite-them-right'
+  'MLA': 'mla',
+  'Chicago': 'chicago',
+  'Harvard': 'harvard'
 }
 
 /**
@@ -51,23 +52,147 @@ export function mapToCSL(data) {
  */
 export function formatCitation(cslData, style = 'apa') {
   try {
-    // Get the CSL template name
-    const template = Object.values(SUPPORTED_FORMATS).includes(style) 
-      ? style 
-      : SUPPORTED_FORMATS[style] || 'apa'
+    // Normalize style name
+    const normalizedStyle = style.toLowerCase()
     
-    const cite = new Cite(cslData)
-    const formatted = cite.format('bibliography', {
-      format: 'text',
-      template: template,
-      lang: 'en-US'
-    })
-    // Remove trailing newline that citation-js adds
-    return formatted.trim()
+    // Use custom formatters for different styles since citation-js has limited built-in support
+    switch (normalizedStyle) {
+      case 'apa':
+        return formatAPA(cslData)
+      case 'mla':
+        return formatMLA(cslData)
+      case 'chicago':
+        return formatChicago(cslData)
+      case 'harvard':
+        return formatHarvard(cslData)
+      default:
+        // Try citation-js as fallback
+        const cite = new Cite(cslData)
+        const formatted = cite.format('bibliography', {
+          format: 'text',
+          template: 'apa',
+          lang: 'en-US'
+        })
+        return formatted.trim()
+    }
   } catch (error) {
     console.error(`Error formatting citation with style ${style}:`, error)
     // Fallback to basic formatting if citation-js fails
     return fallbackApaFormat(cslData)
+  }
+}
+
+// Helper function to format APA using citation-js
+function formatAPA(cslData) {
+  const cite = new Cite(cslData)
+  return cite.format('bibliography', {
+    format: 'text',
+    template: 'apa',
+    lang: 'en-US'
+  }).trim()
+}
+
+// Custom MLA formatter
+function formatMLA(cslData) {
+  const authors = formatAuthorListMLA(cslData.author)
+  const title = cslData.title ? `"${cslData.title}."` : ''
+  const container = cslData['container-title'] || ''
+  const year = cslData.issued?.['date-parts']?.[0]?.[0] || ''
+  
+  if (cslData.type === 'article-journal' && container) {
+    const volume = cslData.volume || ''
+    const issue = cslData.issue ? `.${cslData.issue}` : ''
+    const pages = cslData.page ? `: ${cslData.page}` : ''
+    return `${authors} ${title} ${container}, vol. ${volume}${issue}, ${year}${pages}.`.replace(/\s+/g, ' ').trim()
+  }
+  
+  // Book format
+  if (cslData.publisher) {
+    return `${authors} ${title} ${cslData.publisher}, ${year}.`.replace(/\s+/g, ' ').trim()
+  }
+  
+  // Default
+  return `${authors} ${title} ${year}.`.replace(/\s+/g, ' ').trim()
+}
+
+// Custom Chicago formatter (Author-Date)
+function formatChicago(cslData) {
+  const authors = formatAuthorList(cslData.author)
+  const year = cslData.issued?.['date-parts']?.[0]?.[0] || 'n.d.'
+  const title = cslData.title || 'Untitled'
+  
+  if (cslData['container-title']) {
+    let citation = `${authors} ${year}. "${title}." ${cslData['container-title']}`
+    if (cslData.volume) {
+      citation += ` ${cslData.volume}`
+      if (cslData.issue) {
+        citation += ` (${cslData.issue})`
+      }
+    }
+    if (cslData.page) {
+      citation += `: ${cslData.page}`
+    }
+    return citation + '.'
+  }
+  
+  // Book
+  if (cslData.publisher) {
+    return `${authors} ${year}. ${title}. ${cslData.publisher}.`
+  }
+  
+  return `${authors} ${year}. ${title}.`
+}
+
+// Custom Harvard formatter
+function formatHarvard(cslData) {
+  const authors = formatAuthorList(cslData.author)
+  const year = cslData.issued?.['date-parts']?.[0]?.[0] || 'n.d.'
+  const title = cslData.title || 'Untitled'
+  
+  if (cslData['container-title']) {
+    let citation = `${authors} ${year}, '${title}', ${cslData['container-title']}`
+    if (cslData.volume) {
+      citation += `, vol. ${cslData.volume}`
+      if (cslData.issue) {
+        citation += `, no. ${cslData.issue}`
+      }
+    }
+    if (cslData.page) {
+      citation += `, pp. ${cslData.page}`
+    }
+    return citation + '.'
+  }
+  
+  // Book
+  if (cslData.publisher) {
+    return `${authors} ${year}, ${title}, ${cslData.publisher}.`
+  }
+  
+  return `${authors} ${year}, ${title}.`
+}
+
+// MLA-specific author formatter
+function formatAuthorListMLA(authors) {
+  if (!authors || authors.length === 0) return 'Unknown Author.'
+  
+  const formatName = (author, isFirst = false) => {
+    if (author.family && author.given) {
+      if (isFirst) {
+        return `${author.family}, ${author.given}`
+      }
+      return `${author.given} ${author.family}`
+    }
+    return author.family || 'Unknown'
+  }
+  
+  if (authors.length === 1) {
+    return formatName(authors[0], true) + '.'
+  } else if (authors.length === 2) {
+    return `${formatName(authors[0], true)}, and ${formatName(authors[1])}.`
+  } else if (authors.length === 3) {
+    return `${formatName(authors[0], true)}, ${formatName(authors[1])}, and ${formatName(authors[2])}.`
+  } else {
+    return `${formatName(authors[0], true)}, et al.`
   }
 }
 

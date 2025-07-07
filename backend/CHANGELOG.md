@@ -1,5 +1,15 @@
 # Backend Changelog
 
+## [0.2.1] - 2025-01-07
+
+### Fixed
+- Multi-format citation now produces distinct outputs for each style
+- Implemented custom formatters for MLA, Chicago, and Harvard styles
+- Fixed issue where all formats showed identical APA-style output
+
+### Changed
+- formatCitation now uses custom implementations for each style instead of relying on citation-js templates
+
 ## [0.2.0] - 2025-01-07
 
 ### Added
