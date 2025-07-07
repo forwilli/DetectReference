@@ -105,7 +105,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
               <p className="text-xs text-muted-foreground">One per line • We verify with CrossRef & Google Scholar</p>
             </div>
             <div className="flex-shrink-0 hidden sm:block">
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-800">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
                 Detects Hallucinations
               </span>
             </div>
