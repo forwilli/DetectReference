@@ -1,5 +1,20 @@
 # Frontend Changelog
 
+## [0.3.0] - 2025-01-07
+
+### Added
+- Shadcn/ui infrastructure setup with components.json
+- CSS variables theme system for light/dark mode support
+- Core shadcn/ui components: Button, Card, Textarea, Select, Alert
+- Vite path alias configuration (@/ imports)
+- lib/utils.js with cn() utility function
+- tailwindcss-animate plugin for animations
+
+### Changed
+- Updated tailwind.config.js to support shadcn/ui requirements
+- Enhanced index.css with CSS variable definitions
+- Added Vite resolve alias configuration
+
 ## [0.2.0] - 2025-01-07
 
 ### Added

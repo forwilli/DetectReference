@@ -1,10 +1,18 @@
 import React from 'react'
 import ReferenceInput from './components/ReferenceInput'
 import VerificationResults from './components/VerificationResults'
+import ShadcnTest from './components/ShadcnTest'
 import useStore from './store/useStore'
 
 function App() {
   const { verificationResults } = useStore()
+  
+  // Temporarily show Shadcn test component
+  const showTest = false
+
+  if (showTest) {
+    return <ShadcnTest />
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
