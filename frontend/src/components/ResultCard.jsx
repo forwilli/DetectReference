@@ -8,16 +8,29 @@ function ResultCard({ result }) {
   const [copied, setCopied] = useState(false)
   const [selectedFormat, setSelectedFormat] = useState('apa')
   
-  // Utility function to strip HTML tags from text
-  const stripHtmlTags = (text) => {
-    // Remove all HTML tags (handles <i>, </i>, <b>, </b>, <em>, </em>, etc.)
-    return text.replace(/<[^>]*>/g, '')
+  // Copy citation with rich text formatting
+  const copyRichText = async (htmlText, plainText) => {
+    try {
+      // Use ClipboardItem API to write both HTML and plain text
+      const clipboardItem = new ClipboardItem({
+        'text/html': new Blob([htmlText], { type: 'text/html' }),
+        'text/plain': new Blob([plainText], { type: 'text/plain' })
+      })
+      await navigator.clipboard.write([clipboardItem])
+      return true
+    } catch (err) {
+      // Fallback to plain text if rich text fails
+      console.warn('Rich text copy failed, falling back to plain text:', err)
+      await navigator.clipboard.writeText(plainText)
+      return false
+    }
   }
   
-  const handleCopy = () => {
-    // Strip HTML tags before copying
-    const plainTextReference = stripHtmlTags(result.reference)
-    navigator.clipboard.writeText(plainTextReference)
+  const handleCopy = async () => {
+    // Create plain text version
+    const plainTextReference = result.reference.replace(/<[^>]*>/g, '')
+    
+    await copyRichText(result.reference, plainTextReference)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }

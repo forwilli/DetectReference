@@ -61,26 +61,41 @@ Johnson, M. (2021). Book title. Publisher Name.`
     }
   }
 
-  // Utility function to strip HTML tags from citation text
-  const stripHtmlTags = (text) => {
-    // Remove all HTML tags (handles <i>, </i>, <b>, </b>, <em>, </em>, etc.)
-    return text.replace(/<[^>]*>/g, '')
-  }
-
-  const handleCopyAll = () => {
-    if (formattedResults) {
-      // Strip HTML tags from all citations before copying
-      const allFormatted = formattedResults.formatted
-        .map(citation => stripHtmlTags(citation))
-        .join('\n\n')
-      navigator.clipboard.writeText(allFormatted)
+  // Copy citation with rich text formatting
+  const copyRichText = async (htmlText, plainText) => {
+    try {
+      // Use ClipboardItem API to write both HTML and plain text
+      const clipboardItem = new ClipboardItem({
+        'text/html': new Blob([htmlText], { type: 'text/html' }),
+        'text/plain': new Blob([plainText], { type: 'text/plain' })
+      })
+      await navigator.clipboard.write([clipboardItem])
+      return true
+    } catch (err) {
+      // Fallback to plain text if rich text fails
+      console.warn('Rich text copy failed, falling back to plain text:', err)
+      await navigator.clipboard.writeText(plainText)
+      return false
     }
   }
 
-  const handleCopySingle = (citation) => {
-    // Strip HTML tags before copying
-    const plainTextCitation = stripHtmlTags(citation)
-    navigator.clipboard.writeText(plainTextCitation)
+  const handleCopyAll = async () => {
+    if (formattedResults) {
+      // Create both HTML and plain text versions
+      const htmlFormatted = formattedResults.formatted.join('<br><br>')
+      const plainFormatted = formattedResults.formatted
+        .map(citation => citation.replace(/<[^>]*>/g, ''))
+        .join('\n\n')
+      
+      await copyRichText(htmlFormatted, plainFormatted)
+    }
+  }
+
+  const handleCopySingle = async (citation) => {
+    // Create plain text version
+    const plainTextCitation = citation.replace(/<[^>]*>/g, '')
+    
+    await copyRichText(citation, plainTextCitation)
   }
 
   return (
