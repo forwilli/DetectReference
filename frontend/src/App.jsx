@@ -60,7 +60,7 @@ function App() {
             <>
               <div className="text-center space-y-4">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                  Reference Verifier
+                  Free Reference Verifier
                   <br className="hidden sm:inline" />
                   <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">& Citation Generator</span>
                 </h1>
@@ -119,10 +119,14 @@ function App() {
           <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
             <span>© 2025 Cite</span>
             <span className="hidden sm:inline">•</span>
-            <span className="hidden sm:inline">APA • MLA • Chicago • Harvard</span>
+            <span>Free Forever</span>
+            <span>•</span>
+            <span className="hidden md:inline">AI Hallucination Detector</span>
+            <span className="hidden md:inline">•</span>
+            <span>APA • MLA • Chicago • Harvard</span>
             <span className="hidden sm:inline">•</span>
-            <span>Made for students ❤️</span>
-            <span className="hidden sm:inline">•</span>
+            <span className="hidden lg:inline">CrossRef & Google Scholar Verified</span>
+            <span className="hidden lg:inline">•</span>
             <a href="https://github.com/forwitli/DetectReference" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors">
               Open Source
             </a>

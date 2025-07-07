@@ -94,8 +94,10 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         )}
 
         <div className="space-y-2">
-          <p className="text-sm font-medium text-foreground">
-            Paste your references below, one per line. Powered by CrossRef and Google Scholar.
+          <p className="text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">Drop your references here</span> — one per line
+            <br />
+            <span className="text-xs">We'll check them against CrossRef & Google Scholar databases</span>
           </p>
           <Textarea
             className="min-h-[250px] font-mono text-sm"
