@@ -29,7 +29,10 @@ if (missingVars.length > 0) {
   missingVars.forEach(v => console.error(`   - ${v}`))
   console.error('\nPlease configure these variables in your .env file or environment.')
   console.error('See .env.example for reference.\n')
-  process.exit(1)
+  // Don't exit in production, just warn
+  if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    process.exit(1)
+  }
 }
 
 import express from 'express'
@@ -41,6 +44,15 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+
+// Health check route
+app.get('/api/test', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'Backend API is running',
+    timestamp: new Date().toISOString()
+  })
+})
 
 app.use('/api', verifyRouter)
 
