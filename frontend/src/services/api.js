@@ -21,7 +21,7 @@ export const verifyReferences = async (references) => {
 export const verifyReferencesStream = (references, onResult, onProgress, onComplete, onError) => {
   const controller = new AbortController()
   
-  fetch('/api/verify-references-stream', {
+  fetch(`${API_URL}/api/verify-references-stream`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
