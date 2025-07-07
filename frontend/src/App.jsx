@@ -10,7 +10,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('verify')
 
   return (
-    <div className="h-screen bg-background flex flex-col relative overflow-hidden">
+    <div className={`${verificationResults.length === 0 ? 'h-screen overflow-hidden' : 'min-h-screen'} bg-background flex flex-col relative`}>
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none -z-10" />
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none -z-10" />
