@@ -29,7 +29,10 @@
       "Bash(rg:*)",
       "Bash(grep:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npx:*)",
+      "Bash(npm run build:*)",
+      "Bash(git restore:*)"
     ],
     "deny": []
   }
