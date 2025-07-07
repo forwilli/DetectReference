@@ -27,7 +27,9 @@
       "Bash(NO_PROXY=127.0.0.1,localhost node final-demo.js)",
       "Bash(npm run lint:*)",
       "Bash(rg:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
