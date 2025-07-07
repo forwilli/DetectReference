@@ -3,7 +3,6 @@ import ReferenceInput from './components/ReferenceInput'
 import VerificationResults from './components/VerificationResults'
 import CitationFormatter from './components/CitationFormatter'
 import SwanLogo from './components/SwanLogo'
-import FooterDebug from './components/FooterDebug'
 import useStore from './store/useStore'
 
 function App() {
@@ -152,9 +151,6 @@ function App() {
           </div>
         </div>
       </footer>
-      
-      {/* Debug Info - Remove in production */}
-      <FooterDebug />
     </div>
   )
 }
