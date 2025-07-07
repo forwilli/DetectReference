@@ -1,5 +1,22 @@
 # Frontend Changelog
 
+## [0.4.0] - 2025-01-07
+
+### Added
+- Modern header with gradient text effect in App.jsx
+- Footer with copyright and shadcn/ui attribution
+
+### Changed
+- Refactored ReferenceInput.jsx to use Card, Button, Textarea, and Alert components from shadcn/ui
+- Refactored ResultCard.jsx to use Card, Select, and Button components from shadcn/ui
+- Refactored VerificationResults.jsx to use Button component and theme colors
+- Updated all text colors to use theme variables (text-foreground, text-muted-foreground)
+- Updated background colors to use theme variables (bg-primary, bg-secondary, bg-muted)
+- Simplified Select component usage with native HTML select
+
+### Fixed
+- Build error with Select component imports
+
 ## [0.3.0] - 2025-01-07
 
 ### Added

@@ -1,6 +1,10 @@
 import React, { useState, useRef } from 'react'
 import useStore from '../store/useStore'
 import { verifyReferences, verifyReferencesStream } from '../services/api'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 function ReferenceInput() {
   const [inputText, setInputText] = useState('')
@@ -78,58 +82,62 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <p className="text-gray-600 mb-4">
+    <Card className="max-w-4xl mx-auto">
+      <CardHeader>
+        <CardTitle>Enter Your References</CardTitle>
+        <CardDescription>
           Paste your references below, one per line. This tool uses the Gemini AI and Google Search 
           to verify each entry.
-        </p>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
         
-        <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4 mb-6">
-          <p className="text-sm">
+        <Alert className="mb-6">
+          <AlertDescription>
             <strong>Note:</strong> A status like "Not Found" or "Mismatch" indicates the reference couldn't be strongly matched
             against the search results. It does **not** definitively prove the reference is
             fake or wrong (it could be new, unindexed, or formatted differently). Use this as a
             preliminary check. "Verified" indicates a good match was found, and the reference may have been
             automatically formatted.
-          </p>
-        </div>
+          </AlertDescription>
+        </Alert>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-4">
-            <p className="text-red-800">
+          <Alert variant="destructive" className="mb-4">
+            <AlertDescription>
               Verification request failed. Please try again later.
-            </p>
-          </div>
+            </AlertDescription>
+          </Alert>
         )}
 
-        <textarea
-          className="w-full h-64 p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        <Textarea
+          className="min-h-[256px] mb-6"
           placeholder={exampleText}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />
 
-        <div className="mt-6 flex justify-center gap-4">
+        <div className="flex justify-center gap-4">
           {!useStore.getState().isVerifying ? (
-            <button
+            <Button
               onClick={handleVerify}
               disabled={!inputText.trim()}
-              className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              size="lg"
             >
               🔄 Verify References
-            </button>
+            </Button>
           ) : (
-            <button
+            <Button
               onClick={handleCancel}
-              className="px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              variant="destructive"
+              size="lg"
             >
               ❌ Cancel Verification
-            </button>
+            </Button>
           )}
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }
 
