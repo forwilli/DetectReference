@@ -36,7 +36,8 @@ Johnson, M. (2021). Book title. Publisher Name.`
     setFormattedResults(null)
 
     try {
-      const response = await fetch('/api/format-citations', {
+      const API_URL = import.meta.env.VITE_API_URL || ''
+      const response = await fetch(`${API_URL}/api/format-citations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
