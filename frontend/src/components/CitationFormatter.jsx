@@ -73,12 +73,12 @@ Johnson, M. (2021). Book title. Publisher Name.`
   }
 
   return (
-    <Card className="animate-in paper-edge">
+    <Card className="animate-in">
       <CardHeader>
-        <CardTitle className="font-serif text-[#1a365d]">
+        <CardTitle>
           Citation Formatter
         </CardTitle>
-        <p className="text-sm text-[#92400e]/70 font-serif italic">
+        <p className="text-sm text-muted-foreground">
           Transform your references into perfectly formatted citations.
         </p>
       </CardHeader>
@@ -105,7 +105,7 @@ Johnson, M. (2021). Book title. Publisher Name.`
             References (one per line)
           </p>
           <Textarea
-            className="min-h-[200px] font-serif text-sm bg-white/40 backdrop-blur-sm border-[#e2e8f0] text-[#22543d] placeholder:text-[#92400e]/50 shadow-inner"
+            className="min-h-[200px] font-mono text-sm"
             placeholder={exampleText}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}

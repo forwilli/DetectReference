@@ -10,23 +10,23 @@ function App() {
   const [activeTab, setActiveTab] = useState('verify')
 
   return (
-    <div className="min-h-screen paper-texture flex flex-col relative overflow-hidden">
-      {/* Paper overlay effect */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#fafaf8] to-transparent opacity-50" />
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[rgba(26,54,93,0.03)] to-transparent" />
-      </div>
+    <div className="min-h-screen bg-background flex flex-col relative">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none" />
       
-      {/* Page edges */}
-      <div className="absolute left-12 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#e2e8f0] to-transparent opacity-30" />
-      <div className="absolute right-12 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#e2e8f0] to-transparent opacity-30" />
-      {/* Scholarly Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-[#e2e8f0] bg-[#fafaf8]/95 backdrop-blur supports-[backdrop-filter]:bg-[#fafaf8]/60">
+      {/* Subtle decorative elements */}
+      <div className="absolute left-0 top-1/3 w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent pointer-events-none" />
+      <div className="absolute right-0 top-1/3 w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent pointer-events-none" />
+      <div className="absolute left-10 top-1/2 w-px h-48 bg-gradient-to-b from-transparent via-gray-100 to-transparent pointer-events-none" />
+      <div className="absolute right-10 top-1/2 w-px h-48 bg-gradient-to-b from-transparent via-gray-100 to-transparent pointer-events-none" />
+      {/* Modern Header */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center">
           <div className="mr-4 flex">
             <a className="mr-6 flex items-center space-x-2" href="/">
               <SwanLogo className="h-6 w-6" />
-              <span className="font-serif text-lg tracking-wide text-[#1a365d]">
+              <span className="font-bold inline-block">
                 SwanRef
               </span>
             </a>
@@ -59,45 +59,47 @@ function App() {
           {verificationResults.length === 0 ? (
             <>
               <div className="text-center space-y-6">
-                <h1 className="text-4xl font-serif tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-[#1a365d]">
-                  Where Truth Meets Citation
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+                  Verify Your References
+                  <br className="hidden sm:inline" />
+                  <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">Format with Precision</span>
                 </h1>
-                <p className="mt-6 mx-auto max-w-[600px] text-lg text-muted-foreground leading-relaxed">
-                  A meticulous verification system for academic integrity. 
-                  Transform your references into perfectly formatted citations.
+                <p className="mx-auto max-w-[700px] text-lg text-muted-foreground sm:text-xl">
+                  Ensure the authenticity of your academic citations and transform them into 
+                  perfectly formatted references across multiple citation styles.
                 </p>
                 
                 {/* Tab Navigation */}
-                <div className="flex justify-center gap-6 py-8">
+                <div className="flex justify-center gap-4 py-8">
                   <button
                     onClick={() => setActiveTab('verify')}
-                    className={`inline-flex items-center justify-center text-sm font-serif transition-all duration-300 h-10 px-8 ${
+                    className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-8 ${
                       activeTab === 'verify'
-                        ? 'text-[#1a365d] border-b-2 border-[#1a365d]'
-                        : 'text-[#92400e]/60 hover:text-[#92400e] border-b-2 border-transparent'
+                        ? 'bg-primary text-primary-foreground shadow hover:bg-primary/90'
+                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                     }`}
                   >
-                    Verification Chamber
+                    Verify References
                   </button>
                   <button
                     onClick={() => setActiveTab('format')}
-                    className={`inline-flex items-center justify-center text-sm font-serif transition-all duration-300 h-10 px-8 ${
+                    className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-8 ${
                       activeTab === 'format'
-                        ? 'text-[#1a365d] border-b-2 border-[#1a365d]'
-                        : 'text-[#92400e]/60 hover:text-[#92400e] border-b-2 border-transparent'
+                        ? 'bg-primary text-primary-foreground shadow hover:bg-primary/90'
+                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                     }`}
                   >
-                    Formatting Atelier
+                    Format Citations
                   </button>
                 </div>
               </div>
               
               <div className="relative">
-                {/* Paper shadow effect */}
+                {/* Subtle background glow */}
                 <div className="absolute inset-0 -z-10">
-                  <div className="absolute inset-4 bg-white/80 rounded-lg shadow-2xl" />
-                  <div className="absolute inset-6 bg-white/60 rounded-lg shadow-xl" />
-                  <div className="absolute inset-8 bg-white/40 rounded-lg shadow-lg" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px]">
+                    <div className="absolute inset-0 rounded-full bg-gradient-radial from-gray-100 to-transparent opacity-40" />
+                  </div>
                 </div>
                 
                 <div className="relative">

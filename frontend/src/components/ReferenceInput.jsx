@@ -93,23 +93,16 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
           </Alert>
         )}
 
-        <div className="space-y-3">
-          <p className="text-sm font-serif text-[#1a365d] italic">
-            "The pursuit of truth requires meticulous verification"
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-foreground">
+            Paste your references below, one per line. Powered by CrossRef and Google Scholar.
           </p>
-          <div className="relative paper-edge rounded-lg">
-            {/* Scanning line when verifying */}
-            {useStore.getState().isVerifying && (
-              <div className="scan-line pointer-events-none" />
-            )}
-            <div className="absolute left-0 top-0 bottom-0 w-8 border-l-2 border-[#e2e8f0] opacity-50" />
-            <Textarea
-              className="min-h-[350px] font-serif text-sm leading-relaxed bg-white/40 backdrop-blur-sm border-[#e2e8f0] pl-12 text-[#22543d] placeholder:text-[#92400e]/50 shadow-inner"
-              placeholder={exampleText}
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-            />
-          </div>
+          <Textarea
+            className="min-h-[300px] font-mono text-sm"
+            placeholder={exampleText}
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+          />
         </div>
 
         <div className="flex justify-center">
@@ -118,10 +111,10 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
               onClick={handleVerify}
               disabled={!inputText.trim()}
               size="lg"
-              className={`transition-all duration-500 font-serif tracking-wide ${
+              className={`transition-all duration-300 ${
                 inputText.trim() 
-                  ? 'bg-[#1a365d] hover:bg-[#22543d] text-white shadow-lg transform hover:scale-105' 
-                  : 'bg-transparent text-[#1a365d]/40 border-2 border-dashed border-[#1a365d]/20'
+                  ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg' 
+                  : 'bg-primary/20 text-primary/50 backdrop-blur-sm border border-primary/30'
               }`}
             >
               <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
