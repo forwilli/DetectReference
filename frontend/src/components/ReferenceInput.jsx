@@ -93,12 +93,23 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
           </Alert>
         )}
 
-        <div className="space-y-2">
-          <p className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">Drop your references here</span> — one per line
-            <br />
-            <span className="text-xs">We'll check them against CrossRef & Google Scholar databases</span>
-          </p>
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 px-4 py-3 bg-muted/30 rounded-lg border border-border/50">
+            <div className="flex-shrink-0">
+              <svg className="w-5 h-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-foreground">Paste your references</p>
+              <p className="text-xs text-muted-foreground">One per line • We verify with CrossRef & Google Scholar</p>
+            </div>
+            <div className="flex-shrink-0 hidden sm:block">
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                AI Check
+              </span>
+            </div>
+          </div>
           <Textarea
             className="min-h-[250px] font-mono text-sm"
             placeholder={exampleText}
