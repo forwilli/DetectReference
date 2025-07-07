@@ -5,18 +5,34 @@ import React from 'react'
  * Handles italics and other HTML formatting in citations
  */
 function FormattedCitation({ citation }) {
-  // Convert <i> tags to proper React elements
+  // Convert HTML tags to proper React elements
   const renderFormattedText = (text) => {
     if (!text) return null
     
-    // Split by italic tags
-    const parts = text.split(/(<i>.*?<\/i>)/g)
+    // Handle multiple HTML tags: <i>, <b>, <em>, <strong>
+    const htmlPattern = /(<(?:i|b|em|strong)>.*?<\/(?:i|b|em|strong)>)/g
+    const parts = text.split(htmlPattern)
     
     return parts.map((part, index) => {
-      if (part.startsWith('<i>') && part.endsWith('</i>')) {
-        // Remove the tags and render in italics
+      // Handle italic tags
+      if (part.match(/^<i>.*<\/i>$/)) {
         const content = part.slice(3, -4)
         return <em key={index}>{content}</em>
+      }
+      // Handle bold tags
+      if (part.match(/^<b>.*<\/b>$/)) {
+        const content = part.slice(3, -4)
+        return <strong key={index}>{content}</strong>
+      }
+      // Handle em tags
+      if (part.match(/^<em>.*<\/em>$/)) {
+        const content = part.slice(4, -5)
+        return <em key={index}>{content}</em>
+      }
+      // Handle strong tags
+      if (part.match(/^<strong>.*<\/strong>$/)) {
+        const content = part.slice(8, -9)
+        return <strong key={index}>{content}</strong>
       }
       return <span key={index}>{part}</span>
     })

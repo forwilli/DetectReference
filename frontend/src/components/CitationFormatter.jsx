@@ -61,15 +61,26 @@ Johnson, M. (2021). Book title. Publisher Name.`
     }
   }
 
+  // Utility function to strip HTML tags from citation text
+  const stripHtmlTags = (text) => {
+    // Remove all HTML tags (handles <i>, </i>, <b>, </b>, <em>, </em>, etc.)
+    return text.replace(/<[^>]*>/g, '')
+  }
+
   const handleCopyAll = () => {
     if (formattedResults) {
-      const allFormatted = formattedResults.formatted.join('\n\n')
+      // Strip HTML tags from all citations before copying
+      const allFormatted = formattedResults.formatted
+        .map(citation => stripHtmlTags(citation))
+        .join('\n\n')
       navigator.clipboard.writeText(allFormatted)
     }
   }
 
   const handleCopySingle = (citation) => {
-    navigator.clipboard.writeText(citation)
+    // Strip HTML tags before copying
+    const plainTextCitation = stripHtmlTags(citation)
+    navigator.clipboard.writeText(plainTextCitation)
   }
 
   return (

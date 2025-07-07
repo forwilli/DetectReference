@@ -2,13 +2,22 @@ import React, { useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import FormattedCitation from './FormattedCitation'
 
 function ResultCard({ result }) {
   const [copied, setCopied] = useState(false)
   const [selectedFormat, setSelectedFormat] = useState('apa')
   
+  // Utility function to strip HTML tags from text
+  const stripHtmlTags = (text) => {
+    // Remove all HTML tags (handles <i>, </i>, <b>, </b>, <em>, </em>, etc.)
+    return text.replace(/<[^>]*>/g, '')
+  }
+  
   const handleCopy = () => {
-    navigator.clipboard.writeText(result.reference)
+    // Strip HTML tags before copying
+    const plainTextReference = stripHtmlTags(result.reference)
+    navigator.clipboard.writeText(plainTextReference)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -59,7 +68,9 @@ function ResultCard({ result }) {
             <span className="text-xl">{getStatusIcon(result.status)}</span>
           </div>
           <div className="col-span-11">
-            <p className="text-gray-800 text-sm leading-relaxed mb-3">{result.reference}</p>
+            <p className="text-gray-800 text-sm leading-relaxed mb-3">
+              <FormattedCitation citation={result.reference} />
+            </p>
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3">
                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
