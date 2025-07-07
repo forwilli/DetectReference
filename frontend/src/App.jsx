@@ -54,13 +54,13 @@ function App() {
             <>
               <div className="text-center space-y-6">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                  Build your Bibliography
+                  Verify Your References
                   <br className="hidden sm:inline" />
-                  with confidence.
+                  <span className="text-muted-foreground">Format with Precision</span>
                 </h1>
                 <p className="mx-auto max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-                  A beautifully-designed, accessible citation verification and formatting platform. 
-                  Works with your favorite frameworks. Open Source. Open Science.
+                  Ensure the authenticity of your academic citations and transform them into 
+                  perfectly formatted references across multiple citation styles.
                 </p>
                 
                 {/* Tab Navigation */}
@@ -89,10 +89,16 @@ function App() {
               </div>
               
               <div className="relative">
-                {/* Decorative elements */}
-                <div className="absolute -top-10 -left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
-                <div className="absolute -top-10 -right-10 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
-                <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000" />
+                {/* Philosophical background elements */}
+                <div className="absolute inset-0 -z-10">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px]">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 opacity-30 blur-3xl animate-pulse" />
+                  </div>
+                  <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-gray-200 to-transparent opacity-20" />
+                  <div className="absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-transparent via-gray-200 to-transparent opacity-20" />
+                  <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-20" />
+                  <div className="absolute bottom-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-20" />
+                </div>
                 
                 <div className="relative">
                   {activeTab === 'verify' ? <ReferenceInput /> : <CitationFormatter />}

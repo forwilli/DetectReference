@@ -82,21 +82,8 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
   }
 
   return (
-    <div className="space-y-8 animate-in">
-      <div className="text-center">
-        <p className="text-base text-muted-foreground">
-          Paste your references below, one per line. Powered by CrossRef and Google Scholar.
-        </p>
-      </div>
-      
-      <div className="space-y-6">
-        <div className="rounded-lg border bg-muted/50 p-4">
-          <p className="text-sm leading-normal text-muted-foreground">
-            <span className="font-medium">Note:</span> References marked as "Not Found" or "Mismatch" couldn't be strongly matched. 
-            This doesn't prove they're incorrect—they might be new, unindexed, or differently formatted. 
-            "Verified" indicates a strong match was found.
-          </p>
-        </div>
+    <div className="space-y-6 animate-in">
+      <div className="space-y-4">
 
         {error && (
           <Alert variant="destructive" className="mb-6">
@@ -106,12 +93,17 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
           </Alert>
         )}
 
-        <Textarea
-          className="min-h-[300px] font-mono text-sm"
-          placeholder={exampleText}
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-        />
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-foreground">
+            Paste your references below, one per line. Powered by CrossRef and Google Scholar.
+          </p>
+          <Textarea
+            className="min-h-[300px] font-mono text-sm"
+            placeholder={exampleText}
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+          />
+        </div>
 
         <div className="flex justify-center">
           {!useStore.getState().isVerifying ? (
@@ -119,7 +111,11 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
               onClick={handleVerify}
               disabled={!inputText.trim()}
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              className={`transition-all duration-300 ${
+                inputText.trim() 
+                  ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg' 
+                  : 'bg-primary/20 text-primary/50 backdrop-blur-sm border border-primary/30'
+              }`}
             >
               <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M11 2C6.03 2 2 6.03 2 11C2 15.97 6.03 20 11 20C13.39 20 15.56 19.12 17.18 17.69L20.3 20.8C20.5 21 20.77 21.1 21.03 21.1C21.29 21.1 21.56 21 21.76 20.8C22.17 20.39 22.17 19.73 21.76 19.32L18.65 16.22C19.57 14.71 20.1 12.93 20.1 11C20.1 6.03 16.07 2 11.1 2H11ZM11 4C14.87 4 18 7.13 18 11C18 14.87 14.87 18 11 18C7.13 18 4 14.87 4 11C4 7.13 7.13 4 11 4Z" fill="currentColor"/>

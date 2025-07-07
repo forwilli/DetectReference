@@ -73,28 +73,24 @@ Johnson, M. (2021). Book title. Publisher Name.`
   }
 
   return (
-    <Card>
+    <Card className="animate-in">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <polyline points="10,9 9,9 8,9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+        <CardTitle>
           Citation Formatter
         </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Transform your references into perfectly formatted citations.
+        </p>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-2 block">
+          <label className="text-sm font-medium mb-2 block">
             Format Style
           </label>
           <select
             value={selectedFormat}
             onChange={(e) => setSelectedFormat(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {formats.map(format => (
               <option key={format.value} value={format.value}>
@@ -104,12 +100,12 @@ Johnson, M. (2021). Book title. Publisher Name.`
           </select>
         </div>
 
-        <div>
-          <label className="text-sm font-medium text-gray-700 mb-2 block">
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-foreground">
             References (one per line)
-          </label>
+          </p>
           <Textarea
-            className="min-h-[120px]"
+            className="min-h-[200px] font-mono text-sm"
             placeholder={exampleText}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
@@ -125,7 +121,11 @@ Johnson, M. (2021). Book title. Publisher Name.`
         <Button
           onClick={handleFormat}
           disabled={!inputText.trim() || isProcessing}
-          className="w-full"
+          className={`w-full transition-all duration-300 ${
+            inputText.trim() 
+              ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg' 
+              : 'bg-primary/20 text-primary/50 backdrop-blur-sm border border-primary/30'
+          }`}
         >
           {isProcessing ? (
             <>
@@ -162,18 +162,21 @@ Johnson, M. (2021). Book title. Publisher Name.`
             
             <div className="space-y-3">
               {formattedResults.formatted.map((citation, index) => (
-                <div key={index} className="p-3 bg-gray-50 rounded-md border">
+                <div key={index} className="group relative rounded-lg border p-3 hover:bg-accent transition-colors">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="text-sm text-gray-800 leading-relaxed flex-1">
+                    <div className="text-sm leading-relaxed flex-1">
                       <FormattedCitation citation={citation} />
                     </div>
                     <Button
                       onClick={() => handleCopySingle(citation)}
                       variant="ghost"
                       size="sm"
-                      className="text-xs"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity"
                     >
-                      Copy
+                      <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
                     </Button>
                   </div>
                 </div>
