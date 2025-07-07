@@ -11,17 +11,17 @@ function VerificationResults() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground mb-2">Verification Results</h2>
-          <p className="text-muted-foreground">
-            Verified {verificationResults.filter(r => r.status === 'verified').length} of {verificationResults.length} references
+          <h2 className="text-3xl font-serif tracking-tight text-[#1a365d] mb-2">Verification Chamber Results</h2>
+          <p className="text-[#92400e]/70 font-serif">
+            Authenticated {verificationResults.filter(r => r.status === 'verified').length} of {verificationResults.length} references
           </p>
         </div>
         <Button
           onClick={handleNewVerification}
-          className="bg-primary hover:bg-primary/90 text-primary-foreground"
+          className="bg-[#1a365d] hover:bg-[#22543d] text-white font-serif"
         >
           New Verification
         </Button>
