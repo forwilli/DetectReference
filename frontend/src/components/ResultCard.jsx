@@ -2,10 +2,15 @@ import React, { useState } from 'react'
 
 function ResultCard({ result }) {
   const [copied, setCopied] = useState(false)
+  const [selectedFormat, setSelectedFormat] = useState('apa')
+  
+  // Available formats from backend
+  const availableFormats = result.formatted ? Object.keys(result.formatted) : []
 
-  const handleCopyAPA = () => {
-    if (result.formattedAPA) {
-      navigator.clipboard.writeText(result.formattedAPA)
+  const handleCopy = () => {
+    const textToCopy = result.formatted?.[selectedFormat] || result.formattedAPA
+    if (textToCopy) {
+      navigator.clipboard.writeText(textToCopy)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     }
@@ -87,21 +92,36 @@ function ResultCard({ result }) {
             {result.message && ` - ${result.message}`}
           </p>
           
-          {/* Display formatted APA citation for verified references */}
-          {result.status === 'verified' && result.formattedAPA && (
+          {/* Display formatted citation for verified references */}
+          {result.status === 'verified' && (result.formatted || result.formattedAPA) && (
             <div className="mt-4 p-3 bg-gray-50 rounded border border-gray-200">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <p className="text-xs font-medium text-gray-600 mb-1">Formatted Citation (APA)</p>
-                  <p className="text-sm text-gray-800">{result.formattedAPA}</p>
+              <div className="flex items-start justify-between mb-2">
+                <div className="flex items-center space-x-2">
+                  <p className="text-xs font-medium text-gray-600">Formatted Citation</p>
+                  {availableFormats.length > 1 && (
+                    <select
+                      value={selectedFormat}
+                      onChange={(e) => setSelectedFormat(e.target.value)}
+                      className="text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    >
+                      {availableFormats.map(format => (
+                        <option key={format} value={format}>
+                          {format.toUpperCase()}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
                 <button
-                  onClick={handleCopyAPA}
-                  className="ml-3 px-3 py-1 text-xs bg-gray-200 hover:bg-gray-300 rounded transition-colors duration-200"
-                  title="Copy APA citation"
+                  onClick={handleCopy}
+                  className="px-3 py-1 text-xs bg-gray-200 hover:bg-gray-300 rounded transition-colors duration-200"
+                  title={`Copy ${selectedFormat.toUpperCase()} citation`}
                 >
                   {copied ? 'Copied!' : 'Copy'}
                 </button>
+              </div>
+              <div className="text-sm text-gray-800">
+                {result.formatted?.[selectedFormat] || result.formattedAPA}
               </div>
             </div>
           )}

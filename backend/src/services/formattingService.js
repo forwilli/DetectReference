@@ -1,6 +1,16 @@
 import Cite from 'citation-js'
 
 /**
+ * Supported citation formats with their CSL template names
+ */
+export const SUPPORTED_FORMATS = {
+  'APA': 'apa',
+  'MLA': 'modern-language-association',
+  'Chicago': 'chicago-author-date',
+  'Harvard': 'harvard-cite-them-right'
+}
+
+/**
  * Maps internal data structure (from Gemini/CrossRef) to CSL-JSON format
  * This is the core task for Phase 1 - correctly parsing author names in "姓, 名" format
  * @param {Object} data - Internal reference data
@@ -34,25 +44,41 @@ export function mapToCSL(data) {
 }
 
 /**
- * Format CSL-JSON data as APA citation string
+ * Format CSL-JSON data with specified citation style
  * @param {Object} cslData - CSL-JSON formatted data
- * @returns {string} APA formatted citation
+ * @param {string} style - Citation style (e.g., 'apa', 'mla', 'chicago', 'harvard')
+ * @returns {string} Formatted citation
  */
-export function formatAsApa(cslData) {
+export function formatCitation(cslData, style = 'apa') {
   try {
+    // Get the CSL template name
+    const template = Object.values(SUPPORTED_FORMATS).includes(style) 
+      ? style 
+      : SUPPORTED_FORMATS[style] || 'apa'
+    
     const cite = new Cite(cslData)
     const formatted = cite.format('bibliography', {
       format: 'text',
-      template: 'apa',
+      template: template,
       lang: 'en-US'
     })
     // Remove trailing newline that citation-js adds
     return formatted.trim()
   } catch (error) {
-    console.error('Error formatting citation:', error)
+    console.error(`Error formatting citation with style ${style}:`, error)
     // Fallback to basic formatting if citation-js fails
     return fallbackApaFormat(cslData)
   }
+}
+
+/**
+ * Format CSL-JSON data as APA citation string
+ * @param {Object} cslData - CSL-JSON formatted data
+ * @returns {string} APA formatted citation
+ * @deprecated Use formatCitation(cslData, 'apa') instead
+ */
+export function formatAsApa(cslData) {
+  return formatCitation(cslData, 'apa')
 }
 
 /**
@@ -226,5 +252,7 @@ function formatAuthorList(authors) {
 
 export default {
   mapToCSL,
-  formatAsApa
+  formatAsApa,
+  formatCitation,
+  SUPPORTED_FORMATS
 }

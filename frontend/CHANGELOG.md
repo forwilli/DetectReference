@@ -1,5 +1,16 @@
 # Frontend Changelog
 
+## [0.2.0] - 2025-01-07
+
+### Added
+- Format selector dropdown for switching between citation styles
+- Support for displaying multiple citation formats (APA, MLA, Chicago, Harvard)
+- Dynamic format detection based on backend response
+
+### Changed
+- Copy button now copies the currently selected format
+- Citation display shows selected format name in copy button tooltip
+
 ## [0.1.0] - 2025-01-07
 
 ### Added

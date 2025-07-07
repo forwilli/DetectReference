@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'
-import { mapToCSL, formatAsApa } from '../formattingService.js'
+import { mapToCSL, formatAsApa, formatCitation, SUPPORTED_FORMATS } from '../formattingService.js'
 
 describe('formattingService', () => {
   describe('mapToCSL', () => {
@@ -215,6 +215,63 @@ describe('formattingService', () => {
       expect(result).toContain('Smith')
       // Either citation-js formats with all authors or fallback uses et al.
       expect(result.match(/et al\.|Doe.*Johnson/)).toBeTruthy()
+    })
+  })
+
+  describe('formatCitation', () => {
+    it('should support multiple citation formats', () => {
+      const cslData = {
+        type: 'article-journal',
+        title: 'Test Article',
+        author: [{ family: 'Smith', given: 'John' }],
+        issued: { 'date-parts': [[2023]] },
+        'container-title': 'Test Journal'
+      }
+      
+      // Test each supported format
+      Object.keys(SUPPORTED_FORMATS).forEach(formatName => {
+        const result = formatCitation(cslData, formatName)
+        expect(result).toBeTruthy()
+        expect(result.length).toBeGreaterThan(0)
+        expect(result).toContain('Smith')
+        expect(result).toContain('2023')
+      })
+    })
+
+    it('should default to APA when style is not provided', () => {
+      const cslData = {
+        type: 'book',
+        title: 'Test Book',
+        author: [{ family: 'Author', given: 'A' }],
+        issued: { 'date-parts': [[2023]] }
+      }
+      
+      const defaultResult = formatCitation(cslData)
+      const apaResult = formatCitation(cslData, 'APA')
+      
+      expect(defaultResult).toBe(apaResult)
+    })
+
+    it('should handle CSL template names directly', () => {
+      const cslData = {
+        type: 'article',
+        title: 'Test Article',
+        author: [{ family: 'Test', given: 'Author' }],
+        issued: { 'date-parts': [[2023]] }
+      }
+      
+      // Using CSL template name directly
+      const result = formatCitation(cslData, 'modern-language-association')
+      expect(result).toBeTruthy()
+      expect(result).toContain('Test')
+    })
+
+    it('should verify SUPPORTED_FORMATS constant', () => {
+      expect(SUPPORTED_FORMATS).toBeDefined()
+      expect(Object.keys(SUPPORTED_FORMATS)).toContain('APA')
+      expect(Object.keys(SUPPORTED_FORMATS)).toContain('MLA')
+      expect(Object.keys(SUPPORTED_FORMATS)).toContain('Chicago')
+      expect(Object.keys(SUPPORTED_FORMATS)).toContain('Harvard')
     })
   })
 })

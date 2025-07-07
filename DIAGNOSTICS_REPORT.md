@@ -24,6 +24,18 @@
 
 ## 3. 最近完成的工作 (Recently Completed)
 
+### ✅ 扩展参考文献格式支持 (2025-01-07)
+- **实施内容**:
+  - ✅ 创建通用的 formatCitation 函数支持多种格式
+  - ✅ 添加 SUPPORTED_FORMATS 常量定义（APA、MLA、Chicago、Harvard）
+  - ✅ 更新 verifyControllerSSE.js 返回多格式结果
+  - ✅ 更新前端 ResultCard 支持格式切换下拉菜单
+  - ✅ 添加多格式单元测试（4个新测试用例）
+- **成果**: 
+  - 用户现在可以在APA、MLA、Chicago、Harvard格式间切换
+  - 保持向后兼容性（formattedAPA字段仍然可用）
+  - 前端自动检测可用格式并显示切换器
+
 ### ✅ ADR-002: 参考文献格式化 Phase 1 (2025-01-07)
 - **实施内容**:
   - ✅ 安装 citation-js 依赖（包括 patch-package 解决依赖问题）
@@ -99,23 +111,31 @@
 
 ## 3. 下一步行动计划 (Next Action Plan)
 
-- **当前任务: 扩展参考文献格式**
-  - **状态**: 📝 **规划中**
+- **[已完成] 扩展参考文献格式**
+  - **状态**: ✅ **已完成** (2025-01-07)
   - **目标**: 将格式化功能从仅支持APA，扩展到支持MLA、芝加哥 (Chicago) 和哈佛 (Harvard) 等多种主流学术格式。
   - **技术分析**:
       - **核心技术**: `citation-js` 库通过 **CSL (Citation Style Language)** 模板来定义引用样式。因此，我们无需手动编写格式化规则。
-      - **实施关键**: 找到并使用正确的CSL模板名称。例如，`'apa'` 用于APA格式，`'mla'` 用于MLA格式。
+      - **实施关键**: 找到并使用正确的CSL模板名称。研究表明，可用的模板包括：`apa`, `modern-language-association` (MLA), `chicago-author-date`, `harvard-cite-them-right`。
   - **建议的执行步骤**:
       1.  **扩展 `formattingService.js`**:
-          - 修改 `formatAsApa` 函数，使其成为一个更通用的 `formatCitation(cslData, style)` 函数，其中 `style` 参数是CSL模板的名称（如 'apa'）。
-          - 在该服务中导出一个支持的格式列表，例如 `SUPPORTED_FORMATS = ['apa', 'mla', 'chicago-author-date', 'harvard-cite-them-right']`。
+          - 修改 `formatAsApa` 函数，使其成为一个更通用的 `formatCitation(cslData, style)` 函数。
+          - 在该服务中导出一个支持的格式列表及其对应的模板名称，例如:
+            ```javascript
+            export const SUPPORTED_FORMATS = {
+              'APA': 'apa',
+              'MLA': 'modern-language-association',
+              'Chicago': 'chicago-author-date',
+              'Harvard': 'harvard-cite-them-right'
+            };
+            ```
       2.  **改造 `verifyControllerSSE.js`**:
-          - (可选，可延后) 允许API请求中包含一个 `format` 参数，以指定所需的输出格式。如果未提供，则默认为 `apa`。
-          - 在成功验证后，循环调用 `formatCitation` 函数，为所有支持的格式生成引用字符串，并将它们作为一个对象（如 `formatted: { apa: '...', mla: '...' }`）返回给前端。
+          - 在成功验证后，循环遍历 `SUPPORTED_FORMATS` 列表，为每种格式生成引用字符串。
+          - 将结果作为一个对象（如 `formatted: { apa: '...', mla: '...' }`）返回给前端。
       3.  **更新前端 `ResultCard.jsx`**:
-          - 当接收到包含多种格式的 `formatted` 对象时，使用一个下拉菜单或标签页来允许用户切换和预览不同的引用样式。
-          - "复制"按钮的功能应与当前选中的格式保持同步。
-      4.  **更新单元测试**: 扩展 `formattingService.test.js`，为新增的MLA、Chicago等格式添加测试用例，确保输出的准确性。
+          - 使用一个下拉菜单或标签页来允许用户切换和预览不同的引用样式。
+          - “复制”按钮的功能应与当前选中的格式保持同步。
+      4.  **更新单元测试**: 扩展 `formattingService.test.js`，为新增的MLA、Chicago等格式添加至少一个基本的测试用例，确保函数调用成功。
 
 ### 建议**: 提交所有更改
   - 使用 Git 提交所有已完成的工作。

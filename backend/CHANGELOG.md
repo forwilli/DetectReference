@@ -1,5 +1,18 @@
 # Backend Changelog
 
+## [0.2.0] - 2025-01-07
+
+### Added
+- Multi-format citation support (APA, MLA, Chicago, Harvard)
+- Generic `formatCitation` function to replace format-specific functions
+- `SUPPORTED_FORMATS` constant for available citation styles
+- All verified references now return citations in multiple formats
+
+### Changed
+- `formatAsApa` is now deprecated in favor of `formatCitation`
+- verifyControllerSSE now returns `formatted` object with all citation styles
+- Backward compatibility maintained with `formattedAPA` field
+
 ## [0.1.0] - 2025-01-07
 
 ### Added

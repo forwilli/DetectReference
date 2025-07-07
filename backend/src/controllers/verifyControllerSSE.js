@@ -2,7 +2,27 @@ import { analyzeReferencesBatch } from '../services/geminiServiceAxios.js'
 import { searchReference } from '../services/googleSearchService.js'
 import { verifyWithCrossRef, findPaperOnCrossRef } from '../services/crossrefService.js'
 import { getCachedResult, setCachedResult, getCacheStats } from '../services/cacheService.js'
-import { mapToCSL, formatAsApa } from '../services/formattingService.js'
+import { mapToCSL, formatCitation, SUPPORTED_FORMATS } from '../services/formattingService.js'
+
+/**
+ * Generate citations in all supported formats
+ * @param {Object} cslData - CSL-JSON formatted data
+ * @returns {Object} Object with format names as keys and formatted citations as values
+ */
+function generateAllFormats(cslData) {
+  const formatted = {}
+  
+  Object.keys(SUPPORTED_FORMATS).forEach(formatName => {
+    try {
+      formatted[formatName.toLowerCase()] = formatCitation(cslData, formatName)
+    } catch (error) {
+      console.error(`Error formatting ${formatName}:`, error)
+      // If a specific format fails, just skip it
+    }
+  })
+  
+  return formatted
+}
 
 export const verifyReferencesSSEController = async (req, res, next) => {
   try {
@@ -51,7 +71,7 @@ export const verifyReferencesSSEController = async (req, res, next) => {
         fromCache: true
       }
       
-      // Add APA formatting if the reference was successfully verified
+      // Add formatting for all supported styles if the reference was successfully verified
       if (verificationResult.status === 'verified' && result.geminiAnalysis) {
         try {
           const cslData = mapToCSL({
@@ -60,7 +80,9 @@ export const verifyReferencesSSEController = async (req, res, next) => {
             url: verificationResult.url,
             source: verificationResult.source
           })
-          verificationResult.formattedAPA = formatAsApa(cslData)
+          verificationResult.formatted = generateAllFormats(cslData)
+          // Keep backward compatibility
+          verificationResult.formattedAPA = verificationResult.formatted.apa
         } catch (error) {
           console.error('Error formatting cached result:', error)
         }
@@ -170,14 +192,16 @@ export const verifyReferencesSSEController = async (req, res, next) => {
             }
           }
           
-          // Add APA formatting for verified CrossRef results
+          // Add formatting for all supported styles for verified CrossRef results
           try {
             const cslData = mapToCSL({
               ...ref,
               ...crossrefResult,
               source: 'crossref'
             })
-            verificationResult.formattedAPA = formatAsApa(cslData)
+            verificationResult.formatted = generateAllFormats(cslData)
+            // Keep backward compatibility
+            verificationResult.formattedAPA = verificationResult.formatted.apa
           } catch (error) {
             console.error('Error formatting CrossRef result:', error)
           }
@@ -252,7 +276,7 @@ export const verifyReferencesSSEController = async (req, res, next) => {
           }
         }
         
-        // Add APA formatting for verified Google results
+        // Add formatting for all supported styles for verified Google results
         if (finalStatus === 'verified') {
           try {
             const cslData = mapToCSL({
@@ -260,7 +284,9 @@ export const verifyReferencesSSEController = async (req, res, next) => {
               doi: searchResult.doi || ref.doi,
               source: 'google'
             })
-            verificationResult.formattedAPA = formatAsApa(cslData)
+            verificationResult.formatted = generateAllFormats(cslData)
+            // Keep backward compatibility
+            verificationResult.formattedAPA = verificationResult.formatted.apa
           } catch (error) {
             console.error('Error formatting Google result:', error)
           }
