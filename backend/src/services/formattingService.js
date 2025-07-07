@@ -1,0 +1,230 @@
+import Cite from 'citation-js'
+
+/**
+ * Maps internal data structure (from Gemini/CrossRef) to CSL-JSON format
+ * This is the core task for Phase 1 - correctly parsing author names in "姓, 名" format
+ * @param {Object} data - Internal reference data
+ * @returns {Object} CSL-JSON formatted object
+ */
+export function mapToCSL(data) {
+  const cslData = {
+    id: data.doi || data.id || generateId(),
+    type: mapType(data.type),
+    title: data.title,
+    author: parseAuthors(data.authors || data.author),
+    issued: parseDate(data.year || data.publishedDate),
+    'container-title': data.journal || data.publisher,
+    publisher: data.publisher,
+    volume: data.volume,
+    issue: data.issue,
+    page: data.pages || data.page,
+    DOI: data.doi,
+    URL: data.url,
+    source: data.source
+  }
+
+  // Remove undefined/null values
+  Object.keys(cslData).forEach(key => {
+    if (cslData[key] === undefined || cslData[key] === null) {
+      delete cslData[key]
+    }
+  })
+
+  return cslData
+}
+
+/**
+ * Format CSL-JSON data as APA citation string
+ * @param {Object} cslData - CSL-JSON formatted data
+ * @returns {string} APA formatted citation
+ */
+export function formatAsApa(cslData) {
+  try {
+    const cite = new Cite(cslData)
+    const formatted = cite.format('bibliography', {
+      format: 'text',
+      template: 'apa',
+      lang: 'en-US'
+    })
+    // Remove trailing newline that citation-js adds
+    return formatted.trim()
+  } catch (error) {
+    console.error('Error formatting citation:', error)
+    // Fallback to basic formatting if citation-js fails
+    return fallbackApaFormat(cslData)
+  }
+}
+
+/**
+ * Parse author string or array into CSL author format
+ * Handles "姓, 名" format and various other formats
+ * @param {string|Array} authors - Author data
+ * @returns {Array} CSL author array
+ */
+function parseAuthors(authors) {
+  if (!authors) return []
+  
+  // If already an array of objects, ensure proper format
+  if (Array.isArray(authors)) {
+    return authors.map(author => {
+      if (typeof author === 'object' && author.family) {
+        return author
+      }
+      return parseAuthorString(String(author))
+    })
+  }
+  
+  // Handle string format with multiple authors
+  if (typeof authors === 'string') {
+    // Split by common separators: semicolon, "and", "&"
+    const authorList = authors.split(/[;]|(?:\s+and\s+)|(?:\s*&\s*)/)
+    return authorList.map(author => parseAuthorString(author.trim())).filter(a => a)
+  }
+  
+  return []
+}
+
+/**
+ * Parse individual author string
+ * @param {string} authorStr - Single author string
+ * @returns {Object} CSL author object
+ */
+function parseAuthorString(authorStr) {
+  if (!authorStr) return null
+  
+  // Handle "Last, First" format
+  if (authorStr.includes(',')) {
+    const parts = authorStr.split(',').map(p => p.trim())
+    return {
+      family: parts[0],
+      given: parts[1] || ''
+    }
+  }
+  
+  // Handle "First Last" format
+  const parts = authorStr.trim().split(/\s+/)
+  if (parts.length === 1) {
+    return { family: parts[0] }
+  }
+  
+  // Assume last part is family name
+  return {
+    given: parts.slice(0, -1).join(' '),
+    family: parts[parts.length - 1]
+  }
+}
+
+/**
+ * Parse date information into CSL date format
+ * @param {string|number|Object} date - Date data
+ * @returns {Object} CSL date object
+ */
+function parseDate(date) {
+  if (!date) return undefined
+  
+  // If already in CSL format
+  if (typeof date === 'object' && date['date-parts']) {
+    return date
+  }
+  
+  // Parse year only
+  const year = parseInt(String(date).match(/\d{4}/)?.[0])
+  if (year) {
+    return {
+      'date-parts': [[year]]
+    }
+  }
+  
+  return undefined
+}
+
+/**
+ * Map internal type to CSL type
+ * @param {string} type - Internal type
+ * @returns {string} CSL type
+ */
+function mapType(type) {
+  const typeMap = {
+    'journal': 'article-journal',
+    'article': 'article-journal',
+    'book': 'book',
+    'chapter': 'chapter',
+    'conference': 'paper-conference',
+    'thesis': 'thesis',
+    'report': 'report',
+    'webpage': 'webpage'
+  }
+  
+  return typeMap[type?.toLowerCase()] || 'article'
+}
+
+/**
+ * Generate unique ID for CSL data
+ * @returns {string} Unique ID
+ */
+function generateId() {
+  return 'ref_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+}
+
+/**
+ * Fallback APA formatting when citation-js fails
+ * @param {Object} cslData - CSL-JSON data
+ * @returns {string} Basic APA formatted string
+ */
+function fallbackApaFormat(cslData) {
+  const authors = formatAuthorList(cslData.author)
+  const year = cslData.issued?.['date-parts']?.[0]?.[0] || 'n.d.'
+  const title = cslData.title || 'Untitled'
+  
+  // Journal article
+  if (cslData['container-title']) {
+    let citation = `${authors} (${year}). ${title}. ${cslData['container-title']}`
+    if (cslData.volume) {
+      citation += `, ${cslData.volume}`
+      if (cslData.issue) {
+        citation += `(${cslData.issue})`
+      }
+    }
+    if (cslData.page) {
+      citation += `, ${cslData.page}`
+    }
+    return citation + '.'
+  }
+  
+  // Book
+  if (cslData.publisher) {
+    return `${authors} (${year}). ${title}. ${cslData.publisher}.`
+  }
+  
+  // Default
+  return `${authors} (${year}). ${title}.`
+}
+
+/**
+ * Format author list for fallback APA
+ * @param {Array} authors - CSL author array
+ * @returns {string} Formatted author string
+ */
+function formatAuthorList(authors) {
+  if (!authors || authors.length === 0) return 'Unknown Author'
+  
+  const formatName = (author) => {
+    if (author.family && author.given) {
+      return `${author.family}, ${author.given.charAt(0)}.`
+    }
+    return author.family || 'Unknown'
+  }
+  
+  if (authors.length === 1) {
+    return formatName(authors[0])
+  } else if (authors.length === 2) {
+    return `${formatName(authors[0])} & ${formatName(authors[1])}`
+  } else {
+    return `${formatName(authors[0])} et al.`
+  }
+}
+
+export default {
+  mapToCSL,
+  formatAsApa
+}

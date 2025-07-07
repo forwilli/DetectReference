@@ -2,6 +2,7 @@ import { analyzeReferencesBatch } from '../services/geminiServiceAxios.js'
 import { searchReference } from '../services/googleSearchService.js'
 import { verifyWithCrossRef, findPaperOnCrossRef } from '../services/crossrefService.js'
 import { getCachedResult, setCachedResult, getCacheStats } from '../services/cacheService.js'
+import { mapToCSL, formatAsApa } from '../services/formattingService.js'
 
 export const verifyReferencesSSEController = async (req, res, next) => {
   try {
@@ -48,6 +49,21 @@ export const verifyReferencesSSEController = async (req, res, next) => {
         reference: result.reference,
         ...result.verificationResult,
         fromCache: true
+      }
+      
+      // Add APA formatting if the reference was successfully verified
+      if (verificationResult.status === 'verified' && result.geminiAnalysis) {
+        try {
+          const cslData = mapToCSL({
+            ...result.geminiAnalysis,
+            doi: verificationResult.doi,
+            url: verificationResult.url,
+            source: verificationResult.source
+          })
+          verificationResult.formattedAPA = formatAsApa(cslData)
+        } catch (error) {
+          console.error('Error formatting cached result:', error)
+        }
       }
       
       res.write(`data: ${JSON.stringify({
@@ -154,6 +170,18 @@ export const verifyReferencesSSEController = async (req, res, next) => {
             }
           }
           
+          // Add APA formatting for verified CrossRef results
+          try {
+            const cslData = mapToCSL({
+              ...ref,
+              ...crossrefResult,
+              source: 'crossref'
+            })
+            verificationResult.formattedAPA = formatAsApa(cslData)
+          } catch (error) {
+            console.error('Error formatting CrossRef result:', error)
+          }
+          
           // Store in cache
           setCachedResult(ref.originalReference, ref, verificationResult)
           
@@ -221,6 +249,20 @@ export const verifyReferencesSSEController = async (req, res, next) => {
           verificationResult.bestMatch = {
             score: searchResult.evidence[0].score,
             matches: searchResult.evidence[0].matches
+          }
+        }
+        
+        // Add APA formatting for verified Google results
+        if (finalStatus === 'verified') {
+          try {
+            const cslData = mapToCSL({
+              ...ref,
+              doi: searchResult.doi || ref.doi,
+              source: 'google'
+            })
+            verificationResult.formattedAPA = formatAsApa(cslData)
+          } catch (error) {
+            console.error('Error formatting Google result:', error)
           }
         }
         

@@ -1,5 +1,21 @@
 # Frontend Changelog
 
+## [0.1.0] - 2025-01-07
+
+### Added
+- APA citation display for verified references in ResultCard component
+- Copy button for formatted citations with visual feedback
+- Elegant UI design for citation display section
+- Support for displaying formattedAPA field from backend
+
+### Changed
+- ResultCard now uses React hooks (useState) for copy functionality
+- Enhanced user experience with one-click citation copying
+
+### Fixed
+- Error display UI when backend verification fails
+- Support for 'ambiguous' and 'error' status display with appropriate icons
+
 ## [0.0.2] - 2025-01-06
 
 ### Added

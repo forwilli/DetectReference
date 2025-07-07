@@ -1,6 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 function ResultCard({ result }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopyAPA = () => {
+    if (result.formattedAPA) {
+      navigator.clipboard.writeText(result.formattedAPA)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
   const getStatusColor = (status) => {
     switch (status) {
       case 'verified':
@@ -77,6 +86,25 @@ function ResultCard({ result }) {
             {getStatusLabel(result.status)}
             {result.message && ` - ${result.message}`}
           </p>
+          
+          {/* Display formatted APA citation for verified references */}
+          {result.status === 'verified' && result.formattedAPA && (
+            <div className="mt-4 p-3 bg-gray-50 rounded border border-gray-200">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <p className="text-xs font-medium text-gray-600 mb-1">Formatted Citation (APA)</p>
+                  <p className="text-sm text-gray-800">{result.formattedAPA}</p>
+                </div>
+                <button
+                  onClick={handleCopyAPA}
+                  className="ml-3 px-3 py-1 text-xs bg-gray-200 hover:bg-gray-300 rounded transition-colors duration-200"
+                  title="Copy APA citation"
+                >
+                  {copied ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

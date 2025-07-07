@@ -1,5 +1,33 @@
 # Backend Changelog
 
+## [0.1.0] - 2025-01-07
+
+### Added
+- Citation formatting service (formattingService.js) with APA format support
+- CSL-JSON mapping for various reference types (journal articles, books, etc.)
+- Support for Chinese author name format "姓, 名"
+- Integration of formatting into SSE verification endpoint
+- Comprehensive unit tests for formatting service (11 test cases)
+- citation-js dependency for professional citation formatting
+- Fallback formatting mechanism when citation-js fails
+
+### Changed
+- verifyControllerSSE.js now returns `formattedAPA` field for verified references
+- Cache system now stores and returns formatted citations
+
+## [0.0.3] - 2025-01-07
+
+### Added
+- In-memory caching system using node-cache (7-day TTL, 10000 item limit)
+- Cache key generation using SHA256 hashing
+- Cache statistics and monitoring
+- Memory usage monitoring with alerts
+- Integration of caching into verification workflow
+
+### Changed
+- Verification performance improved from 3-5s to <100ms for cached results
+- SSE responses now include cache statistics in completion event
+
 ## [0.0.2] - 2025-01-06
 
 ### Changed
