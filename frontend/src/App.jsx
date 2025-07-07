@@ -60,13 +60,13 @@ function App() {
             <>
               <div className="text-center space-y-6">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                  Verify Your References
+                  Free Citation Generator
                   <br className="hidden sm:inline" />
-                  <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">Format with Precision</span>
+                  <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">& Reference Verifier</span>
                 </h1>
                 <p className="mx-auto max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-                  Ensure the authenticity of your academic citations and transform them into 
-                  perfectly formatted references across multiple citation styles.
+                  Instantly verify academic references and create perfectly formatted citations in 
+                  APA, MLA, Chicago, and Harvard styles. Trusted by 50,000+ students.
                 </p>
                 
                 {/* Tab Navigation */}
@@ -115,21 +115,39 @@ function App() {
 
       {/* Footer */}
       <footer className="border-t mt-auto">
-        <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
-          <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-            <SwanLogo className="h-5 w-5" />
-            <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-              Built by researchers, for researchers. The source code is available on{" "}
-              <a
-                href="https://github.com/forwitli/DetectReference"
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium underline underline-offset-4"
-              >
-                GitHub
-              </a>
-              .
-            </p>
+        <div className="container py-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center md:items-start gap-4">
+              <div className="flex items-center gap-2">
+                <SwanLogo className="h-5 w-5" />
+                <span className="font-semibold">Cite by SwanRef</span>
+              </div>
+              <p className="text-sm text-muted-foreground text-center md:text-left">
+                Free citation generator trusted by students worldwide. 
+                Verify references and format citations instantly.
+              </p>
+            </div>
+            <div className="flex flex-col items-center md:items-start gap-4">
+              <h3 className="font-semibold">Citation Styles</h3>
+              <ul className="text-sm text-muted-foreground space-y-2 text-center md:text-left">
+                <li>APA 7th Edition</li>
+                <li>MLA 9th Edition</li>
+                <li>Chicago 17th Edition</li>
+                <li>Harvard Referencing</li>
+              </ul>
+            </div>
+            <div className="flex flex-col items-center md:items-start gap-4">
+              <h3 className="font-semibold">Resources</h3>
+              <ul className="text-sm text-muted-foreground space-y-2 text-center md:text-left">
+                <li><a href="#" className="hover:text-foreground transition-colors">How to Cite Sources</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Citation Guide</a></li>
+                <li><a href="https://github.com/forwitli/DetectReference" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors">Open Source</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
+            © 2025 Cite. Made with ❤️ for students everywhere.
           </div>
         </div>
       </footer>
