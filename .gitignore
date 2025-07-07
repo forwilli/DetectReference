@@ -28,3 +28,38 @@ yarn-error.log*
 
 # Testing
 coverage/
+
+# Internal documentation and work logs
+PROJECT_CONFIG.md
+PROJECT_ROLES.md
+DIAGNOSTICS_REPORT.md
+DEPLOYMENT.md
+DEPLOY_CHECKLIST.md
+ERROR_TEMPLATE.md
+MAINTENANCE.md
+HEALTH_CHECK_REPORT.md
+CHANGELOG.md
+backend/CHANGELOG.md
+frontend/CHANGELOG.md
+WINDOWS-MANUAL-START.md
+**/CHANGELOG.md
+**/*LOG.md
+**/*log.md
+
+# Work records and collaboration notes
+*gemini*
+*Gemini*
+*工作记录*
+*合作模式*
+*日志*
+
+# Screenshots and images
+image copy*.png
+*.png
+*.jpg
+*.jpeg
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
