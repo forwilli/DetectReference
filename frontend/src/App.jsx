@@ -3,6 +3,7 @@ import ReferenceInput from './components/ReferenceInput'
 import VerificationResults from './components/VerificationResults'
 import CitationFormatter from './components/CitationFormatter'
 import SwanLogo from './components/SwanLogo'
+import FooterDebug from './components/FooterDebug'
 import useStore from './store/useStore'
 
 function App() {
@@ -12,14 +13,14 @@ function App() {
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none -z-10" />
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none -z-10" />
       
       {/* Subtle decorative elements */}
-      <div className="absolute left-0 top-1/3 w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent pointer-events-none" />
-      <div className="absolute right-0 top-1/3 w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent pointer-events-none" />
-      <div className="absolute left-10 top-1/2 w-px h-48 bg-gradient-to-b from-transparent via-gray-100 to-transparent pointer-events-none" />
-      <div className="absolute right-10 top-1/2 w-px h-48 bg-gradient-to-b from-transparent via-gray-100 to-transparent pointer-events-none" />
+      <div className="absolute left-0 top-1/3 w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent pointer-events-none -z-10" />
+      <div className="absolute right-0 top-1/3 w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent pointer-events-none -z-10" />
+      <div className="absolute left-10 top-1/2 w-px h-48 bg-gradient-to-b from-transparent via-gray-100 to-transparent pointer-events-none -z-10" />
+      <div className="absolute right-10 top-1/2 w-px h-48 bg-gradient-to-b from-transparent via-gray-100 to-transparent pointer-events-none -z-10" />
       {/* Modern Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center">
@@ -55,7 +56,7 @@ function App() {
 
       {/* Main Content */}
       <main className="container relative flex-1">
-        <div className="mx-auto max-w-[980px] py-8 md:py-12 lg:py-24">
+        <div className="mx-auto max-w-[980px] py-8 md:py-12 lg:py-24 w-full">
           {verificationResults.length === 0 ? (
             <>
               <div className="text-center space-y-6">
@@ -114,7 +115,7 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t mt-auto">
+      <footer className="border-t mt-auto bg-background relative z-10">
         <div className="container py-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="flex flex-col items-center md:items-start gap-4">
@@ -151,6 +152,9 @@ function App() {
           </div>
         </div>
       </footer>
+      
+      {/* Debug Info - Remove in production */}
+      <FooterDebug />
     </div>
   )
 }
