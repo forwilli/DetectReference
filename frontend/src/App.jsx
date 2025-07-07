@@ -60,17 +60,17 @@ function App() {
             <>
               <div className="text-center space-y-4">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                  Free Citation Generator
+                  Reference Verifier
                   <br className="hidden sm:inline" />
-                  <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">& Reference Verifier</span>
+                  <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">& Citation Generator</span>
                 </h1>
                 <p className="mx-auto max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-                  Instantly verify academic references and create perfectly formatted citations. 
-                  Works with CrossRef, Google Scholar, and major academic databases.
+                  Detect AI hallucinations and fabricated references in academic papers. 
+                  Verify authenticity with CrossRef and Google Scholar, then format in any citation style.
                 </p>
                 
                 {/* Tab Navigation */}
-                <div className="flex justify-center gap-4 py-6">
+                <div className="flex justify-center gap-4 py-8">
                   <button
                     onClick={() => setActiveTab('verify')}
                     className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-8 ${
