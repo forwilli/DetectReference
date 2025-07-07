@@ -24,6 +24,19 @@
 
 ## 3. 最近完成的工作 (Recently Completed)
 
+### ✅ ADR-002: 参考文献格式化 Phase 1 (2025-01-07)
+- **实施内容**:
+  - ✅ 安装 citation-js 依赖（包括 patch-package 解决依赖问题）
+  - ✅ 创建 formattingService.js（mapToCSL 和 formatAsApa 函数，支持"姓, 名"格式解析）
+  - ✅ 添加完整单元测试（11个测试用例全部通过）
+  - ✅ 集成到 verifyControllerSSE.js（缓存、CrossRef、Google结果均支持格式化）
+  - ✅ 更新 ResultCard.jsx（显示格式化结果并提供复制按钮）
+- **成果**: 
+  - 成功验证的文献现在会显示标准APA格式引用
+  - 用户可一键复制格式化后的引用
+  - 支持期刊文章、书籍等多种文献类型
+  - 正确处理中英文作者名称格式
+
 ### ✅ ADR-001: 后端缓存实施 (2025-01-07)
 - **实施内容**:
   - ✅ 安装 node-cache 依赖
@@ -38,11 +51,7 @@
 
 ## 4. 下一步建议 (Next Steps)
 
-### 建议: 实施参考文献格式化 (ADR-002)
-- **状态**: ⏳ 待实施
-- **理由**: 基础设施已通过缓存加固，现在可以安全地添加用户价值功能
-- **技术方案**: 分阶段实施（Phase 1: 轻量级APA格式 → Phase 2: 扩展格式 → Phase 3: 完整方案）
-- **详情**: 见 [ADR-002](docs/adr/002-citation-formatting.md)
+见下方"下一步行动计划"部分。
 
 ---
 
@@ -90,20 +99,37 @@
 
 ## 3. 下一步行动计划 (Next Action Plan)
 
-### ✅ ADR-002: 参考文献格式化 Phase 1 (2025-01-07)
-- **实施内容**:
-  - ✅ 安装 citation-js 依赖 (包括 patch-package 解决依赖问题)
-  - ✅ 创建 formattingService.js (mapToCSL 和 formatAsApa 函数，支持"姓, 名"格式解析)
-  - ✅ 添加完整单元测试 (11个测试用例全部通过)
-  - ✅ 集成到 verifyControllerSSE.js (缓存、CrossRef、Google结果均支持格式化)
-  - ✅ 更新 ResultCard.jsx (显示格式化结果并提供复制按钮)
-- **成果**: 
-  - 成功验证的文献现在会显示标准APA格式引用
-  - 用户可一键复制格式化后的引用
-  - 支持期刊文章、书籍等多种文献类型
-  - 正确处理中英文作者名称格式
+- **当前任务: 扩展参考文献格式**
+  - **状态**: 📝 **规划中**
+  - **目标**: 将格式化功能从仅支持APA，扩展到支持MLA、芝加哥 (Chicago) 和哈佛 (Harvard) 等多种主流学术格式。
+  - **技术分析**:
+      - **核心技术**: `citation-js` 库通过 **CSL (Citation Style Language)** 模板来定义引用样式。因此，我们无需手动编写格式化规则。
+      - **实施关键**: 找到并使用正确的CSL模板名称。例如，`'apa'` 用于APA格式，`'mla'` 用于MLA格式。
+  - **建议的执行步骤**:
+      1.  **扩展 `formattingService.js`**:
+          - 修改 `formatAsApa` 函数，使其成为一个更通用的 `formatCitation(cslData, style)` 函数，其中 `style` 参数是CSL模板的名称（如 'apa'）。
+          - 在该服务中导出一个支持的格式列表，例如 `SUPPORTED_FORMATS = ['apa', 'mla', 'chicago-author-date', 'harvard-cite-them-right']`。
+      2.  **改造 `verifyControllerSSE.js`**:
+          - (可选，可延后) 允许API请求中包含一个 `format` 参数，以指定所需的输出格式。如果未提供，则默认为 `apa`。
+          - 在成功验证后，循环调用 `formatCitation` 函数，为所有支持的格式生成引用字符串，并将它们作为一个对象（如 `formatted: { apa: '...', mla: '...' }`）返回给前端。
+      3.  **更新前端 `ResultCard.jsx`**:
+          - 当接收到包含多种格式的 `formatted` 对象时，使用一个下拉菜单或标签页来允许用户切换和预览不同的引用样式。
+          - "复制"按钮的功能应与当前选中的格式保持同步。
+      4.  **更新单元测试**: 扩展 `formattingService.test.js`，为新增的MLA、Chicago等格式添加测试用例，确保输出的准确性。
 
 ### 建议**: 提交所有更改
   - 使用 Git 提交所有已完成的工作。
+
+- **当前任务: 规划 Phase 2 - 批量处理增强**
+  - **状态**: 📝 **规划中**
+  - **目标**: 允许用户通过上传文件（如.txt, .bib）来批量导入参考文献，而不是手动复制粘贴，以显著提升工具的易用性。
+  - **初步分析**:
+      1.  **文件类型**:
+          - **.txt**: 实现最简单，可直接按行读取。应作为第一优先级。
+          - **.bib (BibTeX)**: 用户价值极高，但需要引入一个专门的BibTeX解析库。
+          - **.pdf / .docx**: 解析难度和不确定性极高，应放在更长远的规划中。
+      2.  **API 设计**: 需要一个新的API端点，例如 `POST /api/verify-references-file`，它能够处理 `multipart/form-data` 请求。
+      3.  **后端逻辑**: 后端接收到文件后，需要根据文件类型调用不同的解析器，将文件内容转换为参考文献字符串数组，然后复用现有的 `verifyControllerSSE` 验证流程。
+  - **建议**: 我们可以为此创建一个新的ADR (`ADR-003`) 来详细讨论技术选型和实施细节。
 
 ---
