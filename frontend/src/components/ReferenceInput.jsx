@@ -82,21 +82,19 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in">
       <div className="text-center">
-        <p className="text-lg text-muted-foreground leading-relaxed">
-          Paste your references below, one per line. This tool uses CrossRef and Google Search to verify each entry.
+        <p className="text-base text-muted-foreground">
+          Paste your references below, one per line. Powered by CrossRef and Google Scholar.
         </p>
       </div>
       
       <div className="space-y-6">
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-          <p className="text-sm text-gray-700">
-            <strong>Note:</strong> A status like "Not Found" or "Mismatch" indicates the reference couldn't be strongly matched
-            against the search results. It does <strong>NOT</strong> definitively prove the reference is
-            fake or wrong (it could be new, unindexed, or formatted differently). Use this as a
-            preliminary check. "Verified" indicates a good match was found, and the reference may have been
-            automatically formatted.
+        <div className="rounded-lg border bg-muted/50 p-4">
+          <p className="text-sm leading-normal text-muted-foreground">
+            <span className="font-medium">Note:</span> References marked as "Not Found" or "Mismatch" couldn't be strongly matched. 
+            This doesn't prove they're incorrect—they might be new, unindexed, or differently formatted. 
+            "Verified" indicates a strong match was found.
           </p>
         </div>
 
@@ -109,7 +107,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         )}
 
         <Textarea
-          className="min-h-[200px] border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+          className="min-h-[300px] font-mono text-sm"
           placeholder={exampleText}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
@@ -121,12 +119,10 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
               onClick={handleVerify}
               disabled={!inputText.trim()}
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
-              <svg className="w-6 h-6 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="8" fill="#4ade80" stroke="#22c55e" strokeWidth="2"/>
-                <circle cx="12" cy="12" r="3" fill="#16a34a"/>
-                <path d="m19 19-3-3" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 2C6.03 2 2 6.03 2 11C2 15.97 6.03 20 11 20C13.39 20 15.56 19.12 17.18 17.69L20.3 20.8C20.5 21 20.77 21.1 21.03 21.1C21.29 21.1 21.56 21 21.76 20.8C22.17 20.39 22.17 19.73 21.76 19.32L18.65 16.22C19.57 14.71 20.1 12.93 20.1 11C20.1 6.03 16.07 2 11.1 2H11ZM11 4C14.87 4 18 7.13 18 11C18 14.87 14.87 18 11 18C7.13 18 4 14.87 4 11C4 7.13 7.13 4 11 4Z" fill="currentColor"/>
               </svg>
               Verify References
             </Button>
@@ -134,9 +130,9 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
             <Button
               onClick={handleCancel}
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2"
+              variant="outline"
             >
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
