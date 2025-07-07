@@ -12,8 +12,14 @@ function App() {
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-muted/50 via-muted/30 to-background pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none" />
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none" />
+      
+      {/* Subtle decorative elements */}
+      <div className="absolute left-0 top-1/3 w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent pointer-events-none" />
+      <div className="absolute right-0 top-1/3 w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent pointer-events-none" />
+      <div className="absolute left-10 top-1/2 w-px h-48 bg-gradient-to-b from-transparent via-gray-100 to-transparent pointer-events-none" />
+      <div className="absolute right-10 top-1/2 w-px h-48 bg-gradient-to-b from-transparent via-gray-100 to-transparent pointer-events-none" />
       {/* Modern Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center">
@@ -56,7 +62,7 @@ function App() {
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
                   Verify Your References
                   <br className="hidden sm:inline" />
-                  <span className="text-muted-foreground">Format with Precision</span>
+                  <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">Format with Precision</span>
                 </h1>
                 <p className="mx-auto max-w-[700px] text-lg text-muted-foreground sm:text-xl">
                   Ensure the authenticity of your academic citations and transform them into 
@@ -89,15 +95,11 @@ function App() {
               </div>
               
               <div className="relative">
-                {/* Philosophical background elements */}
+                {/* Subtle background glow */}
                 <div className="absolute inset-0 -z-10">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px]">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 opacity-30 blur-3xl animate-pulse" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px]">
+                    <div className="absolute inset-0 rounded-full bg-gradient-radial from-gray-100 to-transparent opacity-40" />
                   </div>
-                  <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-gray-200 to-transparent opacity-20" />
-                  <div className="absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-transparent via-gray-200 to-transparent opacity-20" />
-                  <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-20" />
-                  <div className="absolute bottom-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-20" />
                 </div>
                 
                 <div className="relative">
