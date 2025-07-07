@@ -98,14 +98,14 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
             Paste your references below, one per line. Powered by CrossRef and Google Scholar.
           </p>
           <Textarea
-            className="min-h-[300px] font-mono text-sm"
+            className="min-h-[400px] font-mono text-sm leading-relaxed"
             placeholder={exampleText}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
           />
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center pt-2">
           {!useStore.getState().isVerifying ? (
             <Button
               onClick={handleVerify}
