@@ -10,7 +10,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('verify')
 
   return (
-    <div className="min-h-screen bg-background flex flex-col relative">
+    <div className="h-screen bg-background flex flex-col relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none -z-10" />
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none -z-10" />
@@ -55,11 +55,11 @@ function App() {
 
       {/* Main Content */}
       <main className="container relative flex-1">
-        <div className="mx-auto max-w-[980px] py-8 md:py-12 lg:py-24 w-full">
+        <div className="mx-auto max-w-[980px] py-4 md:py-6 lg:py-8 w-full">
           {verificationResults.length === 0 ? (
             <>
-              <div className="text-center space-y-6">
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+              <div className="text-center space-y-4">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
                   Free Citation Generator
                   <br className="hidden sm:inline" />
                   <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">& Reference Verifier</span>
@@ -70,7 +70,7 @@ function App() {
                 </p>
                 
                 {/* Tab Navigation */}
-                <div className="flex justify-center gap-4 py-8">
+                <div className="flex justify-center gap-4 py-4">
                   <button
                     onClick={() => setActiveTab('verify')}
                     className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-8 ${
@@ -113,41 +113,19 @@ function App() {
         </div>
       </main>
 
-      {/* Footer */}
+      {/* Compact Footer */}
       <footer className="border-t mt-auto bg-background relative z-10">
-        <div className="container py-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex flex-col items-center md:items-start gap-4">
-              <div className="flex items-center gap-2">
-                <SwanLogo className="h-5 w-5" />
-                <span className="font-semibold">Cite by SwanRef</span>
-              </div>
-              <p className="text-sm text-muted-foreground text-center md:text-left">
-                Free citation generator trusted by students worldwide. 
-                Verify references and format citations instantly.
-              </p>
-            </div>
-            <div className="flex flex-col items-center md:items-start gap-4">
-              <h3 className="font-semibold">Citation Styles</h3>
-              <ul className="text-sm text-muted-foreground space-y-2 text-center md:text-left">
-                <li>APA 7th Edition</li>
-                <li>MLA 9th Edition</li>
-                <li>Chicago 17th Edition</li>
-                <li>Harvard Referencing</li>
-              </ul>
-            </div>
-            <div className="flex flex-col items-center md:items-start gap-4">
-              <h3 className="font-semibold">Resources</h3>
-              <ul className="text-sm text-muted-foreground space-y-2 text-center md:text-left">
-                <li><a href="#" className="hover:text-foreground transition-colors">How to Cite Sources</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Citation Guide</a></li>
-                <li><a href="https://github.com/forwitli/DetectReference" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors">Open Source</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-            © 2025 Cite. Made with ❤️ for students everywhere.
+        <div className="container py-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+            <span>© 2025 Cite</span>
+            <span className="hidden sm:inline">•</span>
+            <span className="hidden sm:inline">APA • MLA • Chicago • Harvard</span>
+            <span className="hidden sm:inline">•</span>
+            <span>Made for students ❤️</span>
+            <span className="hidden sm:inline">•</span>
+            <a href="https://github.com/forwitli/DetectReference" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors">
+              Open Source
+            </a>
           </div>
         </div>
       </footer>
