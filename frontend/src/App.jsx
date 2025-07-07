@@ -55,7 +55,7 @@ function App() {
 
       {/* Main Content */}
       <main className="container relative flex-1">
-        <div className="mx-auto max-w-[980px] py-4 md:py-6 lg:py-8 w-full">
+        <div className="mx-auto max-w-[980px] py-6 md:py-8 lg:py-12 w-full">
           {verificationResults.length === 0 ? (
             <>
               <div className="text-center space-y-4">
@@ -65,12 +65,12 @@ function App() {
                   <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">& Reference Verifier</span>
                 </h1>
                 <p className="mx-auto max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-                  Instantly verify academic references and create perfectly formatted citations in 
-                  APA, MLA, Chicago, and Harvard styles. Trusted by 50,000+ students.
+                  Instantly verify academic references and create perfectly formatted citations. 
+                  Works with CrossRef, Google Scholar, and major academic databases.
                 </p>
                 
                 {/* Tab Navigation */}
-                <div className="flex justify-center gap-4 py-4">
+                <div className="flex justify-center gap-4 py-6">
                   <button
                     onClick={() => setActiveTab('verify')}
                     className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-8 ${

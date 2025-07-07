@@ -98,7 +98,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
             Paste your references below, one per line. Powered by CrossRef and Google Scholar.
           </p>
           <Textarea
-            className="min-h-[200px] font-mono text-sm"
+            className="min-h-[250px] font-mono text-sm"
             placeholder={exampleText}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
