@@ -10,7 +10,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('verify')
 
   return (
-    <div className={`${verificationResults.length === 0 ? 'h-screen overflow-hidden' : 'min-h-screen'} bg-background flex flex-col relative`}>
+    <div className="min-h-screen bg-background flex flex-col relative">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none -z-10" />
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none -z-10" />
@@ -55,7 +55,7 @@ function App() {
 
       {/* Main Content */}
       <main className="container relative flex-1">
-        <div className="mx-auto max-w-[980px] py-6 md:py-8 lg:py-12 w-full">
+        <div className="mx-auto max-w-[980px] py-4 md:py-6 lg:py-10 w-full">
           {verificationResults.length === 0 ? (
             <>
               <div className="text-center space-y-4">
