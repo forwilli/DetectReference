@@ -1,27 +1,12 @@
 import { analyzeReferencesBatch } from '../services/geminiServiceAxios.js'
 import { searchReference } from '../services/googleSearchService.js'
 import { verifyWithCrossRef, findPaperOnCrossRef } from '../services/crossrefService.js'
-import { getCachedResult, setCachedResult, getCacheStats } from '../services/cacheService.js'
-import { mapToCSL, formatCitation, SUPPORTED_FORMATS } from '../services/formattingService.js'
 
-/**
- * Generate citations in all supported formats
- * @param {Object} cslData - CSL-JSON formatted data
- * @returns {Object} Object with format names as keys and formatted citations as values
- */
-function generateAllFormats(cslData) {
-  const formatted = {}
-  
-  Object.keys(SUPPORTED_FORMATS).forEach(formatName => {
-    try {
-      formatted[formatName.toLowerCase()] = formatCitation(cslData, formatName)
-    } catch (error) {
-      console.error(`Error formatting ${formatName}:`, error)
-      // If a specific format fails, just skip it
-    }
-  })
-  
-  return formatted
+// Helper function to convert numeric score to confidence level
+function getConfidenceLevel(score) {
+  if (score >= 0.8) return 'HIGH'
+  if (score >= 0.5) return 'MEDIUM'
+  return 'LOW'
 }
 
 export const verifyReferencesSSEController = async (req, res, next) => {
@@ -37,91 +22,24 @@ export const verifyReferencesSSEController = async (req, res, next) => {
     const totalReferences = references.length
     let processedCount = 0
     
-    // Check cache first and separate cached vs uncached references
-    const cachedResults = []
-    const uncachedReferences = []
-    const uncachedIndices = []
-    
-    for (let i = 0; i < references.length; i++) {
-      const cachedResult = getCachedResult(references[i])
-      if (cachedResult) {
-        cachedResults.push({ index: i, result: cachedResult })
-      } else {
-        uncachedReferences.push(references[i])
-        uncachedIndices.push(i)
-      }
-    }
-    
-    // 发送开始事件，包含缓存信息
+    // 发送开始事件
     res.write(`data: ${JSON.stringify({ 
       type: 'start', 
-      message: `Starting verification... (${cachedResults.length} from cache, ${uncachedReferences.length} to process)`,
-      total: totalReferences,
-      cached: cachedResults.length,
-      uncached: uncachedReferences.length
+      message: `Starting verification...`,
+      total: totalReferences
     })}\n\n`)
     
-    // 立即发送所有缓存的结果
-    for (const { index, result } of cachedResults) {
-      processedCount++
-      const verificationResult = {
-        index,
-        reference: result.reference,
-        ...result.verificationResult,
-        fromCache: true
-      }
-      
-      // Add formatting for all supported styles if the reference was successfully verified
-      if (verificationResult.status === 'verified' && result.geminiAnalysis) {
-        try {
-          const cslData = mapToCSL({
-            ...result.geminiAnalysis,
-            doi: verificationResult.doi,
-            url: verificationResult.url,
-            source: verificationResult.source
-          })
-          verificationResult.formatted = generateAllFormats(cslData)
-          // Keep backward compatibility
-          verificationResult.formattedAPA = verificationResult.formatted.apa
-        } catch (error) {
-          console.error('Error formatting cached result:', error)
-        }
-      }
-      
-      res.write(`data: ${JSON.stringify({
-        type: 'result',
-        data: verificationResult,
-        progress: {
-          current: processedCount,
-          total: totalReferences,
-          percentage: Math.round((processedCount / totalReferences) * 100)
-        }
-      })}\n\n`)
-    }
-    
-    // 如果所有结果都来自缓存，直接结束
-    if (uncachedReferences.length === 0) {
-      const stats = getCacheStats()
-      res.write(`data: ${JSON.stringify({ 
-        type: 'complete', 
-        message: 'All results from cache!',
-        cacheStats: stats
-      })}\n\n`)
-      res.end()
-      return
-    }
-    
-    // 阶段一：批量解析（仅处理未缓存的）
-    console.log(`Phase 1: Batch analysis with Gemini for ${uncachedReferences.length} uncached references...`)
+    // 阶段一：批量解析
+    console.log(`Phase 1: Batch analysis with Gemini for ${references.length} references...`)
     let analyzedReferences
     try {
-      analyzedReferences = await analyzeReferencesBatch(uncachedReferences)
+      analyzedReferences = await analyzeReferencesBatch(references)
       console.log(`Successfully analyzed ${analyzedReferences.length} references`)
       
-      // 恢复原始索引
+      // 设置原始索引
       for (let i = 0; i < analyzedReferences.length; i++) {
-        analyzedReferences[i].originalIndex = uncachedIndices[i]
-        analyzedReferences[i].originalReference = uncachedReferences[i]
+        analyzedReferences[i].originalIndex = i
+        analyzedReferences[i].originalReference = references[i]
       }
       
       // 发送批量分析完成事件
@@ -154,6 +72,13 @@ export const verifyReferencesSSEController = async (req, res, next) => {
         ref.type === 'journal_article' || 
         ref.type === 'conference_paper'
       )
+      
+      console.log('DEBUG: Reference analysis:', { 
+        title: ref.title, 
+        type: ref.type, 
+        doi: ref.doi, 
+        shouldUseCrossRef 
+      })
       
       if (shouldUseCrossRef) {
         let crossrefResult = null
@@ -192,26 +117,17 @@ export const verifyReferencesSSEController = async (req, res, next) => {
             }
           }
           
-          // Add formatting for all supported styles for verified CrossRef results
-          try {
-            const cslData = mapToCSL({
-              ...ref,
-              ...crossrefResult,
-              source: 'crossref'
-            })
-            verificationResult.formatted = generateAllFormats(cslData)
-            // Keep backward compatibility
-            verificationResult.formattedAPA = verificationResult.formatted.apa
-          } catch (error) {
-            console.error('Error formatting CrossRef result:', error)
-          }
+          // Formatting removed - handled by separate format endpoint
           
-          // Store in cache
-          setCachedResult(ref.originalReference, ref, verificationResult)
+          // Cache removed - no longer storing results
           
-          // 如果是通过路径B找到的，添加匹配分数信息
+          // 如果是通过路径B找到的，添加置信度等级
           if (crossrefResult.matchScore) {
-            verificationResult.message += ` (match score: ${(crossrefResult.matchScore * 100).toFixed(0)}%)`
+            verificationResult.confidenceLevel = getConfidenceLevel(crossrefResult.matchScore)
+            verificationResult.message += ` (confidence: ${verificationResult.confidenceLevel})`
+          } else {
+            // DOI直接匹配，置信度为HIGH
+            verificationResult.confidenceLevel = 'HIGH'
           }
           
           res.write(`data: ${JSON.stringify({
@@ -243,19 +159,24 @@ export const verifyReferencesSSEController = async (req, res, next) => {
         const searchResult = await searchReference(ref)
         processedCount++
         
+        console.log('DEBUG: Google search result:', { status: searchResult.status, confidence: searchResult.confidence })
+        
         // 根据置信度确定最终状态和消息
         let finalStatus = searchResult.status
         let finalMessage = searchResult.message
         
+        // 获取置信度等级
+        const confidenceLevel = getConfidenceLevel(searchResult.confidence)
+        
         // 对于模糊结果，提供更详细的信息
         if (searchResult.status === 'ambiguous') {
-          finalMessage = `Ambiguous (confidence: ${(searchResult.confidence * 100).toFixed(0)}%)`
+          finalMessage = `Ambiguous (confidence: ${confidenceLevel})`
           if (searchResult.evidence && searchResult.evidence.length > 0) {
             const topEvidence = searchResult.evidence[0]
             finalMessage += ` - Best match: ${topEvidence.matches.join(', ')}`
           }
         } else if (searchResult.status === 'verified') {
-          finalMessage = `Verified (confidence: ${(searchResult.confidence * 100).toFixed(0)}%)`
+          finalMessage = `Verified (confidence: ${confidenceLevel})`
         }
         
         const verificationResult = {
@@ -264,36 +185,22 @@ export const verifyReferencesSSEController = async (req, res, next) => {
           status: finalStatus,
           message: finalMessage,
           source: 'google',
-          confidence: searchResult.confidence,
+          confidenceLevel: confidenceLevel,
           doi: searchResult.doi || ref.doi || null
         }
         
-        // 如果有证据，添加最佳匹配的URL（但不显示给用户）
+        console.log('DEBUG: Verification result status before formatting:', finalStatus)
+        
+        // 如果有证据，添加最佳匹配信息（但不包含分数）
         if (searchResult.evidence && searchResult.evidence.length > 0) {
           verificationResult.bestMatch = {
-            score: searchResult.evidence[0].score,
             matches: searchResult.evidence[0].matches
           }
         }
         
-        // Add formatting for all supported styles for verified Google results
-        if (finalStatus === 'verified') {
-          try {
-            const cslData = mapToCSL({
-              ...ref,
-              doi: searchResult.doi || ref.doi,
-              source: 'google'
-            })
-            verificationResult.formatted = generateAllFormats(cslData)
-            // Keep backward compatibility
-            verificationResult.formattedAPA = verificationResult.formatted.apa
-          } catch (error) {
-            console.error('Error formatting Google result:', error)
-          }
-        }
+        // Formatting removed - handled by separate format endpoint
         
-        // Store in cache
-        setCachedResult(ref.originalReference, ref, verificationResult)
+        // Cache removed - no longer storing results
         
         res.write(`data: ${JSON.stringify({
           type: 'result',
@@ -315,7 +222,8 @@ export const verifyReferencesSSEController = async (req, res, next) => {
             index: ref.originalIndex,
             reference: ref.originalReference,
             status: 'error',
-            message: error.message
+            message: error.message,
+            confidenceLevel: 'LOW'  // 错误状态默认为LOW
           },
           progress: {
             current: processedCount,
@@ -326,12 +234,10 @@ export const verifyReferencesSSEController = async (req, res, next) => {
       }
     }
     
-    // Send completion event with cache statistics
-    const stats = getCacheStats()
+    // Send completion event
     res.write(`data: ${JSON.stringify({ 
       type: 'complete',
-      message: 'Verification completed',
-      cacheStats: stats
+      message: 'Verification completed'
     })}\n\n`)
     res.end()
     

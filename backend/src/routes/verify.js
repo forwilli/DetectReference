@@ -2,6 +2,7 @@ import express from 'express'
 import { body, validationResult } from 'express-validator'
 import { verifyReferencesController } from '../controllers/verifyController.js'
 import { verifyReferencesSSEController } from '../controllers/verifyControllerSSE.js'
+import { formatCitationsController } from '../controllers/formatController.js'
 
 const router = express.Router()
 
@@ -40,6 +41,23 @@ router.post('/verify-references-stream',
     next()
   },
   verifyReferencesSSEController
+)
+
+router.post('/format-citations',
+  [
+    body('references').isArray().withMessage('References must be an array'),
+    body('references').notEmpty().withMessage('References array cannot be empty'),
+    body('references.*').isString().withMessage('Each reference must be a string'),
+    body('format').optional().isString().withMessage('Format must be a string')
+  ],
+  (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+    next()
+  },
+  formatCitationsController
 )
 
 export default router

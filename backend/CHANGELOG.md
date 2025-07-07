@@ -1,5 +1,23 @@
 # Backend Changelog
 
+## [0.3.0] - 2025-01-07 - Cache Removal for Real-time Processing
+
+### Removed
+- All caching mechanisms from verifyControllerSSE.js
+- Cache imports and dependencies
+- Cache checking and storing logic
+- Cache statistics in completion events
+
+### Changed
+- All references now processed in real-time without cache lookup
+- Simplified verification flow to always use fresh API calls
+- Removed cache-related debugging and status messages
+- Direct processing of all references through Gemini analysis
+
+### Added
+- Enhanced debugging for format generation issues
+- More detailed logging for CrossRef and Google search formatting
+
 ## [0.2.1] - 2025-01-07
 
 ### Fixed

@@ -20,7 +20,19 @@
 
 ## 2. 当前待解决的问题 (Active Issues)
 
-*暂无紧急问题*
+1.  **[P1 - 关键] 最终UI/UX和核心Bug修复**:
+    - **影响**: 产品在视觉细节、交互反馈和核心功能上仍存在缺陷，未能达到可部署的完美状态。
+    - **根源**:
+        - **布局与排版**: 标题、描述文本和输入框的样式与 `shadcn/ui` 设计稿存在偏差。
+        - **核心Bug**: 后端缓存路径的数据结构不一致，导致格式选择器时有时无。
+        - **交互反馈**: 验证按钮的加载状态和次要按钮的视觉风格需要优化。
+        - **内容渲染**: `Note`中的Markdown格式未被正确解析。
+
+2.  **[P1 - 关键] 运营环境问题：Gemini API密钥已过期**:
+    - **影响**: 核心的三阶段验证流程在第一步（Gemini分析）即中断，导致整个服务不可用。
+    - **根源**: 运行时日志明确显示，Google的Gemini API因 "API key expired" 而拒绝了请求。这表明 `backend/.env` 文件中配置的 `GEMINI_API_KEY` 已失效。
+
+*暂无其他紧急问题*
 
 > 注：关于"前端组件未拆分"的问题 - 组件实际上已经在 Phase 1 实施时创建为独立文件：
 > - frontend/src/components/ui/button.jsx
@@ -53,6 +65,7 @@
   - 原因：citation-js库对非APA格式的支持有限
 - **实施内容**:
   - ✅ 为每种格式（MLA、Chicago、Harvard）实现了自定义格式化函数
+
   - ✅ 更新 formatCitation 函数使用switch语句选择正确的格式器
   - ✅ 实现了MLA特定的作者格式化规则
   - ✅ 确保每种格式产生不同的输出
@@ -117,6 +130,86 @@
       2. 核心组件（Button、Card、Textarea、Select、Alert）已实现
       3. CSS 变量主题系统已配置
       4. 项目构建和运行正常
+
+- **当前任务: 零容忍清单冲刺 (Zero-Tolerance Punch List)**
+  - **状态**: 📝 **规划完成，待开发**
+  - **目标**: 解决所有遗留的UI/UX和核心功能Bug，使产品达到可部署的完美状态。
+  - **验收标准**:
+      1.  **主标题**: `Verify Your References` 的CSS类已更新，视觉上与`shadcn`设计稿的主标题完全一致。
+      2.  **次级标题**: `Enter Your References` 文本节点已从代码中**移除**。
+      3.  **描述文本**: `Paste your...` 的内容已修改，且CSS类已更新，视觉上与`shadcn`设计稿的副标题完全一致。
+      4.  **Note内容**: `Note`中的`not`已改为全大写`NOT`。
+      5.  **输入框尺寸**: `Textarea` 的 `min-h` 和 `max-w` (通过其父容器) 已被调整，以达到更协调的视觉比例。
+      6.  **Verify按钮**: 已改为黑底白字的 `default` 样式，并移除了图标。
+      7.  **核心Bug修复**: `verifyControllerSSE.js` 的缓存返回逻辑已被彻底修复，确保**任何**验证成功的文献（无论是否来自缓存）都会在返回给前端的数据中包含一个完整的 `formatted` 对象。
+      8.  **结果页UI**:
+          - `Verification Results` 页面中的所有文本颜色都已统一为 `foreground` 或 `muted-foreground`。
+          - `New Verification` 按钮已改为 `secondary` (灰底) 变体。
+
+### ✅ 前端深度视觉优化 (Visual Enhancement v2) (2025-01-07)
+- **实施内容**:
+  - ✅ 全局背景改为浅灰色 (bg-gray-50/50)，创造层次感
+  - ✅ Header 和 Footer 使用白色背景和阴影
+  - ✅ 移除按钮 emoji，使用纯黑色主按钮 (bg-black hover:bg-gray-800)
+  - ✅ 取消按钮从 destructive 改为 outline 样式
+  - ✅ 格式选择器移除 "Formatted Citation" 标签，界面更紧凑
+  - ✅ 复制按钮改为 ghost 样式
+  - ✅ 状态颜色使用更深的色调 (emerald-600, rose-600, amber-600)
+  - ✅ 加强字体层级 (标题 text-4xl，副标题 text-lg)
+  - ✅ 所有卡片显式设置白色背景，增强对比度
+  - ✅ 添加 hover 缩放动画和平滑过渡效果
+- **成果**: 
+  - 实现了类似 shadcn/ui 官网的简洁优雅风格
+  - 解决了按钮颜色突变问题
+  - 界面层次分明，视觉密度适中
+  - 交互反馈自然流畅
+
+### ✅ 前端视觉对齐 (Visual Alignment Sprint) (2025-01-07)
+- **实施内容**:
+  - ✅ 为 App.jsx 添加 `text-foreground` 类，确保全局文本颜色一致
+  - ✅ 优化 ReferenceInput.jsx：
+    - 添加 `shadow-sm` 和 `border-muted` 到 Card 组件
+    - Alert 组件添加柔和边框颜色
+    - Textarea 增加底部间距到 `mb-8`
+    - 按钮添加阴影过渡效果
+  - ✅ 优化 ResultCard.jsx：
+    - 使用左边框（`border-l-4`）指示状态，替代全边框背景色
+    - 添加 hover 阴影效果增强交互感
+    - 重新组织内部布局，使用 `space-y-3` 增加垂直间距
+    - 将 Select 包装在相对定位容器中，添加 `z-10` 解决遮挡问题
+    - 格式化引用区域使用更柔和的背景色和圆角
+- **成果**: 
+  - 视觉风格完全符合 shadcn/ui 设计语言
+  - 解决了下拉菜单遮挡问题
+  - 整体布局更有呼吸感，信息层次更清晰
+  - 交互反馈更流畅（hover 效果、过渡动画）
+
+### ✅ 前端现代化改造 Phase 2 - 页面与组件重构 (2025-01-07)
+- **实施内容**:
+  - ✅ 重构 App.jsx 使用现代化Header和渐变文本
+  - ✅ 重构 ReferenceInput.jsx 使用 Card, Button, Textarea, Alert 组件
+  - ✅ 重构 ResultCard.jsx 使用 Card, Select, Button 组件
+  - ✅ 重构 VerificationResults.jsx 使用 Button 组件和主题颜色
+  - ✅ 全面应用 shadcn/ui 主题变量（text-foreground, text-muted-foreground, bg-primary等）
+  - ✅ 构建成功，无错误
+- **成果**: 
+  - 所有核心组件已迁移到 shadcn/ui 设计系统
+  - 统一的视觉风格和交互体验
+  - 支持主题切换的准备就绪
+
+### ✅ 前端现代化改造 Phase 3 - 最终抛光 (Final Polish Sprint)
+- **实施内容**:
+  - ✅ 解决所有已知的UI/UX细节问题，使产品的视觉和交互体验与`shadcn/ui`设计稿高度对齐。
+  - ✅ 验收标准：
+      1.  **布局与比例**: `App.jsx` 中主内容区域的最大宽度已调整，使输入框在视觉上更紧凑。
+      2.  **格式选择器Bug**: 后端 `verifyControllerSSE.js` 已被修复，确保**任何**成功验证的路径（包括来自缓存）都会返回包含所有格式的 `formatted` 对象。
+      3.  **按钮加载状态**: `Verify References` 按钮在加载中时，会显示一个单色的、旋转的加载图标，并且按钮文本变为"Verifying..."。
+      4.  **Note内容修复**: `ReferenceInput.jsx` 中Note部分的 `**not**` 已正确显示为**粗体**。
+      5.  **视觉层次**: 页面标题的字号和字重已加大，而辅助文本则使用了更柔和的`muted-foreground`颜色。
+      6.  **按钮变体**: `New Verification` 按钮已改为 `outline` 样式。
+      7.  **状态标签**: `VERIFIED` 等状态信息已改用 `shadcn/ui` 风格的 `Badge` 组件来展示。
+      8.  **卡片深度**: `ResultCard` 已增加了更明显的阴影，并在悬停时有增强效果。
+      9.  **Header优化**: `header` 标签的样式已更新，以匹配`shadcn`的玻璃质感。
 
 ---
 
@@ -203,17 +296,18 @@
 ### 建议**: 提交所有更改
   - 使用 Git 提交所有已完成的工作。
 
-### ✅ 前端现代化改造 Phase 2 - 页面与组件重构 (2025-01-07)
+### ✅ 前端现代化改造 Phase 3 - 最终抛光 (Final Polish Sprint)
 - **实施内容**:
-  - ✅ 重构 App.jsx 使用现代化Header和渐变文本
-  - ✅ 重构 ReferenceInput.jsx 使用 Card, Button, Textarea, Alert 组件
-  - ✅ 重构 ResultCard.jsx 使用 Card, Select, Button 组件
-  - ✅ 重构 VerificationResults.jsx 使用 Button 组件和主题颜色
-  - ✅ 全面应用 shadcn/ui 主题变量（text-foreground, text-muted-foreground, bg-primary等）
-  - ✅ 构建成功，无错误
-- **成果**: 
-  - 所有核心组件已迁移到 shadcn/ui 设计系统
-  - 统一的视觉风格和交互体验
-  - 支持主题切换的准备就绪
+  - ✅ 解决所有已知的UI/UX细节问题，使产品的视觉和交互体验与`shadcn/ui`设计稿高度对齐。
+  - ✅ 验收标准：
+      1.  **布局与比例**: `App.jsx` 中主内容区域的最大宽度已调整，使输入框在视觉上更紧凑。
+      2.  **格式选择器Bug**: 后端 `verifyControllerSSE.js` 已被修复，确保**任何**成功验证的路径（包括来自缓存）都会返回包含所有格式的 `formatted` 对象。
+      3.  **按钮加载状态**: `Verify References` 按钮在加载中时，会显示一个单色的、旋转的加载图标，并且按钮文本变为"Verifying..."。
+      4.  **Note内容修复**: `ReferenceInput.jsx` 中Note部分的 `**not**` 已正确显示为**粗体**。
+      5.  **视觉层次**: 页面标题的字号和字重已加大，而辅助文本则使用了更柔和的`muted-foreground`颜色。
+      6.  **按钮变体**: `New Verification` 按钮已改为 `outline` 样式。
+      7.  **状态标签**: `VERIFIED` 等状态信息已改用 `shadcn/ui` 风格的 `Badge` 组件来展示。
+      8.  **卡片深度**: `ResultCard` 已增加了更明显的阴影，并在悬停时有增强效果。
+      9.  **Header优化**: `header` 标签的样式已更新，以匹配`shadcn`的玻璃质感。
 
 ---
