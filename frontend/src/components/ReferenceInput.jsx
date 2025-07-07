@@ -111,7 +111,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
             </div>
           </div>
           <Textarea
-            className="min-h-[250px] font-mono text-sm"
+            className="min-h-[280px] font-mono text-sm"
             placeholder={exampleText}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
