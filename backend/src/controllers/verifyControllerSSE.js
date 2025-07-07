@@ -1,6 +1,7 @@
 import { analyzeReferencesBatch } from '../services/geminiServiceAxios.js'
 import { searchReference } from '../services/googleSearchService.js'
 import { verifyWithCrossRef, findPaperOnCrossRef } from '../services/crossrefService.js'
+import { getCachedResult, setCachedResult, getCacheStats } from '../services/cacheService.js'
 
 export const verifyReferencesSSEController = async (req, res, next) => {
   try {
@@ -15,19 +16,75 @@ export const verifyReferencesSSEController = async (req, res, next) => {
     const totalReferences = references.length
     let processedCount = 0
     
-    // 发送开始事件
+    // Check cache first and separate cached vs uncached references
+    const cachedResults = []
+    const uncachedReferences = []
+    const uncachedIndices = []
+    
+    for (let i = 0; i < references.length; i++) {
+      const cachedResult = getCachedResult(references[i])
+      if (cachedResult) {
+        cachedResults.push({ index: i, result: cachedResult })
+      } else {
+        uncachedReferences.push(references[i])
+        uncachedIndices.push(i)
+      }
+    }
+    
+    // 发送开始事件，包含缓存信息
     res.write(`data: ${JSON.stringify({ 
       type: 'start', 
-      message: 'Starting batch analysis...',
-      total: totalReferences 
+      message: `Starting verification... (${cachedResults.length} from cache, ${uncachedReferences.length} to process)`,
+      total: totalReferences,
+      cached: cachedResults.length,
+      uncached: uncachedReferences.length
     })}\n\n`)
     
-    // 阶段一：批量解析
-    console.log('Phase 1: Batch analysis with Gemini...')
+    // 立即发送所有缓存的结果
+    for (const { index, result } of cachedResults) {
+      processedCount++
+      const verificationResult = {
+        index,
+        reference: result.reference,
+        ...result.verificationResult,
+        fromCache: true
+      }
+      
+      res.write(`data: ${JSON.stringify({
+        type: 'result',
+        data: verificationResult,
+        progress: {
+          current: processedCount,
+          total: totalReferences,
+          percentage: Math.round((processedCount / totalReferences) * 100)
+        }
+      })}\n\n`)
+    }
+    
+    // 如果所有结果都来自缓存，直接结束
+    if (uncachedReferences.length === 0) {
+      const stats = getCacheStats()
+      res.write(`data: ${JSON.stringify({ 
+        type: 'complete', 
+        message: 'All results from cache!',
+        cacheStats: stats
+      })}\n\n`)
+      res.end()
+      return
+    }
+    
+    // 阶段一：批量解析（仅处理未缓存的）
+    console.log(`Phase 1: Batch analysis with Gemini for ${uncachedReferences.length} uncached references...`)
     let analyzedReferences
     try {
-      analyzedReferences = await analyzeReferencesBatch(references)
+      analyzedReferences = await analyzeReferencesBatch(uncachedReferences)
       console.log(`Successfully analyzed ${analyzedReferences.length} references`)
+      
+      // 恢复原始索引
+      for (let i = 0; i < analyzedReferences.length; i++) {
+        analyzedReferences[i].originalIndex = uncachedIndices[i]
+        analyzedReferences[i].originalReference = uncachedReferences[i]
+      }
       
       // 发送批量分析完成事件
       res.write(`data: ${JSON.stringify({ 
@@ -81,8 +138,8 @@ export const verifyReferencesSSEController = async (req, res, next) => {
           processedCount++
           
           const verificationResult = {
-            index: i,
-            reference: ref.originalReference || references[i],
+            index: ref.originalIndex,
+            reference: ref.originalReference,
             status: 'verified',
             message: `Verified - DOI: ${crossrefResult.doi}`,
             source: 'crossref',
@@ -96,6 +153,9 @@ export const verifyReferencesSSEController = async (req, res, next) => {
               citationCount: crossrefResult.citationCount
             }
           }
+          
+          // Store in cache
+          setCachedResult(ref.originalReference, ref, verificationResult)
           
           // 如果是通过路径B找到的，添加匹配分数信息
           if (crossrefResult.matchScore) {
@@ -147,8 +207,8 @@ export const verifyReferencesSSEController = async (req, res, next) => {
         }
         
         const verificationResult = {
-          index: ref.index,
-          reference: ref.originalReference || references[ref.index],
+          index: ref.originalIndex,
+          reference: ref.originalReference,
           status: finalStatus,
           message: finalMessage,
           source: 'google',
@@ -163,6 +223,9 @@ export const verifyReferencesSSEController = async (req, res, next) => {
             matches: searchResult.evidence[0].matches
           }
         }
+        
+        // Store in cache
+        setCachedResult(ref.originalReference, ref, verificationResult)
         
         res.write(`data: ${JSON.stringify({
           type: 'result',
@@ -181,8 +244,8 @@ export const verifyReferencesSSEController = async (req, res, next) => {
         res.write(`data: ${JSON.stringify({
           type: 'result',
           data: {
-            index: ref.index,
-            reference: ref.originalReference || references[ref.index],
+            index: ref.originalIndex,
+            reference: ref.originalReference,
             status: 'error',
             message: error.message
           },
@@ -195,7 +258,13 @@ export const verifyReferencesSSEController = async (req, res, next) => {
       }
     }
     
-    res.write(`data: ${JSON.stringify({ type: 'complete' })}\n\n`)
+    // Send completion event with cache statistics
+    const stats = getCacheStats()
+    res.write(`data: ${JSON.stringify({ 
+      type: 'complete',
+      message: 'Verification completed',
+      cacheStats: stats
+    })}\n\n`)
     res.end()
     
   } catch (error) {
