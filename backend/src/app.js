@@ -45,6 +45,20 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Reference Verifier API',
+    version: '1.0.0',
+    endpoints: {
+      test: '/api/test',
+      verify: '/api/verify-references',
+      verifyStream: '/api/verify-references-stream',
+      format: '/api/format-citations'
+    }
+  })
+})
+
 // Health check route
 app.get('/api/test', (req, res) => {
   res.json({
