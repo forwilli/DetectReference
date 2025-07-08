@@ -127,8 +127,9 @@ const searchForReference = async (searchQuery, numResults) => {
   
   if (!apiKey || !cseId) {
     console.error('Google Search API credentials not found')
-    console.error('API Key:', apiKey ? '✓ Present' : '✗ Missing')
-    console.error('CSE ID:', cseId ? '✓ Present' : '✗ Missing')
+    console.error('API Key:', apiKey ? `✓ Present (${apiKey.substring(0, 10)}...)` : '✗ Missing')
+    console.error('CSE ID:', cseId ? `✓ Present (${cseId})` : '✗ Missing')
+    console.error('All env vars:', Object.keys(process.env).filter(k => k.includes('GOOGLE')))
     throw new Error('Search API not configured')
   }
   
