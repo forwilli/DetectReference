@@ -1,85 +1,56 @@
-# Reference Verifier
+# Cite - Reference Verifier & Citation Generator
 
-一个使用AI技术验证学术参考文献真实性的Web应用。
+A free web tool that detects AI hallucinations and fabricated references in academic papers. Verify citations with CrossRef and Google Scholar, then format them in APA, MLA, Chicago, or Harvard styles.
 
-## 功能特点
+🔗 **Live Demo**: [cite.alx37.com](https://cite.alx37.com)
 
-- 批量验证参考文献
-- 使用 Gemini 2.5 Flash 进行文献信息识别
-- 通过 Google Search API 验证文献真实性
-- 直观的结果展示（已验证/虚构/不确定）
-- 实时验证进度显示
+## Features
 
-## 技术栈
+- 🔍 **Reference Verification**: Check if citations are real using CrossRef and Google Scholar
+- 🤖 **AI Hallucination Detection**: Identify fabricated or AI-generated references
+- 📝 **Citation Formatting**: Convert references to APA, MLA, Chicago, or Harvard formats
+- ✨ **Rich Text Copy**: Preserve italics when copying to Word
+- 🚀 **Free Forever**: No signup, no limits, no ads
 
-- **前端**: React + Vite + Tailwind CSS
-- **后端**: Node.js + Express
-- **AI**: Google Gemini 2.5 Flash
-- **搜索**: Google Custom Search API
+## Tech Stack
 
-## 快速开始
+- **Frontend**: React, Tailwind CSS, Vite
+- **Backend**: Node.js, Express
+- **APIs**: CrossRef, Google Scholar, Gemini AI
+- **Deployment**: Vercel
 
-### 环境要求
+## Development
 
-- Node.js >= 18.0.0
-- npm 或 yarn
-
-### 安装步骤
-
-1. 克隆项目
 ```bash
-git clone [repository-url]
-cd DetectReference
+# Install dependencies
+cd frontend && npm install
+cd ../backend && npm install
+
+# Run frontend (http://localhost:5173)
+cd frontend && npm run dev
+
+# Run backend (http://localhost:3001)
+cd backend && npm start
 ```
 
-2. 安装前端依赖
-```bash
-cd frontend
-npm install
-```
+## Environment Variables
 
-3. 安装后端依赖
-```bash
-cd ../backend
-npm install
-```
-
-4. 配置环境变量
-在 backend 目录创建 `.env` 文件：
+Create `.env` file in backend directory:
 ```env
 PORT=3001
 GEMINI_API_KEY=your_gemini_api_key
-GOOGLE_SEARCH_API_KEY=your_google_search_api_key
+GOOGLE_API_KEY=your_google_api_key
 GOOGLE_CSE_ID=your_custom_search_engine_id
 ```
 
-5. 启动开发服务器
+## Contributing
 
-前端：
-```bash
-cd frontend
-npm run dev
-```
+Pull requests are welcome! Please feel free to submit a PR.
 
-后端：
-```bash
-cd backend
-npm run dev
-```
+## License
 
-## 使用说明
+MIT License - feel free to use this in your own projects!
 
-1. 打开浏览器访问 http://localhost:5173
-2. 在文本框中粘贴参考文献列表（每行一个）
-3. 点击 "Verify References" 按钮
-4. 查看验证结果
+---
 
-## 项目结构
-
-```
-DetectReference/
-├── frontend/          # 前端应用
-├── backend/           # 后端API
-├── docs/              # 项目文档
-└── README.md
-```
+Made with ❤️ for students everywhere

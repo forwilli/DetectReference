@@ -35,7 +35,8 @@
       "Bash(git restore:*)",
       "Bash(npm run start:*)",
       "Bash(npm restart)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git rm:*)"
     ],
     "deny": []
   }
