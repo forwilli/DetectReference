@@ -36,7 +36,7 @@ Johnson, M. (2021). Book title. Publisher Name.`
     setFormattedResults(null)
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || ''
+      const API_URL = import.meta.env.VITE_API_URL || 'https://detect-reference-backend.vercel.app'
       const response = await fetch(`${API_URL}/api/format-citations`, {
         method: 'POST',
         headers: {
