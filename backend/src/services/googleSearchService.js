@@ -46,71 +46,37 @@ export const searchReference = async (referenceData) => {
   try {
     const { title, authors, year, journal, doi, url: refUrl, publisher, type } = referenceData
     
-    // 构建搜索查询 - 首先尝试精确搜索
+    // 构建优化的单次搜索查询
     let searchQuery = ''
+    
     if (title) {
-      // 清理标题中的特殊字符
+      // 清理标题，保留关键词
       const cleanTitle = title.replace(/&/g, 'and').replace(/[:]/g, ' ').replace(/[^\w\s,.-]/g, ' ').replace(/\s+/g, ' ').trim()
-      searchQuery += cleanTitle + ' '
+      
+      // 对于较长标题，只使用前面的关键词
+      const titleWords = cleanTitle.split(' ')
+      if (titleWords.length > 8) {
+        searchQuery += titleWords.slice(0, 6).join(' ') + ' '
+      } else {
+        searchQuery += cleanTitle + ' '
+      }
     }
+    
+    // 只添加第一作者的姓
     if (authors && authors.length > 0) {
-      const cleanAuthor = authors[0].replace(/[^\w\s.-]/g, ' ').replace(/\s+/g, ' ').trim()
-      searchQuery += cleanAuthor + ' '
+      const authorName = authors[0].split(',')[0].split(' ').pop()
+      if (authorName) searchQuery += authorName + ' '
     }
+    
     if (year) searchQuery += year + ' '
-    if (journal) {
-      const cleanJournal = journal.replace(/&/g, 'and').replace(/[:]/g, ' ').replace(/[^\w\s,.-]/g, ' ').replace(/\s+/g, ' ').trim()
-      searchQuery += cleanJournal + ' '
-    }
+    
+    // DOI是最准确的标识符
     if (doi) searchQuery += 'doi:' + doi
 
-    console.log('Search query:', searchQuery.trim())
+    console.log('Optimized search query:', searchQuery.trim())
     
-    let response = await searchForReference(searchQuery.trim(), 10) // Google API 免费版最多10个结果
-    
-    // 如果精确搜索没有结果，尝试更宽松的搜索
-    if (response.length === 0 && title) {
-      console.log('No results with exact search, trying relaxed search...')
-      
-      // 基于文献类型调整搜索策略
-      let relaxedQuery = ''
-      
-      if (type === 'webpage' || type === 'report') {
-        // 对于网页和报告，使用更灵活的搜索
-        const cleanTitle = title.replace(/&/g, 'and').replace(/[:]/g, ' ').replace(/[^\w\s.-]/g, ' ').trim()
-        const keyWords = cleanTitle.split(' ').filter(w => w.length > 4).slice(0, 4).join(' ')
-        relaxedQuery = keyWords
-        if (year) relaxedQuery += ` ${year}`
-        
-        // 如果有特定域名，添加域名作为关键词
-        if (refUrl) {
-          try {
-            const domain = new URL(refUrl).hostname
-            // 不使用 site: 操作符，因为可能不被 CSE 支持
-            const siteName = domain.replace('www.', '').split('.')[0]
-            if (siteName && siteName.length > 2) {
-              relaxedQuery += ` ${siteName}`
-            }
-          } catch (e) {
-            // 忽略无效URL
-          }
-        }
-      } else {
-        // 学术文献使用标准策略
-        const cleanTitle = title.replace(/&/g, 'and').replace(/[:]/g, ' ').replace(/[^\w\s.-]/g, ' ').trim()
-        const titleWords = cleanTitle.split(' ').filter(w => w.length > 3)
-        const keyWords = titleWords.slice(0, 5).join(' ')
-        relaxedQuery = keyWords
-        if (authors && authors.length > 0) {
-          const cleanAuthor = authors[0].replace(/[^\w\s.-]/g, ' ').trim()
-          relaxedQuery += ` ${cleanAuthor}`
-        }
-        if (year) relaxedQuery += ` ${year}`
-      }
-      
-      console.log('Relaxed search query:', relaxedQuery)
-      response = await searchForReference(relaxedQuery, 10)
-    }
+    // 只进行一次搜索
+    const response = await searchForReference(searchQuery.trim(), 10)
     
     // 使用新的置信度评分系统处理结果
     return processSearchResultsWithConfidence(response, referenceData)
