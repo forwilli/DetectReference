@@ -15,7 +15,7 @@ async function processInBatches(items, batchSize, processor) {
   
   for (let i = 0; i < items.length; i += batchSize) {
     const batch = items.slice(i, i + batchSize)
-    const batchPromises = batch.map(processor)
+    const batchPromises = batch.map((item, localIndex) => processor(item, i + localIndex))
     const batchResults = await Promise.allSettled(batchPromises)
     results.push(...batchResults)
     
@@ -31,7 +31,13 @@ async function processInBatches(items, batchSize, processor) {
 export const verifyReferencesSSEController = async (req, res, next) => {
   try {
     const { references } = req.body
+    
+    if (!references || !Array.isArray(references)) {
+      throw new Error('Invalid references data')
+    }
+    
     console.log('Received references for parallel SSE processing:', references.length)
+    console.log('First reference sample:', references[0]?.substring(0, 100) + '...')
     
     res.setHeader('Content-Type', 'text/event-stream')
     res.setHeader('Cache-Control', 'no-cache')
@@ -173,9 +179,9 @@ export const verifyReferencesSSEController = async (req, res, next) => {
     if (pendingGoogleSearch.length > 0) {
       console.log(`Phase 3: Parallel Google search for ${pendingGoogleSearch.length} remaining references...`)
       
-      const googleSearchProcessor = async (ref, index) => {
+      const googleSearchProcessor = async (ref, globalIndex) => {
         try {
-          console.log(`Processing Google search for: ${ref.title}`)
+          console.log(`[${globalIndex + 1}] Processing Google search for: ${ref.title}`)
           const searchStartTime = Date.now()
           const searchResult = await searchReference(ref)
           const searchEndTime = Date.now()
