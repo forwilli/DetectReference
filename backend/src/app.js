@@ -5,10 +5,8 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// 仅在非生产环境加载.env文件
-if (!process.env.VERCEL && process.env.NODE_ENV !== 'production') {
-  dotenv.config({ path: path.join(__dirname, '..', '.env') })
-}
+// 加载.env文件
+dotenv.config({ path: path.join(__dirname, '..', '.env') })
 
 // 验证必需的环境变量
 const requiredEnvVars = ['GEMINI_API_KEY', 'GOOGLE_SEARCH_API_KEY', 'GOOGLE_CSE_ID']
