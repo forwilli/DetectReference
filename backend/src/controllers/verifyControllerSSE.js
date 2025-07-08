@@ -154,10 +154,26 @@ export const verifyReferencesSSEController = async (req, res, next) => {
     console.log(`Phase 3: Google search for ${pendingGoogleSearch.length} remaining references...`)
     
     // 阶段三：简单串行处理（先确保稳定性）
-    for (const ref of pendingGoogleSearch) {
+    console.log(`Starting Phase 3: Google Search for ${pendingGoogleSearch.length} references`)
+    
+    // 设置整体超时，防止无限卡住
+    const overallTimeout = setTimeout(() => {
+      console.error('Overall verification timeout reached - forcing completion')
+      res.write(`data: ${JSON.stringify({ 
+        type: 'complete',
+        message: 'Verification timed out - partial results returned'
+      })}\\n\\n`)
+      res.end()
+    }, 120000) // 2分钟整体超时
+    
+    for (let i = 0; i < pendingGoogleSearch.length; i++) {
+      const ref = pendingGoogleSearch[i]
       try {
-        console.log(`Processing reference: ${ref.title}`)
+        console.log(`[${i+1}/${pendingGoogleSearch.length}] Processing reference: ${ref.title}`)
+        const searchStartTime = Date.now()
         const searchResult = await searchReference(ref)
+        const searchEndTime = Date.now()
+        console.log(`[${i+1}/${pendingGoogleSearch.length}] Search completed in ${searchEndTime - searchStartTime}ms for: ${ref.title}`)
         processedCount++
         
         const confidenceLevel = getConfidenceLevel(searchResult.confidence)
@@ -184,10 +200,10 @@ export const verifyReferencesSSEController = async (req, res, next) => {
           }
         })}\n\n`)
         
-        console.log(`Completed ${processedCount}/${totalReferences}`)
+        console.log(`[${i+1}/${pendingGoogleSearch.length}] Completed ${processedCount}/${totalReferences} - sent result for: ${ref.title}`)
         
       } catch (error) {
-        console.error(`Error processing reference "${ref.title}":`, error.message)
+        console.error(`[${i+1}/${pendingGoogleSearch.length}] Error processing reference "${ref.title}":`, error.message)
         processedCount++
         
         res.write(`data: ${JSON.stringify({
@@ -208,10 +224,16 @@ export const verifyReferencesSSEController = async (req, res, next) => {
       }
       
       // 减少延迟，加快处理速度
+      console.log(`[${i+1}/${pendingGoogleSearch.length}] Waiting 0.5s before next request...`)
       await new Promise(resolve => setTimeout(resolve, 500)) // 0.5秒延迟
+      console.log(`[${i+1}/${pendingGoogleSearch.length}] Continuing to next reference...`)
     }
     
+    // 清除超时定时器
+    clearTimeout(overallTimeout)
+    
     // Send completion event
+    console.log('All references processed successfully - sending completion event')
     res.write(`data: ${JSON.stringify({ 
       type: 'complete',
       message: 'Verification completed'
