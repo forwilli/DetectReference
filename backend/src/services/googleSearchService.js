@@ -151,25 +151,42 @@ const searchForReference = async (searchQuery, numResults) => {
   try {
     const config = {
       params,
-      timeout: 20000  // 增加到20秒
+      timeout: 8000  // 减少到8秒，避免长时间等待
     }
     
     // 直接连接，不使用任何代理
+    console.log(`Making Google Search request with 8s timeout for: ${searchQuery}`)
     
     const response = await axios.get(url, config)
+    console.log(`Google Search completed successfully for: ${searchQuery}`)
     return response.data.items || []
   } catch (error) {
+    // 处理超时错误
+    if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
+      console.error(`Google Search request timed out after 8s for query: ${searchQuery}`)
+      return []
+    }
+    
     if (error.code === 'ECONNREFUSED') {
       console.error('Connection refused to Google API')
+      return []
+    }
+    
+    // 处理网络错误
+    if (error.code === 'ECONNRESET' || error.code === 'ENOTFOUND') {
+      console.error(`Network error (${error.code}) for Google Search:`, searchQuery)
+      return []
+    }
+    
+    // 处理API限制
+    if (error.response?.status === 429) {
+      console.error('Google Search API rate limited. Query:', searchQuery)
       return []
     }
     
     if (error.response?.status === 400) {
       console.error('Bad request to Google Search API. Query:', searchQuery)
       console.error('Error details:', JSON.stringify(error.response.data, null, 2))
-      console.error('Request URL:', error.config?.url)
-      console.error('Request params:', error.config?.params)
-      // 返回空数组而不是抛出错误，让系统继纭处理
       return []
     }
     
@@ -178,7 +195,7 @@ const searchForReference = async (searchQuery, numResults) => {
       return []
     }
     
-    console.error('Google Search API error:', error.message)
+    console.error('Google Search API error:', error.message, 'Query:', searchQuery)
     return []
   }
 }

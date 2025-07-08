@@ -207,8 +207,8 @@ export const verifyReferencesSSEController = async (req, res, next) => {
         })}\n\n`)
       }
       
-      // 每个请求后短暂延迟，避免API限制
-      await new Promise(resolve => setTimeout(resolve, 1000)) // 1秒延迟
+      // 减少延迟，加快处理速度
+      await new Promise(resolve => setTimeout(resolve, 500)) // 0.5秒延迟
     }
     
     // Send completion event
