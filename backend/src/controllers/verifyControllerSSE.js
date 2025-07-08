@@ -153,55 +153,28 @@ export const verifyReferencesSSEController = async (req, res, next) => {
     // 阶段三：Google 搜索验证（将在下一步实现）
     console.log(`Phase 3: Google search for ${pendingGoogleSearch.length} remaining references...`)
     
-    // 阶段三：使用改进的Google搜索验证剩余文献
-    for (const ref of pendingGoogleSearch) {
+    // 阶段三：并发处理Google搜索验证剩余文献
+    const CONCURRENT_LIMIT = 3 // 限制并发数量避免API限制
+    
+    const processRefConcurrently = async (ref) => {
       try {
         const searchResult = await searchReference(ref)
         processedCount++
         
-        console.log('DEBUG: Google search result:', { status: searchResult.status, confidence: searchResult.confidence })
-        
-        // 根据置信度确定最终状态和消息
-        let finalStatus = searchResult.status
-        let finalMessage = searchResult.message
-        
-        // 获取置信度等级
         const confidenceLevel = getConfidenceLevel(searchResult.confidence)
-        
-        // 对于模糊结果，提供更详细的信息
-        if (searchResult.status === 'ambiguous') {
-          finalMessage = `Ambiguous (confidence: ${confidenceLevel})`
-          if (searchResult.evidence && searchResult.evidence.length > 0) {
-            const topEvidence = searchResult.evidence[0]
-            finalMessage += ` - Best match: ${topEvidence.matches.join(', ')}`
-          }
-        } else if (searchResult.status === 'verified') {
-          finalMessage = `Verified (confidence: ${confidenceLevel})`
-        }
+        let finalMessage = searchResult.message || `${searchResult.status} (confidence: ${confidenceLevel})`
         
         const verificationResult = {
           index: ref.originalIndex,
           reference: ref.originalReference,
-          status: finalStatus,
+          status: searchResult.status,
           message: finalMessage,
           source: 'google',
           confidenceLevel: confidenceLevel,
           doi: searchResult.doi || ref.doi || null
         }
         
-        console.log('DEBUG: Verification result status before formatting:', finalStatus)
-        
-        // 如果有证据，添加最佳匹配信息（但不包含分数）
-        if (searchResult.evidence && searchResult.evidence.length > 0) {
-          verificationResult.bestMatch = {
-            matches: searchResult.evidence[0].matches
-          }
-        }
-        
-        // Formatting removed - handled by separate format endpoint
-        
-        // Cache removed - no longer storing results
-        
+        // 发送结果
         res.write(`data: ${JSON.stringify({
           type: 'result',
           data: verificationResult,
@@ -231,6 +204,17 @@ export const verifyReferencesSSEController = async (req, res, next) => {
             percentage: Math.round((processedCount / totalReferences) * 100)
           }
         })}\n\n`)
+      }
+    }
+    
+    // 分批处理，避免过多并发请求
+    for (let i = 0; i < pendingGoogleSearch.length; i += CONCURRENT_LIMIT) {
+      const batch = pendingGoogleSearch.slice(i, i + CONCURRENT_LIMIT)
+      await Promise.allSettled(batch.map(processRefConcurrently))
+      
+      // 批次间添加短暂延迟，避免API限制
+      if (i + CONCURRENT_LIMIT < pendingGoogleSearch.length) {
+        await new Promise(resolve => setTimeout(resolve, 500)) // 500ms延迟
       }
     }
     
