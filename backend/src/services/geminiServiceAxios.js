@@ -11,14 +11,6 @@ const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL
 console.log('Gemini API Key loaded:', GEMINI_API_KEY ? 'Yes' : 'No')
 
 export const analyzeReferencesBatch = async (references) => {
-  // 在生产环境明确禁用代理
-  if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
-    delete process.env.HTTP_PROXY
-    delete process.env.HTTPS_PROXY
-    delete process.env.http_proxy
-    delete process.env.https_proxy
-  }
-  
   try {
     console.log('Analyzing batch of references:', references.length)
     const requestData = {

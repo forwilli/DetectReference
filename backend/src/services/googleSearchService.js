@@ -122,14 +122,6 @@ export const searchReference = async (referenceData) => {
 
 // 执行搜索的辅助函数
 const searchForReference = async (searchQuery, numResults) => {
-  // 在生产环境明确禁用代理
-  if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
-    delete process.env.HTTP_PROXY
-    delete process.env.HTTPS_PROXY
-    delete process.env.http_proxy
-    delete process.env.https_proxy
-  }
-  
   // 在使用时获取配置
   const { apiKey, cseId } = getGoogleSearchConfig()
   
