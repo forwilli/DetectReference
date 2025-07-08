@@ -1,19 +1,24 @@
 import axios from 'axios'
-import dotenv from 'dotenv'
-import { httpsAgent } from '../config/agent.js'
 
-// 确保加载环境变量
-dotenv.config()
-
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY
-const MODEL_NAME = process.env.GEMINI_MODEL_NAME || 'gemini-2.5-flash-lite-preview-06-17'
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent`
-
-console.log('Gemini API Key loaded:', GEMINI_API_KEY ? 'Yes' : 'No')
+// 使用延迟加载模式获取配置
+const getGeminiConfig = () => {
+  const apiKey = process.env.GEMINI_API_KEY
+  const modelName = process.env.GEMINI_MODEL_NAME || 'gemini-2.5-flash-lite-preview-06-17'
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`
+  
+  return { apiKey, modelName, apiUrl }
+}
 
 export const analyzeReferencesBatch = async (references) => {
   try {
+    const { apiKey, apiUrl } = getGeminiConfig()
+    
+    if (!apiKey) {
+      throw new Error('GEMINI_API_KEY is not configured')
+    }
+    
     console.log('Analyzing batch of references:', references.length)
+    console.log('Gemini API Key:', apiKey ? `${apiKey.substring(0, 10)}... (${apiKey.length} chars)` : 'Not configured')
     const requestData = {
       contents: [{
         parts: [{
@@ -37,13 +42,12 @@ ${JSON.stringify(references)}
     }
 
     const response = await axios.post(
-      `${API_URL}?key=${GEMINI_API_KEY}`,
+      `${apiUrl}?key=${apiKey}`,
       requestData,
       {
         headers: {
           'Content-Type': 'application/json'
-        },
-        httpsAgent: httpsAgent
+        }
       }
     )
 

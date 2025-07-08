@@ -1,6 +1,6 @@
 import axios from 'axios'
 import dotenv from 'dotenv'
-import { httpsAgent } from '../config/agent.js'
+// 移除代理导入
 
 // 确保加载环境变量
 dotenv.config()
@@ -138,8 +138,7 @@ const searchForReference = async (searchQuery, numResults) => {
     return []
   }
   
-  console.log('Debug - httpsAgent:', httpsAgent ? 'Present' : 'NULL')
-  console.log('Debug - PROXY_URL:', process.env.PROXY_URL)
+  console.log('Making direct Google Search request (no proxy)')
   
   const url = 'https://www.googleapis.com/customsearch/v1'
   const params = {
@@ -152,30 +151,44 @@ const searchForReference = async (searchQuery, numResults) => {
   try {
     const config = {
       params,
-      timeout: 10000
+      timeout: 3000,  // 3秒超时，适合Vercel 10秒限制
+      headers: {
+        'Connection': 'close'  // 避免socket hang up问题
+      }
     }
     
-    // 只有当 httpsAgent 存在时才添加
-    if (httpsAgent) {
-      config.httpsAgent = httpsAgent
-    } else {
-      console.warn('Warning: httpsAgent is null, request may fail')
-    }
+    console.log(`Making Google Search request with 3s timeout for: ${searchQuery}`)
     
     const response = await axios.get(url, config)
+    console.log(`Google Search completed successfully for: ${searchQuery}`)
     return response.data.items || []
   } catch (error) {
+    // 处理超时错误
+    if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
+      console.error(`Google Search request timed out after 3s for query: ${searchQuery}`)
+      return []
+    }
+    
     if (error.code === 'ECONNREFUSED') {
-      console.error(`Proxy connection refused. Please ensure your proxy at ${process.env.PROXY_URL} is running.`)
+      console.error('Connection refused to Google API')
+      return []
+    }
+    
+    // 处理网络错误
+    if (error.code === 'ECONNRESET' || error.code === 'ENOTFOUND') {
+      console.error(`Network error (${error.code}) for Google Search:`, searchQuery)
+      return []
+    }
+    
+    // 处理API限制
+    if (error.response?.status === 429) {
+      console.error('Google Search API rate limited. Query:', searchQuery)
       return []
     }
     
     if (error.response?.status === 400) {
       console.error('Bad request to Google Search API. Query:', searchQuery)
       console.error('Error details:', JSON.stringify(error.response.data, null, 2))
-      console.error('Request URL:', error.config?.url)
-      console.error('Request params:', error.config?.params)
-      // 返回空数组而不是抛出错误，让系统继纭处理
       return []
     }
     
@@ -184,7 +197,7 @@ const searchForReference = async (searchQuery, numResults) => {
       return []
     }
     
-    console.error('Google Search API error:', error.message)
+    console.error('Google Search API error:', error.message, 'Query:', searchQuery)
     return []
   }
 }
