@@ -1,6 +1,5 @@
 import axios from 'axios'
 import dotenv from 'dotenv'
-import { httpsAgent } from '../config/agent.js'
 
 // 确保加载环境变量
 dotenv.config()
@@ -42,8 +41,7 @@ ${JSON.stringify(references)}
       {
         headers: {
           'Content-Type': 'application/json'
-        },
-        httpsAgent: httpsAgent
+        }
       }
     )
 
