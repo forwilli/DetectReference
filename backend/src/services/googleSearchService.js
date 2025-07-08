@@ -151,11 +151,13 @@ const searchForReference = async (searchQuery, numResults) => {
   try {
     const config = {
       params,
-      timeout: 5000  // 减少到5秒，避免Vercel 30秒超时
+      timeout: 3000,  // 3秒超时，适合Vercel 10秒限制
+      headers: {
+        'Connection': 'close'  // 避免socket hang up问题
+      }
     }
     
-    // 直接连接，不使用任何代理
-    console.log(`Making Google Search request with 5s timeout for: ${searchQuery}`)
+    console.log(`Making Google Search request with 3s timeout for: ${searchQuery}`)
     
     const response = await axios.get(url, config)
     console.log(`Google Search completed successfully for: ${searchQuery}`)
@@ -163,7 +165,7 @@ const searchForReference = async (searchQuery, numResults) => {
   } catch (error) {
     // 处理超时错误
     if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
-      console.error(`Google Search request timed out after 5s for query: ${searchQuery}`)
+      console.error(`Google Search request timed out after 3s for query: ${searchQuery}`)
       return []
     }
     

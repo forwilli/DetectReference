@@ -156,9 +156,9 @@ export const verifyReferencesSSEController = async (req, res, next) => {
     // 阶段三：限制处理数量，避免Vercel 30秒超时
     console.log(`Starting Phase 3: Google Search for ${pendingGoogleSearch.length} references`)
     
-    // 限制处理数量以避免Vercel 30秒超时
-    const maxReferencesToProcess = Math.min(pendingGoogleSearch.length, 3)
-    console.log(`Processing only first ${maxReferencesToProcess} references to avoid timeout`)
+    // 限制处理数量以避免Vercel 10秒超时（免费版）
+    const maxReferencesToProcess = Math.min(pendingGoogleSearch.length, 2)
+    console.log(`Processing only first ${maxReferencesToProcess} references to avoid Vercel 10s timeout`)
     
     for (let i = 0; i < maxReferencesToProcess; i++) {
       const ref = pendingGoogleSearch[i]
@@ -217,10 +217,10 @@ export const verifyReferencesSSEController = async (req, res, next) => {
         })}\n\n`)
       }
       
-      // 减少延迟，加快处理速度
+      // 减少延迟，加快处理速度以适应10秒限制
       if (i < maxReferencesToProcess - 1) {
-        console.log(`[${i+1}/${maxReferencesToProcess}] Waiting 0.3s before next request...`)
-        await new Promise(resolve => setTimeout(resolve, 300)) // 0.3秒延迟
+        console.log(`[${i+1}/${maxReferencesToProcess}] Waiting 0.1s before next request...`)
+        await new Promise(resolve => setTimeout(resolve, 100)) // 0.1秒延迟
         console.log(`[${i+1}/${maxReferencesToProcess}] Continuing to next reference...`)
       }
     }
