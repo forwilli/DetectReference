@@ -1,6 +1,6 @@
 import axios from 'axios'
 import dotenv from 'dotenv'
-import { httpsAgent } from '../config/agent.js'
+// 移除代理导入
 
 // 确保加载环境变量
 dotenv.config()
@@ -138,8 +138,7 @@ const searchForReference = async (searchQuery, numResults) => {
     return []
   }
   
-  console.log('Debug - httpsAgent:', httpsAgent ? 'Present' : 'NULL')
-  console.log('Debug - PROXY_URL:', process.env.PROXY_URL)
+  console.log('Making direct Google Search request (no proxy)')
   
   const url = 'https://www.googleapis.com/customsearch/v1'
   const params = {
@@ -152,21 +151,16 @@ const searchForReference = async (searchQuery, numResults) => {
   try {
     const config = {
       params,
-      timeout: 10000
+      timeout: 20000  // 增加到20秒
     }
     
-    // 只有当 httpsAgent 存在时才添加
-    if (httpsAgent) {
-      config.httpsAgent = httpsAgent
-    } else {
-      console.warn('Warning: httpsAgent is null, request may fail')
-    }
+    // 直接连接，不使用任何代理
     
     const response = await axios.get(url, config)
     return response.data.items || []
   } catch (error) {
     if (error.code === 'ECONNREFUSED') {
-      console.error(`Proxy connection refused. Please ensure your proxy at ${process.env.PROXY_URL} is running.`)
+      console.error('Connection refused to Google API')
       return []
     }
     
