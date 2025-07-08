@@ -58,7 +58,7 @@ export const verifyReferencesSSEController = async (req, res, next) => {
           total: totalReferences,
           percentage: Math.round((processedCount / totalReferences) * 100)
         }
-      })}\\n\\n`)
+      })}\n\n`)
     }
     
     // Send start event
@@ -66,7 +66,7 @@ export const verifyReferencesSSEController = async (req, res, next) => {
       type: 'start', 
       message: `Starting parallel verification of ${totalReferences} references...`,
       total: totalReferences
-    })}\\n\\n`)
+    })}\n\n`)
     
     // Phase 1: Batch analysis with Gemini
     console.log(`Phase 1: Batch analysis for ${references.length} references...`)
@@ -85,7 +85,7 @@ export const verifyReferencesSSEController = async (req, res, next) => {
         type: 'analysis_complete', 
         message: 'Batch analysis completed',
         count: analyzedReferences.length 
-      })}\\n\\n`)
+      })}\n\n`)
       
     } catch (error) {
       console.error('Error in batch analysis:', error)
@@ -247,7 +247,7 @@ export const verifyReferencesSSEController = async (req, res, next) => {
       message: `Verification completed for ${totalReferences} references`,
       processed: processedCount,
       total: totalReferences
-    })}\\n\\n`)
+    })}\n\n`)
     
     res.end()
     
@@ -256,7 +256,7 @@ export const verifyReferencesSSEController = async (req, res, next) => {
     res.write(`data: ${JSON.stringify({ 
       type: 'error', 
       message: error.message 
-    })}\\n\\n`)
+    })}\n\n`)
     res.end()
     next(error)
   }
