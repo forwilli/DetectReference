@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instant Reference Verifier Test</title>
+    <meta charset="utf-8">
+    <style>
+        body { 
+            font-family: system-ui, sans-serif; 
+            max-width: 800px; 
+            margin: 40px auto; 
+            padding: 20px;
+            line-height: 1.6;
+        }
+        textarea { 
+            width: 100%; 
+            height: 150px; 
+            padding: 12px; 
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+        }
+        button { 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:disabled { 
+            background: #6c757d; 
+            cursor: not-allowed; 
+        }
+        .result { 
+            margin: 15px 0; 
+            padding: 15px; 
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        .result.verified { 
+            background: #d4edda; 
+            border-color: #28a745; 
+        }
+        .result.error { 
+            background: #f8d7da; 
+            border-color: #dc3545; 
+        }
+        .progress { 
+            background: #e9ecef; 
+            border-radius: 4px; 
+            height: 8px; 
+            margin: 10px 0;
+        }
+        .progress-bar { 
+            background: #007bff; 
+            height: 100%; 
+            border-radius: 4px; 
+            transition: width 0.3s ease;
+        }
+        .log { 
+            background: #f8f9fa; 
+            border: 1px solid #e9ecef; 
+            border-radius: 4px; 
+            padding: 10px; 
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Instant Reference Verifier</h1>
+    <p>Direct test of the verification system, bypassing any cache issues.</p>
+    
+    <textarea id="references" placeholder="Paste your references here, one per line...">Adams, R.B. and Ferreira, D. (2009) 'Women in the boardroom and their impact on governance and performance', Journal of Financial Economics, 94(2), pp. 291-309.
+Jensen, M.C. and Meckling, W.H. (1976) 'Theory of the firm: Managerial behavior, agency costs and ownership structure', Journal of Financial Economics, 3(4), pp. 305-360.
+Brown, M.E., Treviño, L.K. and Harrison, D.A. (2005) 'Ethical leadership: A social learning perspective for construct development and testing', Organizational Behavior and Human Decision Processes, 97(2), pp. 117-134.</textarea>
+    
+    <br>
+    <button id="verifyBtn" onclick="verifyReferences()">🔍 Verify References</button>
+    <button id="clearBtn" onclick="clearResults()">🗑️ Clear Results</button>
+    
+    <div class="progress" id="progressContainer" style="display: none;">
+        <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+    </div>
+    
+    <div id="status" style="margin: 10px 0; font-weight: bold;"></div>
+    
+    <div class="log" id="log" style="display: none;"></div>
+    
+    <div id="results"></div>
+
+    <script>
+        let isVerifying = false;
+        
+        function log(message) {
+            const logEl = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logEl.innerHTML += `[${timestamp}] ${message}\\n`;
+            logEl.scrollTop = logEl.scrollHeight;
+            logEl.style.display = 'block';
+            console.log(message);
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+        }
+        
+        function updateProgress(percentage) {
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            progressContainer.style.display = 'block';
+            progressBar.style.width = percentage + '%';
+        }
+        
+        function addResult(result) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${result.status}`;
+            
+            resultDiv.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 8px;">
+                    ${result.status === 'verified' ? '✅' : '❌'} ${result.status.toUpperCase()}
+                </div>
+                <div style="margin-bottom: 8px; font-size: 14px;">
+                    ${result.reference}
+                </div>
+                <div style="font-size: 12px; color: #666;">
+                    ${result.message}
+                    ${result.doi ? ' | DOI: ' + result.doi : ''}
+                    ${result.source ? ' | Source: ' + result.source : ''}
+                </div>
+            `;
+            
+            resultsDiv.appendChild(resultDiv);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('log').innerHTML = '';
+            document.getElementById('log').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'none';
+            updateStatus('');
+        }
+        
+        async function verifyReferences() {
+            if (isVerifying) return;
+            
+            const textarea = document.getElementById('references');
+            const referenceList = textarea.value.trim().split('\\n').filter(ref => ref.trim());
+            
+            if (referenceList.length === 0) {
+                alert('Please enter at least one reference');
+                return;
+            }
+            
+            isVerifying = true;
+            document.getElementById('verifyBtn').disabled = true;
+            document.getElementById('verifyBtn').textContent = '🔄 Verifying...';
+            
+            clearResults();
+            updateStatus(`Starting verification of ${referenceList.length} references...`);
+            log(`🚀 Starting verification of ${referenceList.length} references`);
+            
+            try {
+                const response = await fetch('https://detect-reference-backend.vercel.app/api/verify-references-stream', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ references: referenceList })
+                });
+                
+                log(`📡 Response received: ${response.status} ${response.statusText}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let resultCount = 0;
+                
+                while (true) {
+                    const { done, value } = await reader.read();
+                    
+                    if (done) {
+                        log('✅ Stream completed');
+                        updateStatus(`Verification completed! ${resultCount} results processed.`);
+                        break;
+                    }
+                    
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\\n');
+                    buffer = lines.pop() || '';
+                    
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6);
+                            if (data.trim()) {
+                                try {
+                                    const event = JSON.parse(data);
+                                    log(`📨 Event: ${event.type} - ${event.message || 'data received'}`);
+                                    
+                                    if (event.type === 'start') {
+                                        updateStatus(event.message);
+                                    } else if (event.type === 'result') {
+                                        resultCount++;
+                                        addResult(event.data);
+                                        if (event.progress) {
+                                            updateProgress(event.progress.percentage);
+                                            updateStatus(`Processing ${event.progress.current}/${event.progress.total} references...`);
+                                        }
+                                    } else if (event.type === 'complete') {
+                                        log('🎉 Verification completed successfully');
+                                        updateStatus(`All done! Processed ${resultCount} references.`);
+                                        updateProgress(100);
+                                        break;
+                                    } else if (event.type === 'error') {
+                                        throw new Error(event.message);
+                                    }
+                                } catch (e) {
+                                    log(`❌ Parse error: ${e.message}`);
+                                    console.error('Parse error:', e, 'Data:', data.substring(0, 100));
+                                }
+                            }
+                        }
+                    }
+                }
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+                updateStatus(`Error: ${error.message}`);
+                alert(`Verification failed: ${error.message}`);
+            } finally {
+                isVerifying = false;
+                document.getElementById('verifyBtn').disabled = false;
+                document.getElementById('verifyBtn').textContent = '🔍 Verify References';
+            }
+        }
+        
+        // Allow Enter key in textarea to trigger verification
+        document.getElementById('references').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                verifyReferences();
+            }
+        });
+        
+        log('✅ Reference Verifier ready! Ctrl+Enter to verify.');
+    </script>
+</body>
+</html>

@@ -133,7 +133,7 @@ export const verifyReferencesSSEController = async (req, res, next) => {
             index: ref.originalIndex,
             reference: ref.originalReference,
             status: 'verified',
-            message: `Verified - DOI: ${crossrefResult.doi}${confidenceLevel !== 'HIGH' ? ` (confidence: ${confidenceLevel})` : ''}`,
+            message: `Verified - DOI: ${crossrefResult.doi}${confidenceLevel !== 'HIGH' ? ` (confidence: ${confidenceLevel})` : ''}`.replace(/"/g, '\"'),
             source: 'crossref',
             doi: crossrefResult.doi,
             confidenceLevel: confidenceLevel,
