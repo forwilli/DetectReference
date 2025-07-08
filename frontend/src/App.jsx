@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import ReferenceInput from './components/ReferenceInput'
-import FixedReferenceInput from './components/FixedReferenceInput'
 import VerificationResults from './components/VerificationResults'
 import CitationFormatter from './components/CitationFormatter'
 import SwanLogo from './components/SwanLogo'
@@ -9,9 +8,6 @@ import useStore from './store/useStore'
 function App() {
   const { verificationResults } = useStore()
   const [activeTab, setActiveTab] = useState('verify')
-  
-  console.log('🎭 App render: verificationResults.length =', verificationResults.length)
-  console.log('🎭 App render: activeTab =', activeTab)
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
@@ -107,7 +103,7 @@ function App() {
                 </div>
                 
                 <div className="relative">
-                  {activeTab === 'verify' ? <FixedReferenceInput /> : <CitationFormatter />}
+                  {activeTab === 'verify' ? <ReferenceInput /> : <CitationFormatter />}
                 </div>
               </div>
             </>

@@ -30,16 +30,12 @@ Porter, M. E., & Kramer, M. R. (2011). Creating shared value. Harvard Business R
 Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (2011). Impacts from climate change on organizations: A conceptual foundation. Business Strategy and the Environment, 20(3), 157-173.`
 
   const handleVerify = async () => {
-    console.log('🔘 ReferenceInput handleVerify called')
-    
     const referenceList = inputText.trim().split('\n').filter(ref => ref.trim())
     
     if (referenceList.length === 0) {
       setError('请输入至少一条参考文献')
       return
     }
-
-    console.log('📝 Processing references:', referenceList.length)
     
     resetState()
     setReferences(referenceList)
@@ -55,8 +51,6 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         body: JSON.stringify({ references: referenceList })
       })
       
-      console.log('📡 Response received:', response.status)
-      
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
       }
@@ -69,34 +63,30 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         const { done, value } = await reader.read()
         
         if (done) {
-          console.log('✅ Stream completed')
           setIsVerifying(false)
           setProgress(100)
           break
         }
         
         buffer += decoder.decode(value, { stream: true })
-        const lines = buffer.split('\n')
-        buffer = lines.pop() || ''
         
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const data = line.slice(6)
+        while (buffer.includes('\n\n')) {
+          const messageEnd = buffer.indexOf('\n\n')
+          const message = buffer.substring(0, messageEnd)
+          buffer = buffer.substring(messageEnd + 2)
+          
+          if (message.startsWith('data: ')) {
+            const data = message.slice(6)
             if (data.trim()) {
               try {
                 const event = JSON.parse(data)
-                console.log('📨 Event:', event.type, event.message || 'data')
                 
                 if (event.type === 'result') {
                   addVerificationResult(event.data)
-                  if (event.progress) {
-                    updateProgress(event.progress)
-                  }
                 } else if (event.type === 'complete') {
-                  console.log('🎉 Verification completed')
-                  setIsVerifying(false)
-                  setProgress(100)
                   break
+                } else if (event.progress) {
+                  updateProgress(event.progress)
                 }
               } catch (e) {
                 console.error('Parse error:', e.message)
@@ -107,7 +97,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
       }
       
     } catch (error) {
-      console.error('❌ Verification error:', error.message)
+      console.error('Verification error:', error.message)
       setError(error.message)
       setIsVerifying(false)
     }
