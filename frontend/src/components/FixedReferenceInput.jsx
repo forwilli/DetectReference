@@ -70,6 +70,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         // 立即处理缓冲区中的完整消息
         console.log('📖 Checking for complete messages in buffer...')
         console.log('📖 Buffer includes \\n\\n:', buffer.includes('\n\n'))
+        console.log('📖 Buffer char codes:', Array.from(buffer.substring(0, 100)).map(c => c.charCodeAt(0)))
         
         while (buffer.includes('\n\n')) {
           console.log('📖 Found complete message delimiter')
