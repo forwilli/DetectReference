@@ -21,6 +21,27 @@ export const verifyReferences = async (references) => {
 export const verifyReferencesStream = (references, onResult, onProgress, onComplete, onError) => {
   const controller = new AbortController()
   
+  // 设置总体超时（5分钟）
+  const timeout = setTimeout(() => {
+    controller.abort()
+    if (onError) {
+      onError(new Error('Verification timeout - please try with fewer references'))
+    }
+  }, 300000) // 5 minutes
+  
+  // 设置心跳检测
+  let lastActivity = Date.now()
+  const heartbeat = setInterval(() => {
+    if (Date.now() - lastActivity > 60000) { // 1分钟无响应
+      controller.abort()
+      clearInterval(heartbeat)
+      clearTimeout(timeout)
+      if (onError) {
+        onError(new Error('Connection timeout - please refresh and try again'))
+      }
+    }
+  }, 10000) // 每10秒检查一次
+  
   fetch(`${API_URL}/api/verify-references-stream`, {
     method: 'POST',
     headers: {
@@ -52,6 +73,7 @@ export const verifyReferencesStream = (references, onResult, onProgress, onCompl
           if (line.startsWith('data: ')) {
             const data = line.slice(6)
             if (data.trim()) {
+              lastActivity = Date.now() // 更新活动时间
               try {
                 const event = JSON.parse(data)
                 
@@ -61,7 +83,10 @@ export const verifyReferencesStream = (references, onResult, onProgress, onCompl
                     onProgress(event.progress)
                   }
                 } else if (event.type === 'complete' && onComplete) {
+                  clearInterval(heartbeat)
+                  clearTimeout(timeout)
                   onComplete()
+                  return
                 }
               } catch (e) {
                 console.error('Failed to parse SSE data:', e)
@@ -72,6 +97,8 @@ export const verifyReferencesStream = (references, onResult, onProgress, onCompl
         
         read()
       }).catch(error => {
+        clearInterval(heartbeat)
+        clearTimeout(timeout)
         if (error.name !== 'AbortError' && onError) {
           onError(error)
         }
@@ -81,6 +108,8 @@ export const verifyReferencesStream = (references, onResult, onProgress, onCompl
     read()
   })
   .catch(error => {
+    clearInterval(heartbeat)
+    clearTimeout(timeout)
     if (error.name !== 'AbortError' && onError) {
       onError(error)
     }
