@@ -52,7 +52,10 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
       const decoder = new TextDecoder()
       let buffer = ''
       
+      console.log('📖 Starting to read stream...')
+      
       while (true) {
+        console.log('📖 Reading next chunk...')
         const { done, value } = await reader.read()
         
         if (done) {
@@ -60,13 +63,20 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
           break
         }
         
+        console.log('📖 Received chunk, size:', value.length)
         buffer += decoder.decode(value, { stream: true })
+        console.log('📖 Buffer content:', buffer.substring(0, 200) + '...')
+        
         const lines = buffer.split('\n')
         buffer = lines.pop() || ''
         
+        console.log('📖 Processing', lines.length, 'lines')
+        
         for (const line of lines) {
+          console.log('📖 Processing line:', line.substring(0, 100) + '...')
           if (line.startsWith('data: ')) {
             const data = line.slice(6)
+            console.log('📖 Data found:', data.substring(0, 100) + '...')
             if (data.trim()) {
               try {
                 const event = JSON.parse(data)
@@ -80,7 +90,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
                   break
                 }
               } catch (e) {
-                console.error('Parse error:', e.message)
+                console.error('Parse error:', e.message, 'Data:', data.substring(0, 100))
               }
             }
           }
