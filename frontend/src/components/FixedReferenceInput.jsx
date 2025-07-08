@@ -67,15 +67,16 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         buffer += decoder.decode(value, { stream: true })
         console.log('📖 Buffer content:', buffer.substring(0, 200) + '...')
         
-        const lines = buffer.split('\n')
-        buffer = lines.pop() || ''
-        
-        console.log('📖 Processing', lines.length, 'lines')
-        
-        for (const line of lines) {
-          console.log('📖 Processing line:', line.substring(0, 100) + '...')
-          if (line.startsWith('data: ')) {
-            const data = line.slice(6)
+        // 立即处理缓冲区中的完整消息
+        while (buffer.includes('\n\n')) {
+          const messageEnd = buffer.indexOf('\n\n')
+          const message = buffer.substring(0, messageEnd)
+          buffer = buffer.substring(messageEnd + 2)
+          
+          console.log('📖 Processing message:', message.substring(0, 100) + '...')
+          
+          if (message.startsWith('data: ')) {
+            const data = message.slice(6)
             console.log('📖 Data found:', data.substring(0, 100) + '...')
             if (data.trim()) {
               try {
