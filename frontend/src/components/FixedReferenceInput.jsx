@@ -17,6 +17,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
 
   const handleVerify = async () => {
     console.log('🔘 FixedReferenceInput handleVerify called')
+    alert('按钮被点击了！正在开始验证...')  // 添加明显的调试信息
     
     const referenceList = inputText.trim().split('\n').filter(ref => ref.trim())
     
