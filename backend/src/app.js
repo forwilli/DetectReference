@@ -5,8 +5,10 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// 显式加载.env文件
-dotenv.config({ path: path.join(__dirname, '..', '.env') })
+// 仅在非生产环境加载.env文件
+if (!process.env.VERCEL && process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: path.join(__dirname, '..', '.env') })
+}
 
 // 验证必需的环境变量
 const requiredEnvVars = ['GEMINI_API_KEY', 'GOOGLE_SEARCH_API_KEY', 'GOOGLE_CSE_ID']
@@ -64,6 +66,20 @@ app.get('/api/test', (req, res) => {
   res.json({
     status: 'ok',
     message: 'Backend API is running',
+    timestamp: new Date().toISOString()
+  })
+})
+
+// Environment check endpoint (temporary for debugging)
+app.get('/api/env-check', (req, res) => {
+  res.json({
+    vercel: !!process.env.VERCEL,
+    nodeEnv: process.env.NODE_ENV,
+    hasGeminiKey: !!process.env.GEMINI_API_KEY,
+    hasGoogleKey: !!process.env.GOOGLE_SEARCH_API_KEY,
+    hasCSEId: !!process.env.GOOGLE_CSE_ID,
+    geminiKeyLength: process.env.GEMINI_API_KEY?.length || 0,
+    googleKeyLength: process.env.GOOGLE_SEARCH_API_KEY?.length || 0,
     timestamp: new Date().toISOString()
   })
 })
