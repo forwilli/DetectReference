@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frontend Debug Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .log { background: #f5f5f5; padding: 10px; margin: 10px 0; font-family: monospace; }
+        button { padding: 10px 20px; margin: 5px; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; }
+        .status { padding: 5px 10px; margin: 5px; border-radius: 3px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Frontend Debug Tool</h1>
+    
+    <div class="test-section">
+        <h2>1. Frontend Access Test</h2>
+        <button onclick="testFrontendAccess()">Test Frontend Access</button>
+        <div id="frontend-result" class="log"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Backend API Test</h2>
+        <button onclick="testBackendAPI()">Test Backend API</button>
+        <div id="backend-result" class="log"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Frontend API Integration Test</h2>
+        <textarea id="test-references" placeholder="输入测试参考文献...">Adams, R.B. and Ferreira, D. (2009) 'Women in the boardroom and their impact on governance and performance', Journal of Financial Economics, 94(2), pp. 291-309.
+Jensen, M.C. and Meckling, W.H. (1976) 'Theory of the firm: Managerial behavior, agency costs and ownership structure', Journal of Financial Economics, 3(4), pp. 305-360.</textarea>
+        <button onclick="testFrontendAPI()">Test Frontend API Call</button>
+        <div id="api-result" class="log"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Simulate Button Click</h2>
+        <button onclick="openFrontendAndClick()">Open Frontend & Monitor</button>
+        <div id="click-result" class="log"></div>
+    </div>
+
+    <script>
+        function log(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
+            element.innerHTML += `<div class="status ${className}">[${timestamp}] ${message}</div>`;
+        }
+
+        async function testFrontendAccess() {
+            log('frontend-result', 'Testing frontend access...', 'info');
+            
+            try {
+                const response = await fetch('https://detect-reference-frontend.vercel.app/', {
+                    method: 'GET',
+                    mode: 'no-cors' // 避免CORS问题
+                });
+                log('frontend-result', '✅ Frontend is accessible', 'success');
+                
+                // 检查前端的JavaScript文件
+                const jsResponse = await fetch('https://detect-reference-frontend.vercel.app/assets/', {
+                    method: 'GET',
+                    mode: 'no-cors'
+                });
+                log('frontend-result', '✅ Frontend assets accessible', 'success');
+                
+            } catch (error) {
+                log('frontend-result', `❌ Frontend access failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testBackendAPI() {
+            log('backend-result', 'Testing backend API...', 'info');
+            
+            try {
+                // 测试健康检查
+                const healthResponse = await fetch('https://detect-reference-backend.vercel.app/api/test');
+                const healthData = await healthResponse.json();
+                log('backend-result', `✅ Backend health: ${healthData.message}`, 'success');
+                
+                // 测试环境检查
+                const envResponse = await fetch('https://detect-reference-backend.vercel.app/api/env-check');
+                const envData = await envResponse.json();
+                log('backend-result', `✅ Backend env: Vercel=${envData.vercel}, Keys=${envData.hasGeminiKey}`, 'success');
+                
+            } catch (error) {
+                log('backend-result', `❌ Backend API failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testFrontendAPI() {
+            const references = document.getElementById('test-references').value.trim().split('\\n').filter(ref => ref.trim());
+            log('api-result', `Testing API with ${references.length} references...`, 'info');
+            
+            try {
+                const response = await fetch('https://detect-reference-backend.vercel.app/api/verify-references-stream', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ references })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                log('api-result', '✅ Stream request started', 'success');
+                
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let eventCount = 0;
+                
+                while (true) {
+                    const { done, value } = await reader.read();
+                    
+                    if (done) {
+                        log('api-result', '✅ Stream completed', 'success');
+                        break;
+                    }
+                    
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\\n');
+                    buffer = lines.pop() || '';
+                    
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6);
+                            if (data.trim()) {
+                                try {
+                                    const event = JSON.parse(data);
+                                    eventCount++;
+                                    log('api-result', `📨 Event ${eventCount}: ${event.type} - ${event.message || 'data received'}`, 'info');
+                                } catch (e) {
+                                    log('api-result', `⚠️ Parse error: ${data.substring(0, 100)}...`, 'error');
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                log('api-result', `🎉 Total events received: ${eventCount}`, 'success');
+                
+            } catch (error) {
+                log('api-result', `❌ API test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function openFrontendAndClick() {
+            log('click-result', '🔗 Opening frontend in new window...', 'info');
+            
+            const frontendWindow = window.open('https://detect-reference-frontend.vercel.app/', '_blank');
+            
+            if (frontendWindow) {
+                log('click-result', '✅ Frontend window opened', 'success');
+                log('click-result', '📋 Instructions:', 'info');
+                log('click-result', '1. Paste some references in the text area', 'info');
+                log('click-result', '2. Click the "Verify References" button', 'info');
+                log('click-result', '3. Check browser console (F12) for any errors', 'info');
+                log('click-result', '4. Report back what happens', 'info');
+            } else {
+                log('click-result', '❌ Failed to open frontend window (popup blocked?)', 'error');
+            }
+        }
+
+        // 自动运行初始测试
+        window.onload = function() {
+            log('frontend-result', '🚀 Debug tool loaded. Click buttons to run tests.', 'info');
+        };
+    </script>
+</body>
+</html>

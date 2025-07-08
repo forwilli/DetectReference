@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimal Frontend Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+        
+        function TestApp() {
+            const [isVerifying, setIsVerifying] = useState(false);
+            const [result, setResult] = useState('');
+            const [inputText, setInputText] = useState('Adams, R.B. and Ferreira, D. (2009) "Women in the boardroom", Journal of Financial Economics, 94(2), pp. 291-309.');
+            
+            const handleVerify = async () => {
+                console.log('🔘 Button clicked!');
+                setIsVerifying(true);
+                setResult('Starting verification...');
+                
+                const referenceList = inputText.trim().split('\n').filter(ref => ref.trim());
+                console.log('📝 References:', referenceList);
+                
+                try {
+                    const response = await fetch('https://detect-reference-backend.vercel.app/api/verify-references-stream', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ references: referenceList })
+                    });
+                    
+                    console.log('📡 Response:', response.status);
+                    setResult(`Response received: ${response.status}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let buffer = '';
+                    let eventCount = 0;
+                    
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        
+                        if (done) {
+                            setResult(prev => prev + '\n✅ Stream completed');
+                            break;
+                        }
+                        
+                        buffer += decoder.decode(value, { stream: true });
+                        const lines = buffer.split('\n');
+                        buffer = lines.pop() || '';
+                        
+                        for (const line of lines) {
+                            if (line.startsWith('data: ')) {
+                                const data = line.slice(6);
+                                if (data.trim()) {
+                                    try {
+                                        const event = JSON.parse(data);
+                                        eventCount++;
+                                        console.log('📨 Event:', event);
+                                        setResult(prev => prev + `\n📨 Event ${eventCount}: ${event.type} - ${event.message || 'data'}`);
+                                    } catch (e) {
+                                        console.error('Parse error:', e);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Error:', error);
+                    setResult(prev => prev + `\n❌ Error: ${error.message}`);
+                } finally {
+                    setIsVerifying(false);
+                }
+            };
+            
+            return (
+                <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+                    <h1>🧪 Minimal Frontend Test</h1>
+                    
+                    <div style={{ margin: '20px 0' }}>
+                        <textarea 
+                            value={inputText}
+                            onChange={(e) => setInputText(e.target.value)}
+                            style={{ width: '100%', height: '100px', padding: '10px' }}
+                            placeholder="Enter references..."
+                        />
+                    </div>
+                    
+                    <button 
+                        onClick={handleVerify}
+                        disabled={isVerifying || !inputText.trim()}
+                        style={{
+                            padding: '10px 20px',
+                            fontSize: '16px',
+                            backgroundColor: isVerifying ? '#ccc' : '#007bff',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: isVerifying ? 'not-allowed' : 'pointer'
+                        }}
+                    >
+                        {isVerifying ? '🔄 Verifying...' : '🔍 Verify References'}
+                    </button>
+                    
+                    <div style={{ 
+                        marginTop: '20px', 
+                        padding: '10px', 
+                        backgroundColor: '#f5f5f5', 
+                        border: '1px solid #ddd',
+                        whiteSpace: 'pre-wrap',
+                        minHeight: '200px',
+                        fontFamily: 'monospace'
+                    }}>
+                        {result || 'Click the button to start verification...'}
+                    </div>
+                </div>
+            );
+        }
+        
+        ReactDOM.render(<TestApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
