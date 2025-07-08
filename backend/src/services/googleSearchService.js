@@ -151,13 +151,15 @@ const searchForReference = async (searchQuery, numResults) => {
   try {
     const config = {
       params,
-      timeout: 3000,  // 3秒超时，适合Vercel 10秒限制
+      timeout: 8000,  // 8秒超时，给网络请求更多时间
       headers: {
         'Connection': 'close'  // 避免socket hang up问题
       }
     }
     
-    console.log(`Making Google Search request with 3s timeout for: ${searchQuery}`)
+    console.log(`Making Google Search request with 8s timeout for: ${searchQuery}`)
+    console.log('Request URL:', url)
+    console.log('Environment:', process.env.NODE_ENV, 'Vercel:', process.env.VERCEL)
     
     const response = await axios.get(url, config)
     console.log(`Google Search completed successfully for: ${searchQuery}`)
@@ -165,7 +167,8 @@ const searchForReference = async (searchQuery, numResults) => {
   } catch (error) {
     // 处理超时错误
     if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
-      console.error(`Google Search request timed out after 3s for query: ${searchQuery}`)
+      console.error(`Google Search request timed out after 8s for query: ${searchQuery}`)
+      console.error('Timeout error details:', error.message)
       return []
     }
     
@@ -198,6 +201,9 @@ const searchForReference = async (searchQuery, numResults) => {
     }
     
     console.error('Google Search API error:', error.message, 'Query:', searchQuery)
+    console.error('Error code:', error.code)
+    console.error('Error response:', error.response?.status, error.response?.statusText)
+    console.error('Full error:', JSON.stringify(error, null, 2))
     return []
   }
 }
