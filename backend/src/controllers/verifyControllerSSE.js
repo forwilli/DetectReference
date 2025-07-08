@@ -153,20 +153,14 @@ export const verifyReferencesSSEController = async (req, res, next) => {
     // 阶段三：Google 搜索验证（将在下一步实现）
     console.log(`Phase 3: Google search for ${pendingGoogleSearch.length} remaining references...`)
     
-    // 阶段三：简单串行处理（先确保稳定性）
+    // 阶段三：限制处理数量，避免Vercel 30秒超时
     console.log(`Starting Phase 3: Google Search for ${pendingGoogleSearch.length} references`)
     
-    // 设置整体超时，防止无限卡住
-    const overallTimeout = setTimeout(() => {
-      console.error('Overall verification timeout reached - forcing completion')
-      res.write(`data: ${JSON.stringify({ 
-        type: 'complete',
-        message: 'Verification timed out - partial results returned'
-      })}\\n\\n`)
-      res.end()
-    }, 120000) // 2分钟整体超时
+    // 限制处理数量以避免Vercel 30秒超时
+    const maxReferencesToProcess = Math.min(pendingGoogleSearch.length, 3)
+    console.log(`Processing only first ${maxReferencesToProcess} references to avoid timeout`)
     
-    for (let i = 0; i < pendingGoogleSearch.length; i++) {
+    for (let i = 0; i < maxReferencesToProcess; i++) {
       const ref = pendingGoogleSearch[i]
       try {
         console.log(`[${i+1}/${pendingGoogleSearch.length}] Processing reference: ${ref.title}`)
@@ -224,19 +218,43 @@ export const verifyReferencesSSEController = async (req, res, next) => {
       }
       
       // 减少延迟，加快处理速度
-      console.log(`[${i+1}/${pendingGoogleSearch.length}] Waiting 0.5s before next request...`)
-      await new Promise(resolve => setTimeout(resolve, 500)) // 0.5秒延迟
-      console.log(`[${i+1}/${pendingGoogleSearch.length}] Continuing to next reference...`)
+      if (i < maxReferencesToProcess - 1) {
+        console.log(`[${i+1}/${maxReferencesToProcess}] Waiting 0.3s before next request...`)
+        await new Promise(resolve => setTimeout(resolve, 300)) // 0.3秒延迟
+        console.log(`[${i+1}/${maxReferencesToProcess}] Continuing to next reference...`)
+      }
     }
     
-    // 清除超时定时器
-    clearTimeout(overallTimeout)
+    // 处理剩余未处理的引用
+    const remainingReferences = pendingGoogleSearch.slice(maxReferencesToProcess)
+    for (const ref of remainingReferences) {
+      processedCount++
+      
+      const verificationResult = {
+        index: ref.originalIndex,
+        reference: ref.originalReference,
+        status: 'pending',
+        message: 'Skipped due to Vercel timeout limit - please verify manually',
+        source: 'timeout',
+        confidenceLevel: 'LOW'
+      }
+      
+      res.write(`data: ${JSON.stringify({
+        type: 'result',
+        data: verificationResult,
+        progress: {
+          current: processedCount,
+          total: totalReferences,
+          percentage: Math.round((processedCount / totalReferences) * 100)
+        }
+      })}\n\n`)
+    }
     
     // Send completion event
-    console.log('All references processed successfully - sending completion event')
+    console.log(`Processed ${maxReferencesToProcess} references, ${remainingReferences.length} skipped due to timeout limits`)
     res.write(`data: ${JSON.stringify({ 
       type: 'complete',
-      message: 'Verification completed'
+      message: `Verification completed - ${maxReferencesToProcess} processed, ${remainingReferences.length} skipped due to timeout limits`
     })}\n\n`)
     res.end()
     
