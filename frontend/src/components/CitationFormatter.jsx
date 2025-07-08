@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { track } from '@vercel/analytics'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -34,6 +35,12 @@ Johnson, M. (2021). Book title. Publisher Name.`
     setIsProcessing(true)
     setError(null)
     setFormattedResults(null)
+
+    // Track citation formatting start
+    track('format_citations_start', {
+      count: referenceList.length,
+      format: selectedFormat
+    })
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'https://detect-reference-backend.vercel.app'

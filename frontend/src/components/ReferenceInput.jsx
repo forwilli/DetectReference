@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import useStore from '../store/useStore'
 import { verifyReferences, verifyReferencesStream } from '../services/api'
 import { getBestEndpoint } from '../services/networkDetection'
+import { track } from '@vercel/analytics'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -38,11 +39,19 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
       return
     }
     
+    // Track verification start event
+    track('verify_references_start', {
+      count: referenceList.length,
+      timestamp: new Date().toISOString()
+    })
+    
     resetState()
     setReferences(referenceList)
     setIsVerifying(true)
     setError(null)
 
+    const startTime = Date.now() // For tracking duration
+    
     try {
       // 获取最佳API端点
       const apiEndpoint = await getBestEndpoint()
@@ -70,6 +79,17 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         if (done) {
           setIsVerifying(false)
           setProgress(100)
+          
+          // Track verification completion
+          const results = useStore.getState().verificationResults
+          const successCount = results.filter(r => r.status === 'verified').length
+          track('verify_references_complete', {
+            total_count: results.length,
+            success_count: successCount,
+            success_rate: results.length > 0 ? (successCount / results.length) : 0,
+            duration_ms: Date.now() - startTime
+          })
+          
           break
         }
         
@@ -105,6 +125,12 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
       console.error('Verification error:', error.message)
       setError(error.message)
       setIsVerifying(false)
+      
+      // Track verification error
+      track('verify_references_error', {
+        error_message: error.message,
+        references_count: referenceList.length
+      })
     }
   }
 
