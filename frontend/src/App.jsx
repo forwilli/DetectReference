@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReferenceInput from './components/ReferenceInput'
-import SimpleReferenceInput from './components/SimpleReferenceInput'
+import FixedReferenceInput from './components/FixedReferenceInput'
 import VerificationResults from './components/VerificationResults'
 import CitationFormatter from './components/CitationFormatter'
 import SwanLogo from './components/SwanLogo'
@@ -104,7 +104,7 @@ function App() {
                 </div>
                 
                 <div className="relative">
-                  {activeTab === 'verify' ? <ReferenceInput /> : <CitationFormatter />}
+                  {activeTab === 'verify' ? <FixedReferenceInput /> : <CitationFormatter />}
                 </div>
               </div>
             </>
