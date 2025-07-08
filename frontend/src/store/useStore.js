@@ -12,9 +12,13 @@ const useStore = create((set, get) => ({
   
   setVerificationResults: (results) => set({ verificationResults: results }),
   
-  addVerificationResult: (result) => set(state => ({
-    verificationResults: [...state.verificationResults, result]
-  })),
+  addVerificationResult: (result) => set(state => {
+    console.log('🏪 Store: Adding verification result', result)
+    console.log('🏪 Store: Current results count:', state.verificationResults.length)
+    const newResults = [...state.verificationResults, result]
+    console.log('🏪 Store: New results count:', newResults.length)
+    return { verificationResults: newResults }
+  }),
   
   updateVerificationResult: (index, result) => set(state => {
     const newResults = [...state.verificationResults]

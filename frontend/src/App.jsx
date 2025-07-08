@@ -9,6 +9,9 @@ import useStore from './store/useStore'
 function App() {
   const { verificationResults } = useStore()
   const [activeTab, setActiveTab] = useState('verify')
+  
+  console.log('🎭 App render: verificationResults.length =', verificationResults.length)
+  console.log('🎭 App render: activeTab =', activeTab)
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative">

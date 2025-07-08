@@ -17,7 +17,6 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
 
   const handleVerify = async () => {
     console.log('🔘 FixedReferenceInput handleVerify called')
-    alert('按钮被点击了！正在开始验证...')  // 添加明显的调试信息
     
     const referenceList = inputText.trim().split('\n').filter(ref => ref.trim())
     
@@ -33,6 +32,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
     resetState() // 重置全局状态
 
     try {
+      console.log('📡 Starting fetch request...')
       const response = await fetch('https://detect-reference-backend.vercel.app/api/verify-references-stream', {
         method: 'POST',
         headers: {
@@ -41,7 +41,8 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         body: JSON.stringify({ references: referenceList })
       })
       
-      console.log('📡 Response received:', response.status)
+      console.log('📡 Response received:', response.status, response.statusText)
+      console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()))
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
@@ -72,6 +73,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
                 console.log('📨 Event:', event.type, event.message || 'data')
                 
                 if (event.type === 'result') {
+                  console.log('📊 Adding result to store:', event.data)
                   addVerificationResult(event.data) // 添加到全局状态，这会触发页面切换
                 } else if (event.type === 'complete') {
                   console.log('🎉 Verification completed')
