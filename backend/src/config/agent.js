@@ -4,9 +4,9 @@ import dotenv from 'dotenv'
 // Load environment variables from .env file
 dotenv.config()
 
-// Check if proxy is enabled - disable in production/Vercel
+// Force disable proxy in production/Vercel
 const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL
-const useProxy = !isProduction && process.env.USE_PROXY === 'true'
+const useProxy = false // 强制禁用代理，确保生产环境不使用代理
 const proxyUrl = process.env.PROXY_URL
 
 let httpsAgent = null
