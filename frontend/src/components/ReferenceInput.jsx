@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import useStore from '../store/useStore'
 import { verifyReferences, verifyReferencesStream } from '../services/api'
+import { getBestEndpoint } from '../services/networkDetection'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -43,7 +44,11 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
     setError(null)
 
     try {
-      const response = await fetch('https://detect-reference-backend.vercel.app/api/verify-references-stream', {
+      // 获取最佳API端点
+      const apiEndpoint = await getBestEndpoint()
+      console.log(`Using API endpoint: ${apiEndpoint}`)
+      
+      const response = await fetch(`${apiEndpoint}/api/verify-references-stream`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

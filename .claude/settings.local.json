@@ -37,7 +37,8 @@
       "Bash(npm restart)",
       "Bash(git push:*)",
       "Bash(git rm:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git config:*)"
     ],
     "deny": []
   }
