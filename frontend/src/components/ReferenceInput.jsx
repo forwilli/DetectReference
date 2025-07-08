@@ -30,6 +30,8 @@ Porter, M. E., & Kramer, M. R. (2011). Creating shared value. Harvard Business R
 Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (2011). Impacts from climate change on organizations: A conceptual foundation. Business Strategy and the Environment, 20(3), 157-173.`
 
   const handleVerify = async () => {
+    console.log('🔘 ReferenceInput handleVerify called')
+    
     const referenceList = inputText.trim().split('\n').filter(ref => ref.trim())
     
     if (referenceList.length === 0) {
@@ -37,41 +39,77 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
       return
     }
 
+    console.log('📝 Processing references:', referenceList.length)
+    
     resetState()
     setReferences(referenceList)
     setIsVerifying(true)
     setError(null)
 
-    // 统一使用流式处理，支持任意数量的参考文献
-    if (useStreaming) {
-      streamControllerRef.current = verifyReferencesStream(
-        referenceList,
-        (result) => {
-          addVerificationResult(result)
+    try {
+      const response = await fetch('https://detect-reference-backend.vercel.app/api/verify-references-stream', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        (progress) => {
-          updateProgress(progress)
-        },
-        () => {
+        body: JSON.stringify({ references: referenceList })
+      })
+      
+      console.log('📡 Response received:', response.status)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+      
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      
+      while (true) {
+        const { done, value } = await reader.read()
+        
+        if (done) {
+          console.log('✅ Stream completed')
           setIsVerifying(false)
           setProgress(100)
-        },
-        (error) => {
-          setError(error.message)
-          setIsVerifying(false)
+          break
         }
-      )
-    } else {
-      // 备用方案：非流式处理（不推荐）
-      try {
-        const results = await verifyReferences(referenceList)
-        setVerificationResults(results)
-        setProgress(100)
-      } catch (error) {
-        setError(error.message)
-      } finally {
-        setIsVerifying(false)
+        
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() || ''
+        
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6)
+            if (data.trim()) {
+              try {
+                const event = JSON.parse(data)
+                console.log('📨 Event:', event.type, event.message || 'data')
+                
+                if (event.type === 'result') {
+                  addVerificationResult(event.data)
+                  if (event.progress) {
+                    updateProgress(event.progress)
+                  }
+                } else if (event.type === 'complete') {
+                  console.log('🎉 Verification completed')
+                  setIsVerifying(false)
+                  setProgress(100)
+                  break
+                }
+              } catch (e) {
+                console.error('Parse error:', e.message)
+              }
+            }
+          }
+        }
       }
+      
+    } catch (error) {
+      console.error('❌ Verification error:', error.message)
+      setError(error.message)
+      setIsVerifying(false)
     }
   }
 

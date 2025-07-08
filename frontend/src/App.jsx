@@ -104,7 +104,7 @@ function App() {
                 </div>
                 
                 <div className="relative">
-                  {activeTab === 'verify' ? <SimpleReferenceInput /> : <CitationFormatter />}
+                  {activeTab === 'verify' ? <ReferenceInput /> : <CitationFormatter />}
                 </div>
               </div>
             </>

@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
+import useStore from '../store/useStore'
 
 function SimpleReferenceInput() {
   const [inputText, setInputText] = useState('')
   const [isVerifying, setIsVerifying] = useState(false)
-  const [results, setResults] = useState([])
   const [error, setError] = useState(null)
+  
+  // 使用全局store来触发页面切换
+  const { setVerificationResults, addVerificationResult, resetState } = useStore()
 
   const handleVerify = async () => {
     console.log('🔘 Simple button clicked!')
@@ -18,7 +21,7 @@ function SimpleReferenceInput() {
 
     setIsVerifying(true)
     setError(null)
-    setResults([])
+    resetState() // 重置全局状态
     
     console.log('📝 Processing references:', referenceList.length)
 
@@ -62,7 +65,7 @@ function SimpleReferenceInput() {
                 console.log('📨 Event:', event.type, event.message || 'data')
                 
                 if (event.type === 'result') {
-                  setResults(prev => [...prev, event.data])
+                  addVerificationResult(event.data) // 添加到全局状态
                 } else if (event.type === 'complete') {
                   console.log('🎉 Verification completed')
                   break
@@ -133,30 +136,9 @@ function SimpleReferenceInput() {
         </div>
       )}
       
-      {results.length > 0 && (
-        <div>
-          <h2>验证结果：</h2>
-          {results.map((result, index) => (
-            <div key={index} style={{
-              padding: '15px',
-              margin: '10px 0',
-              backgroundColor: result.status === 'verified' ? '#d4edda' : '#f8d7da',
-              border: '1px solid ' + (result.status === 'verified' ? '#c3e6cb' : '#f5c6cb'),
-              borderRadius: '4px'
-            }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>
-                {result.status === 'verified' ? '✅' : '❌'} {result.status.toUpperCase()}
-              </div>
-              <div style={{ fontSize: '14px', marginBottom: '10px' }}>
-                {result.reference}
-              </div>
-              <div style={{ fontSize: '12px', color: '#666' }}>
-                {result.message}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      <div style={{ fontSize: '14px', color: '#666', marginTop: '10px' }}>
+        💡 验证完成后将自动跳转到结果页面
+      </div>
     </div>
   )
 }
