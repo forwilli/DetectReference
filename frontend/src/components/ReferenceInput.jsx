@@ -11,6 +11,7 @@ function ReferenceInput() {
   const streamControllerRef = useRef(null)
   const { 
     setReferences, 
+    isVerifying,
     setIsVerifying, 
     setProgress, 
     setVerificationResults, 
@@ -41,7 +42,8 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
     setIsVerifying(true)
     setError(null)
 
-    if (useStreaming && referenceList.length > 2) {
+    // 统一使用流式处理，支持任意数量的参考文献
+    if (useStreaming) {
       streamControllerRef.current = verifyReferencesStream(
         referenceList,
         (result) => {
@@ -60,6 +62,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         }
       )
     } else {
+      // 备用方案：非流式处理（不推荐）
       try {
         const results = await verifyReferences(referenceList)
         setVerificationResults(results)
@@ -119,7 +122,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         </div>
 
         <div className="flex justify-center">
-          {!useStore.getState().isVerifying ? (
+          {!isVerifying ? (
             <Button
               onClick={handleVerify}
               disabled={!inputText.trim()}
