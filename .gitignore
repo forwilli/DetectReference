@@ -63,3 +63,4 @@ image copy*.png
 *.tmp
 *.temp
 *.bak
+.vercel

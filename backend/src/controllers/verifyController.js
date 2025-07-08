@@ -1,39 +1,55 @@
-import { analyzeReference } from '../services/geminiServiceAxios.js'
-import { searchReference } from '../services/googleSearchService.js'
+import {
+  analyzeReference
+} from '../services/geminiServiceAxios.js'
+import {
+  searchReference
+} from '../services/googleSearchService.js'
 
 export const verifyReferencesController = async (req, res, next) => {
   try {
-    const { references } = req.body
+    const {
+      references
+    } = req.body
     console.log('Received references:', references)
     const results = []
 
-    for (let i = 0; i < references.length; i++) {
-      const reference = references[i]
-      
+    for (const reference of references) {
       try {
         const analysis = await analyzeReference(reference)
         
-        const searchResult = await searchReference(analysis)
-        
-        const verificationResult = {
+        let finalResult = {
           reference: reference,
-          status: searchResult.status,
-          message: searchResult.message || null
+          status: 'verified',
+          analysis: analysis,
+        };
+
+        if (analysis.hasPotentialIssues) {
+          console.log(`Potential issues found for "${reference}". Performing Google Search.`);
+          const searchResults = await searchReference(analysis.standardizedReference || reference);
+          finalResult.searchResults = searchResults;
+
+          if (searchResults.items && searchResults.items.length > 0) {
+            console.log(`Found ${searchResults.items.length} search results.`);
+          } else {
+            console.log(`No search results found.`);
+            finalResult.status = 'issue_not_found';
+          }
         }
         
         // 如果有DOI信息，添加到结果中
-        if (searchResult.doi || analysis.doi) {
-          verificationResult.doi = searchResult.doi || analysis.doi
+        if (analysis.doi) {
+          finalResult.doi = analysis.doi
         }
         
-        results.push(verificationResult)
+        results.push(finalResult);
+
       } catch (error) {
         console.error(`Error processing reference "${reference}":`, error.message)
         results.push({
           reference: reference,
           status: 'error',
-          message: error.message
-        })
+          message: `Failed to analyze references: ${error.message}`
+        });
       }
     }
 

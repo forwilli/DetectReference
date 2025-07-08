@@ -1,6 +1,6 @@
 import axios from 'axios'
 import dotenv from 'dotenv'
-// 移除代理导入
+import { httpsAgent } from '../config/agent.js'
 
 // 确保加载环境变量
 dotenv.config()
@@ -127,9 +127,8 @@ const searchForReference = async (searchQuery, numResults) => {
   
   if (!apiKey || !cseId) {
     console.error('Google Search API credentials not found')
-    console.error('API Key:', apiKey ? `✓ Present (${apiKey.substring(0, 10)}...)` : '✗ Missing')
-    console.error('CSE ID:', cseId ? `✓ Present (${cseId})` : '✗ Missing')
-    console.error('All env vars:', Object.keys(process.env).filter(k => k.includes('GOOGLE')))
+    console.error('API Key:', apiKey ? '✓ Present' : '✗ Missing')
+    console.error('CSE ID:', cseId ? '✓ Present' : '✗ Missing')
     throw new Error('Search API not configured')
   }
   
@@ -139,7 +138,8 @@ const searchForReference = async (searchQuery, numResults) => {
     return []
   }
   
-  console.log('Making direct Google Search request (no proxy)')
+  console.log('Debug - httpsAgent:', httpsAgent ? 'Present' : 'NULL')
+  console.log('Debug - PROXY_URL:', process.env.PROXY_URL)
   
   const url = 'https://www.googleapis.com/customsearch/v1'
   const params = {
@@ -152,47 +152,30 @@ const searchForReference = async (searchQuery, numResults) => {
   try {
     const config = {
       params,
-      timeout: 8000,  // 8秒超时，给网络请求更多时间
-      headers: {
-        'Connection': 'close'  // 避免socket hang up问题
-      }
+      timeout: 10000
     }
     
-    console.log(`Making Google Search request with 8s timeout for: ${searchQuery}`)
-    console.log('Request URL:', url)
-    console.log('Environment:', process.env.NODE_ENV, 'Vercel:', process.env.VERCEL)
+    // 只有当 httpsAgent 存在时才添加
+    if (httpsAgent) {
+      config.httpsAgent = httpsAgent
+    } else {
+      console.warn('Warning: httpsAgent is null, request may fail')
+    }
     
     const response = await axios.get(url, config)
-    console.log(`Google Search completed successfully for: ${searchQuery}`)
     return response.data.items || []
   } catch (error) {
-    // 处理超时错误
-    if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
-      console.error(`Google Search request timed out after 8s for query: ${searchQuery}`)
-      console.error('Timeout error details:', error.message)
-      return []
-    }
-    
     if (error.code === 'ECONNREFUSED') {
-      console.error('Connection refused to Google API')
-      return []
-    }
-    
-    // 处理网络错误
-    if (error.code === 'ECONNRESET' || error.code === 'ENOTFOUND') {
-      console.error(`Network error (${error.code}) for Google Search:`, searchQuery)
-      return []
-    }
-    
-    // 处理API限制
-    if (error.response?.status === 429) {
-      console.error('Google Search API rate limited. Query:', searchQuery)
+      console.error(`Proxy connection refused. Please ensure your proxy at ${process.env.PROXY_URL} is running.`)
       return []
     }
     
     if (error.response?.status === 400) {
       console.error('Bad request to Google Search API. Query:', searchQuery)
       console.error('Error details:', JSON.stringify(error.response.data, null, 2))
+      console.error('Request URL:', error.config?.url)
+      console.error('Request params:', error.config?.params)
+      // 返回空数组而不是抛出错误，让系统继纭处理
       return []
     }
     
@@ -201,10 +184,7 @@ const searchForReference = async (searchQuery, numResults) => {
       return []
     }
     
-    console.error('Google Search API error:', error.message, 'Query:', searchQuery)
-    console.error('Error code:', error.code)
-    console.error('Error response:', error.response?.status, error.response?.statusText)
-    console.error('Full error:', JSON.stringify(error, null, 2))
+    console.error('Google Search API error:', error.message)
     return []
   }
 }
