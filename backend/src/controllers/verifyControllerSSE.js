@@ -153,11 +153,10 @@ export const verifyReferencesSSEController = async (req, res, next) => {
     // 阶段三：Google 搜索验证（将在下一步实现）
     console.log(`Phase 3: Google search for ${pendingGoogleSearch.length} remaining references...`)
     
-    // 阶段三：并发处理Google搜索验证剩余文献
-    const CONCURRENT_LIMIT = 3 // 限制并发数量避免API限制
-    
-    const processRefConcurrently = async (ref) => {
+    // 阶段三：简单串行处理（先确保稳定性）
+    for (const ref of pendingGoogleSearch) {
       try {
+        console.log(`Processing reference: ${ref.title}`)
         const searchResult = await searchReference(ref)
         processedCount++
         
@@ -185,8 +184,10 @@ export const verifyReferencesSSEController = async (req, res, next) => {
           }
         })}\n\n`)
         
+        console.log(`Completed ${processedCount}/${totalReferences}`)
+        
       } catch (error) {
-        console.error(`Error processing reference:`, error.message)
+        console.error(`Error processing reference "${ref.title}":`, error.message)
         processedCount++
         
         res.write(`data: ${JSON.stringify({
@@ -195,8 +196,8 @@ export const verifyReferencesSSEController = async (req, res, next) => {
             index: ref.originalIndex,
             reference: ref.originalReference,
             status: 'error',
-            message: error.message,
-            confidenceLevel: 'LOW'  // 错误状态默认为LOW
+            message: `Error: ${error.message}`,
+            confidenceLevel: 'LOW'
           },
           progress: {
             current: processedCount,
@@ -205,17 +206,9 @@ export const verifyReferencesSSEController = async (req, res, next) => {
           }
         })}\n\n`)
       }
-    }
-    
-    // 分批处理，避免过多并发请求
-    for (let i = 0; i < pendingGoogleSearch.length; i += CONCURRENT_LIMIT) {
-      const batch = pendingGoogleSearch.slice(i, i + CONCURRENT_LIMIT)
-      await Promise.allSettled(batch.map(processRefConcurrently))
       
-      // 批次间添加短暂延迟，避免API限制
-      if (i + CONCURRENT_LIMIT < pendingGoogleSearch.length) {
-        await new Promise(resolve => setTimeout(resolve, 500)) // 500ms延迟
-      }
+      // 每个请求后短暂延迟，避免API限制
+      await new Promise(resolve => setTimeout(resolve, 1000)) // 1秒延迟
     }
     
     // Send completion event
