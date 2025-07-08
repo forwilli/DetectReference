@@ -68,7 +68,11 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
         console.log('📖 Buffer content:', buffer.substring(0, 200) + '...')
         
         // 立即处理缓冲区中的完整消息
+        console.log('📖 Checking for complete messages in buffer...')
+        console.log('📖 Buffer includes \\n\\n:', buffer.includes('\n\n'))
+        
         while (buffer.includes('\n\n')) {
+          console.log('📖 Found complete message delimiter')
           const messageEnd = buffer.indexOf('\n\n')
           const message = buffer.substring(0, messageEnd)
           buffer = buffer.substring(messageEnd + 2)
@@ -96,6 +100,8 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
             }
           }
         }
+        
+        console.log('📖 Remaining buffer after processing:', buffer.substring(0, 100) + '...')
       }
       
     } catch (error) {
