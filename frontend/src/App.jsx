@@ -5,6 +5,7 @@ import CitationFormatter from './components/CitationFormatter'
 import SwanLogo from './components/SwanLogo'
 import LanguageSelector from './components/LanguageSelector'
 import SEOContent from './components/SEOContent'
+import AnimatedBackground from './components/AnimatedBackground'
 import useStore from './store/useStore'
 import { useTranslation } from 'react-i18next'
 
@@ -25,15 +26,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 pointer-events-none -z-10" />
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none -z-10" />
+      {/* Animated Background */}
+      <AnimatedBackground />
       
-      {/* Subtle decorative elements */}
-      <div className="absolute left-0 top-1/3 w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent pointer-events-none -z-10" />
-      <div className="absolute right-0 top-1/3 w-px h-32 bg-gradient-to-b from-transparent via-gray-200 to-transparent pointer-events-none -z-10" />
-      <div className="absolute left-10 top-1/2 w-px h-48 bg-gradient-to-b from-transparent via-gray-100 to-transparent pointer-events-none -z-10" />
-      <div className="absolute right-10 top-1/2 w-px h-48 bg-gradient-to-b from-transparent via-gray-100 to-transparent pointer-events-none -z-10" />
+      {/* Background Pattern - now subtle overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/30 via-white/50 to-gray-50/30 pointer-events-none -z-10" />
       {/* Modern Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center">
