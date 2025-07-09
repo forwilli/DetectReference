@@ -3,7 +3,6 @@ import ReferenceInput from './components/ReferenceInput'
 import VerificationResults from './components/VerificationResults'
 import CitationFormatter from './components/CitationFormatter'
 import SwanLogo from './components/SwanLogo'
-import NetworkStatus from './components/NetworkStatus'
 import LanguageSelector from './components/LanguageSelector'
 import SEOContent from './components/SEOContent'
 import useStore from './store/useStore'
@@ -59,7 +58,6 @@ function App() {
           </div>
           <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
             <div className="flex items-center space-x-4">
-              <NetworkStatus />
               <LanguageSelector />
               <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" className="mr-2">
