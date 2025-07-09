@@ -74,5 +74,22 @@
     "emptyInput": "请输入至少一条参考文献",
     "networkError": "网络错误，请重试",
     "serverError": "服务器错误，请稍后重试"
+  },
+  "formatter": {
+    "title": "引用格式化工具",
+    "subtitle": "将您的参考文献转换为完美格式的引用。",
+    "formatStyle": "格式样式",
+    "references": "参考文献（每行一条）",
+    "formatButton": "格式化引用",
+    "copyButton": "复制引用",
+    "copyAllButton": "复制全部",
+    "processing": "处理中...",
+    "results": "格式化的引用",
+    "styles": {
+      "apa": "APA 格式",
+      "mla": "MLA 格式",
+      "chicago": "芝加哥格式",
+      "harvard": "哈佛格式"
+    }
   }
 }

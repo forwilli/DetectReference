@@ -74,5 +74,22 @@
     "emptyInput": "Bitte geben Sie mindestens eine Referenz ein",
     "networkError": "Netzwerkfehler. Bitte versuchen Sie es erneut.",
     "serverError": "Serverfehler. Bitte versuchen Sie es später erneut."
+  },
+  "formatter": {
+    "title": "Zitatformatierer",
+    "subtitle": "Verwandeln Sie Ihre Referenzen in perfekt formatierte Zitate.",
+    "formatStyle": "Formatstil",
+    "references": "Referenzen (eine pro Zeile)",
+    "formatButton": "Zitate Formatieren",
+    "copyButton": "Zitat Kopieren",
+    "copyAllButton": "Alles Kopieren",
+    "processing": "Verarbeitung...",
+    "results": "Formatierte Zitate",
+    "styles": {
+      "apa": "APA-Stil",
+      "mla": "MLA-Stil",
+      "chicago": "Chicago-Stil",
+      "harvard": "Harvard-Stil"
+    }
   }
 }

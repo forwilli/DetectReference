@@ -74,5 +74,22 @@
     "emptyInput": "少なくとも1つの参考文献を入力してください",
     "networkError": "ネットワークエラー。もう一度お試しください。",
     "serverError": "サーバーエラー。後でもう一度お試しください。"
+  },
+  "formatter": {
+    "title": "引用フォーマッター",
+    "subtitle": "参考文献を完璧にフォーマットされた引用に変換します。",
+    "formatStyle": "フォーマットスタイル",
+    "references": "参考文献（1行に1つ）",
+    "formatButton": "引用をフォーマット",
+    "copyButton": "引用をコピー",
+    "copyAllButton": "すべてコピー",
+    "processing": "処理中...",
+    "results": "フォーマットされた引用",
+    "styles": {
+      "apa": "APAスタイル",
+      "mla": "MLAスタイル",
+      "chicago": "シカゴスタイル",
+      "harvard": "ハーバードスタイル"
+    }
   }
 }

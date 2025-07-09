@@ -74,5 +74,22 @@
     "emptyInput": "Por favor, insira pelo menos uma referência",
     "networkError": "Erro de rede. Por favor, tente novamente.",
     "serverError": "Erro do servidor. Por favor, tente novamente mais tarde."
+  },
+  "formatter": {
+    "title": "Formatador de Citações",
+    "subtitle": "Transforme suas referências em citações perfeitamente formatadas.",
+    "formatStyle": "Estilo de Formato",
+    "references": "Referências (uma por linha)",
+    "formatButton": "Formatar Citações",
+    "copyButton": "Copiar Citação",
+    "copyAllButton": "Copiar Tudo",
+    "processing": "Processando...",
+    "results": "Citações Formatadas",
+    "styles": {
+      "apa": "Estilo APA",
+      "mla": "Estilo MLA",
+      "chicago": "Estilo Chicago",
+      "harvard": "Estilo Harvard"
+    }
   }
 }

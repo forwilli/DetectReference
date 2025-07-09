@@ -74,5 +74,22 @@
     "emptyInput": "Please enter at least one reference",
     "networkError": "Network error. Please try again.",
     "serverError": "Server error. Please try again later."
+  },
+  "formatter": {
+    "title": "Citation Formatter",
+    "subtitle": "Transform your references into perfectly formatted citations.",
+    "formatStyle": "Format Style",
+    "references": "References (one per line)",
+    "formatButton": "Format Citations",
+    "copyButton": "Copy Citation",
+    "copyAllButton": "Copy All",
+    "processing": "Processing...",
+    "results": "Formatted Citations",
+    "styles": {
+      "apa": "APA Style",
+      "mla": "MLA Style",
+      "chicago": "Chicago Style",
+      "harvard": "Harvard Style"
+    }
   }
 }

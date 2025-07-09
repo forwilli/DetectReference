@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { track } from '@vercel/analytics'
+import { useTranslation } from 'react-i18next'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -12,12 +13,13 @@ function CitationFormatter() {
   const [formattedResults, setFormattedResults] = useState(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState(null)
+  const { t } = useTranslation()
 
   const formats = [
-    { value: 'apa', label: 'APA Style' },
-    { value: 'mla', label: 'MLA Style' },
-    { value: 'chicago', label: 'Chicago Style' },
-    { value: 'harvard', label: 'Harvard Style' }
+    { value: 'apa', label: t('formatter.styles.apa') },
+    { value: 'mla', label: t('formatter.styles.mla') },
+    { value: 'chicago', label: t('formatter.styles.chicago') },
+    { value: 'harvard', label: t('formatter.styles.harvard') }
   ]
 
   const exampleText = `Smith, J. (2023). Sample article title. Journal Name, 10(2), 123-145.
@@ -28,7 +30,7 @@ Johnson, M. (2021). Book title. Publisher Name.`
     const referenceList = inputText.trim().split('\n').filter(ref => ref.trim())
     
     if (referenceList.length === 0) {
-      setError('Please enter at least one reference')
+      setError(t('errors.emptyInput'))
       return
     }
 
@@ -109,16 +111,16 @@ Johnson, M. (2021). Book title. Publisher Name.`
     <Card className="animate-in">
       <CardHeader>
         <CardTitle>
-          Citation Formatter
+          {t('formatter.title')}
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Transform your references into perfectly formatted citations.
+          {t('formatter.subtitle')}
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
           <label className="text-sm font-medium mb-2 block">
-            Format Style
+            {t('formatter.formatStyle')}
           </label>
           <select
             value={selectedFormat}
@@ -135,7 +137,7 @@ Johnson, M. (2021). Book title. Publisher Name.`
 
         <div className="space-y-2">
           <p className="text-sm font-medium text-foreground">
-            References (one per line)
+            {t('formatter.references')}
           </p>
           <Textarea
             className="min-h-[200px] font-mono text-sm"
@@ -166,14 +168,14 @@ Johnson, M. (2021). Book title. Publisher Name.`
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 818-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              Formatting...
+              {t('formatter.processing')}
             </>
           ) : (
             <>
               <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" fill="currentColor"/>
               </svg>
-              Format Citations
+              {t('formatter.formatButton')}
             </>
           )}
         </Button>
@@ -182,14 +184,14 @@ Johnson, M. (2021). Book title. Publisher Name.`
           <div className="mt-6 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">
-                Formatted Citations ({selectedFormat.toUpperCase()})
+                {t('formatter.results')} ({selectedFormat.toUpperCase()})
               </h3>
               <Button
                 onClick={handleCopyAll}
                 variant="outline"
                 size="sm"
               >
-                Copy All
+                {t('formatter.copyAllButton')}
               </Button>
             </div>
             

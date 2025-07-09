@@ -74,5 +74,22 @@
     "emptyInput": "Veuillez entrer au moins une référence",
     "networkError": "Erreur réseau. Veuillez réessayer.",
     "serverError": "Erreur serveur. Veuillez réessayer plus tard."
+  },
+  "formatter": {
+    "title": "Formateur de Citations",
+    "subtitle": "Transformez vos références en citations parfaitement formatées.",
+    "formatStyle": "Style de Format",
+    "references": "Références (une par ligne)",
+    "formatButton": "Formater les Citations",
+    "copyButton": "Copier la Citation",
+    "copyAllButton": "Tout Copier",
+    "processing": "Traitement...",
+    "results": "Citations Formatées",
+    "styles": {
+      "apa": "Style APA",
+      "mla": "Style MLA",
+      "chicago": "Style Chicago",
+      "harvard": "Style Harvard"
+    }
   }
 }
