@@ -9,6 +9,29 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    // SEO优化：减小包体积
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
+    // 分包策略
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'ui-vendor': ['@radix-ui/react-alert-dialog', '@radix-ui/react-slot']
+        }
+      }
+    },
+    // 启用 CSS 代码分割
+    cssCodeSplit: true,
+    // 生成资源报告
+    reportCompressedSize: false
+  },
   server: {
     port: 5173,
     proxy: {
