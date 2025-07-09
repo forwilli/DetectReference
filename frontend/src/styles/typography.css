@@ -1,9 +1,11 @@
 /* Import modern fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
 /* Typography System */
 :root {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
 }
 
 body {
@@ -15,18 +17,19 @@ body {
 
 /* Hero Title Styles */
 .hero-title {
-  font-family: var(--font-sans);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #374151;
 }
 
 .hero-subtitle {
-  font-family: var(--font-sans);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
-  color: #9ca3af;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #6b7280;
 }
 
 .hero-description {

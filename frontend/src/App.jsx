@@ -71,14 +71,14 @@ function App() {
             <>
               <div className="text-center">
                 <div className="mb-8">
-                  <h1 className="hero-title text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-gray-900 mb-3">
+                  <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-2">
                     {t('app.mainTitle')}
                   </h1>
-                  <h2 className="hero-subtitle text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+                  <h2 className="hero-subtitle text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
                     {t('app.mainSubtitle')}
                   </h2>
                 </div>
-                <p className="hero-description mx-auto max-w-[680px] text-lg sm:text-xl mb-12">
+                <p className="hero-description mx-auto max-w-[680px] text-base sm:text-lg mb-12">
                   {t('app.mainDescription')}
                 </p>
                 
