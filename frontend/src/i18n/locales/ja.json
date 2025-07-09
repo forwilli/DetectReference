@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "AI引用チェッカー",
+    "subtitle": "ChatGPT、Claude、その他のAIツールからの偽の参考文献を検出"
+  },
+  "input": {
+    "placeholder": "AI生成の参考文献をここに貼り付けて、実在するか確認してください...\n\n例：\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
+    "helperText": "ChatGPT、Claude、その他のAIツールからの偽の引用を検出",
+    "pasteYourReferences": "AI生成の参考文献を貼り付けて確認",
+    "onePerLine": "1行に1つ",
+    "verifyWithDatabases": "CrossRefとGoogle Scholarで検証します"
+  },
+  "buttons": {
+    "detectHallucinations": "AI幻覚を検出",
+    "tryExamples": "AI生成の例でテスト",
+    "stop": "停止",
+    "copyAll": "すべてコピー",
+    "exportResults": "結果をエクスポート",
+    "verifyMore": "さらに参考文献を検証"
+  },
+  "status": {
+    "verified": "検証済み",
+    "suspicious": "疑わしい", 
+    "notFound": "見つかりません",
+    "error": "エラー"
+  },
+  "results": {
+    "title": "検証結果",
+    "verifying": "参考文献を検証中...",
+    "summary": {
+      "total": "参考文献総数",
+      "verified": "検証済み",
+      "suspicious": "疑わしい",
+      "notFound": "見つかりません"
+    },
+    "messages": {
+      "found": "学術データベースで見つかりました",
+      "notFound": "学術データベースで見つかりません - AI幻覚の可能性",
+      "suspicious": "類似は見つかりましたが完全一致せず - 手動で確認してください",
+      "error": "検証中にエラーが発生しました"
+    }
+  },
+  "features": {
+    "feature1": {
+      "title": "即時検証",
+      "description": "1億5000万以上の学術論文と照合"
+    },
+    "feature2": {
+      "title": "AI幻覚検出",
+      "description": "ChatGPTや他のAIの偽の引用を特定"
+    },
+    "feature3": {
+      "title": "永久無料",
+      "description": "登録不要、制限なし、常に無料"
+    }
+  },
+  "errors": {
+    "emptyInput": "少なくとも1つの参考文献を入力してください",
+    "networkError": "ネットワークエラー。もう一度お試しください。",
+    "serverError": "サーバーエラー。後でもう一度お試しください。"
+  }
+}

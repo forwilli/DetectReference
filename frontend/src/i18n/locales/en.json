@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "AI Citation Checker",
+    "subtitle": "Detect fake references from ChatGPT, Claude, or other AI tools"
+  },
+  "input": {
+    "placeholder": "Paste AI-generated references here to check if they're real...\n\nExample:\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
+    "helperText": "Detects fake citations from ChatGPT, Claude, or other AI tools",
+    "pasteYourReferences": "Paste AI-generated references to check",
+    "onePerLine": "One per line",
+    "verifyWithDatabases": "We verify with CrossRef & Google Scholar"
+  },
+  "buttons": {
+    "detectHallucinations": "Detect AI Hallucinations",
+    "tryExamples": "Test with AI-Generated Examples",
+    "stop": "Stop",
+    "copyAll": "Copy All",
+    "exportResults": "Export Results",
+    "verifyMore": "Verify More References"
+  },
+  "status": {
+    "verified": "Verified",
+    "suspicious": "Suspicious", 
+    "notFound": "Not Found",
+    "error": "Error"
+  },
+  "results": {
+    "title": "Verification Results",
+    "verifying": "Verifying your references...",
+    "summary": {
+      "total": "Total References",
+      "verified": "Verified",
+      "suspicious": "Suspicious",
+      "notFound": "Not Found"
+    },
+    "messages": {
+      "found": "Found in academic databases",
+      "notFound": "Not found in any academic database - likely AI hallucination",
+      "suspicious": "Found similar but not exact match - verify manually",
+      "error": "Error during verification"
+    }
+  },
+  "features": {
+    "feature1": {
+      "title": "Instant Verification",
+      "description": "Check references against 150M+ academic papers"
+    },
+    "feature2": {
+      "title": "AI Hallucination Detection",
+      "description": "Identify fake citations from ChatGPT & other AI"
+    },
+    "feature3": {
+      "title": "Free Forever",
+      "description": "No registration, no limits, always free"
+    }
+  },
+  "errors": {
+    "emptyInput": "Please enter at least one reference",
+    "networkError": "Network error. Please try again.",
+    "serverError": "Server error. Please try again later."
+  }
+}

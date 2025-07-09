@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "AI引用检测器",
+    "subtitle": "检测ChatGPT、Claude等AI工具生成的虚假引用"
+  },
+  "input": {
+    "placeholder": "在此粘贴AI生成的参考文献，检查是否真实存在...\n\n示例：\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
+    "helperText": "检测来自ChatGPT、Claude等AI工具的虚假引用",
+    "pasteYourReferences": "粘贴AI生成的参考文献进行检查",
+    "onePerLine": "每行一条",
+    "verifyWithDatabases": "我们通过CrossRef和Google Scholar验证"
+  },
+  "buttons": {
+    "detectHallucinations": "检测AI幻觉",
+    "tryExamples": "试用AI生成的示例",
+    "stop": "停止",
+    "copyAll": "复制全部",
+    "exportResults": "导出结果",
+    "verifyMore": "验证更多引用"
+  },
+  "status": {
+    "verified": "已验证",
+    "suspicious": "可疑", 
+    "notFound": "未找到",
+    "error": "错误"
+  },
+  "results": {
+    "title": "验证结果",
+    "verifying": "正在验证您的引用...",
+    "summary": {
+      "total": "总引用数",
+      "verified": "已验证",
+      "suspicious": "可疑",
+      "notFound": "未找到"
+    },
+    "messages": {
+      "found": "在学术数据库中找到",
+      "notFound": "未在任何学术数据库中找到 - 可能是AI幻觉",
+      "suspicious": "找到相似但不完全匹配 - 请手动验证",
+      "error": "验证过程中出错"
+    }
+  },
+  "features": {
+    "feature1": {
+      "title": "即时验证",
+      "description": "对比1.5亿+学术论文数据库"
+    },
+    "feature2": {
+      "title": "AI幻觉检测",
+      "description": "识别ChatGPT等AI的虚假引用"
+    },
+    "feature3": {
+      "title": "永久免费",
+      "description": "无需注册，无限制，永远免费"
+    }
+  },
+  "errors": {
+    "emptyInput": "请输入至少一条参考文献",
+    "networkError": "网络错误，请重试",
+    "serverError": "服务器错误，请稍后重试"
+  }
+}

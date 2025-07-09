@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "Detector de Citas con IA",
+    "subtitle": "Detecta referencias falsas de ChatGPT, Claude u otras herramientas de IA"
+  },
+  "input": {
+    "placeholder": "Pega aquí las referencias generadas por IA para verificar si son reales...\n\nEjemplo:\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
+    "helperText": "Detecta citas falsas de ChatGPT, Claude u otras herramientas de IA",
+    "pasteYourReferences": "Pega las referencias generadas por IA para verificar",
+    "onePerLine": "Una por línea",
+    "verifyWithDatabases": "Verificamos con CrossRef y Google Scholar"
+  },
+  "buttons": {
+    "detectHallucinations": "Detectar Alucinaciones de IA",
+    "tryExamples": "Probar con Ejemplos de IA",
+    "stop": "Detener",
+    "copyAll": "Copiar Todo",
+    "exportResults": "Exportar Resultados",
+    "verifyMore": "Verificar Más Referencias"
+  },
+  "status": {
+    "verified": "Verificado",
+    "suspicious": "Sospechoso", 
+    "notFound": "No Encontrado",
+    "error": "Error"
+  },
+  "results": {
+    "title": "Resultados de Verificación",
+    "verifying": "Verificando tus referencias...",
+    "summary": {
+      "total": "Referencias Totales",
+      "verified": "Verificadas",
+      "suspicious": "Sospechosas",
+      "notFound": "No Encontradas"
+    },
+    "messages": {
+      "found": "Encontrado en bases de datos académicas",
+      "notFound": "No encontrado en ninguna base de datos académica - probablemente alucinación de IA",
+      "suspicious": "Se encontró similar pero no coincidencia exacta - verificar manualmente",
+      "error": "Error durante la verificación"
+    }
+  },
+  "features": {
+    "feature1": {
+      "title": "Verificación Instantánea",
+      "description": "Verifica contra 150M+ artículos académicos"
+    },
+    "feature2": {
+      "title": "Detección de Alucinaciones IA",
+      "description": "Identifica citas falsas de ChatGPT y otras IA"
+    },
+    "feature3": {
+      "title": "Gratis Para Siempre",
+      "description": "Sin registro, sin límites, siempre gratis"
+    }
+  },
+  "errors": {
+    "emptyInput": "Por favor ingresa al menos una referencia",
+    "networkError": "Error de red. Por favor intenta de nuevo.",
+    "serverError": "Error del servidor. Por favor intenta más tarde."
+  }
+}
