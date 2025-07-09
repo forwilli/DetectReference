@@ -4,7 +4,23 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/((?!google|sitemap|robots|how-to-check-citations|ai-hallucination-detector|chatgpt-fake-references|styles).*)",
+      "source": "/how-to-check-citations",
+      "destination": "/how-to-check-citations.html"
+    },
+    {
+      "source": "/ai-hallucination-detector",
+      "destination": "/ai-hallucination-detector.html"
+    },
+    {
+      "source": "/chatgpt-fake-references",
+      "destination": "/chatgpt-fake-references.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/((?!api|_next|favicon|robots|sitemap|google|styles|images|assets|.*\\.html|.*\\.xml|.*\\.txt|.*\\.svg|.*\\.css|.*\\.js).*)",
       "destination": "/index.html"
     }
   ]
