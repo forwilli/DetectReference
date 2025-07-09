@@ -4,7 +4,7 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/((?!google|sitemap|robots).*)",
+      "source": "/((?!google|sitemap|robots|how-to-check-citations|ai-hallucination-detector|chatgpt-fake-references|styles).*)",
       "destination": "/index.html"
     }
   ]
