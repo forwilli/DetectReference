@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReferenceInput from './components/ReferenceInput'
 import VerificationResults from './components/VerificationResults'
 import CitationFormatter from './components/CitationFormatter'
@@ -7,6 +7,16 @@ import NetworkStatus from './components/NetworkStatus'
 import useStore from './store/useStore'
 
 function App() {
+  // Add Google verification meta tag dynamically
+  useEffect(() => {
+    const verificationCode = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION
+    if (verificationCode && !document.querySelector('meta[name="google-site-verification"]')) {
+      const meta = document.createElement('meta')
+      meta.name = 'google-site-verification'
+      meta.content = verificationCode
+      document.head.appendChild(meta)
+    }
+  }, [])
   const { verificationResults } = useStore()
   const [activeTab, setActiveTab] = useState('verify')
 
