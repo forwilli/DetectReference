@@ -11,13 +11,7 @@ export default defineConfig({
   },
   build: {
     // SEO优化：减小包体积
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      }
-    },
+    minify: 'esbuild',
     // 分包策略
     rollupOptions: {
       output: {
