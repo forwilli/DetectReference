@@ -5,6 +5,7 @@ import CitationFormatter from './components/CitationFormatter'
 import SwanLogo from './components/SwanLogo'
 import NetworkStatus from './components/NetworkStatus'
 import LanguageSelector from './components/LanguageSelector'
+import SEOContent from './components/SEOContent'
 import useStore from './store/useStore'
 import { useTranslation } from 'react-i18next'
 
@@ -122,6 +123,9 @@ function App() {
                 <div className="relative">
                   {activeTab === 'verify' ? <ReferenceInput /> : <CitationFormatter />}
                 </div>
+                
+                {/* SEO Content Section - Only show on homepage */}
+                <SEOContent />
               </div>
             </>
           ) : (

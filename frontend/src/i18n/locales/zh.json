@@ -91,5 +91,59 @@
       "chicago": "芝加哥格式",
       "harvard": "哈佛格式"
     }
+  },
+  "seo": {
+    "trustedBy": "全球研究者信赖",
+    "stats": {
+      "verified": "已验证引用",
+      "accuracy": "准确率",
+      "database": "学术论文",
+      "speed": "每条引用"
+    },
+    "howItWorks": "SwanRef 工作原理",
+    "features": {
+      "detection": {
+        "title": "AI幻觉检测",
+        "desc": "先进算法识别ChatGPT、Claude等AI工具生成的虚假引用"
+      },
+      "database": {
+        "title": "全面的数据库",
+        "desc": "交叉引用CrossRef的1.5亿+论文和Google Scholar以确保最高准确性"
+      },
+      "speed": {
+        "title": "即时结果",
+        "desc": "每条引用验证时间少于1秒，提供详细的状态报告"
+      }
+    },
+    "faqTitle": "常见问题",
+    "faq": {
+      "q1": "AI生成的引用中有多少是假的？",
+      "a1": "研究表明，ChatGPT等AI语言模型生成的引用中有15-30%是完全虚构的。另外20-30%可能包含错误，如错误的页码或出版日期。",
+      "q2": "SwanRef如何验证引用？",
+      "a2": "SwanRef通过多个学术数据库检查每条引用，包括CrossRef（1.5亿+论文）、Google Scholar和直接的出版商数据库。我们使用模式匹配来识别常见的AI幻觉特征。",
+      "q3": "SwanRef真的免费吗？",
+      "a3": "是的，SwanRef对学术使用完全免费。无需注册，无隐藏费用，无使用限制。我们相信学术诚信工具应该对所有学生和研究者开放。",
+      "q4": "可以验证非英文引用吗？",
+      "a4": "目前，SwanRef主要支持英文引用验证。但是，我们的界面支持8种语言，我们正在努力将引用验证扩展到其他语言。"
+    },
+    "warning": {
+      "title": "⚠️ 学术诚信警告",
+      "desc": "使用未经验证的AI生成引用可能导致学术不端指控、论文被拒和学术声誉受损。",
+      "learnHow": "了解如何验证引用",
+      "whyHappen": "为什么会出现AI幻觉"
+    },
+    "styles": {
+      "title": "支持的引用格式",
+      "apa": "心理学与科学",
+      "mla": "文学与人文",
+      "chicago": "历史与出版",
+      "harvard": "经济与商业"
+    },
+    "trust": {
+      "free": "永久免费",
+      "noLogin": "无需注册",
+      "instant": "即时结果",
+      "accurate": "99%准确"
+    }
   }
 }
