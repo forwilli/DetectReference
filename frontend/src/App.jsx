@@ -70,15 +70,15 @@ function App() {
           {verificationResults.length === 0 ? (
             <>
               <div className="text-center">
-                <div className="mb-8">
-                  <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-2">
+                <div className="mb-10">
+                  <h1 className="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-3">
                     {t('app.mainTitle')}
                   </h1>
-                  <h2 className="hero-subtitle text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
+                  <h2 className="hero-subtitle text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
                     {t('app.mainSubtitle')}
                   </h2>
                 </div>
-                <p className="hero-description mx-auto max-w-[680px] text-base sm:text-lg mb-12">
+                <p className="hero-description mx-auto max-w-[680px] text-base sm:text-lg mb-12 opacity-75">
                   {t('app.mainDescription')}
                 </p>
                 
