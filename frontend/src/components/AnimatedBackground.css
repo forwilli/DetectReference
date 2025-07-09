@@ -1,226 +1,207 @@
-/* Animated Background Container */
 .animated-background {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
-  z-index: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse at top, #fafafa 0%, #ffffff 50%, #fafafa 100%);
 }
 
-/* Floating Orbs */
-.orb {
+/* Subtle grain texture */
+.animated-background::before {
+  content: '';
   position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.4;
-  mix-blend-mode: normal;
-  will-change: transform;
-}
-
-.orb-1 {
-  width: 40vw;
-  height: 40vw;
-  max-width: 600px;
-  max-height: 600px;
-  background: radial-gradient(circle at 30% 30%, rgba(147, 51, 234, 0.15) 0%, transparent 60%);
-  top: -10%;
-  right: -10%;
-  animation: float-1 30s ease-in-out infinite;
-}
-
-.orb-2 {
-  width: 50vw;
-  height: 50vw;
-  max-width: 700px;
-  max-height: 700px;
-  background: radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.12) 0%, transparent 60%);
-  bottom: -20%;
-  left: -15%;
-  animation: float-2 35s ease-in-out infinite;
-}
-
-.orb-3 {
-  width: 30vw;
-  height: 30vw;
-  max-width: 400px;
-  max-height: 400px;
-  background: radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.1) 0%, transparent 60%);
-  top: 40%;
-  left: 30%;
-  animation: float-3 40s ease-in-out infinite;
-}
-
-/* Geometric Lines Container */
-.geometric-lines {
-  position: absolute;
-  inset: 0;
-  opacity: 0.15;
-}
-
-.line {
-  position: absolute;
-  background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.3), transparent);
-  transform-origin: center;
-  will-change: transform, opacity;
-}
-
-.line-1 {
-  width: 200%;
-  height: 1px;
-  top: 30%;
+  top: -50%;
   left: -50%;
-  transform: rotate(-15deg);
-  animation: slide-1 50s linear infinite;
+  width: 200%;
+  height: 200%;
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0, 0, 0, 0.01) 35px, rgba(0, 0, 0, 0.01) 70px);
+  animation: grain 8s steps(10) infinite;
+  opacity: 0.4;
 }
 
-.line-2 {
-  width: 150%;
-  height: 1px;
+/* Minimal geometric shapes */
+.shape {
+  position: absolute;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  background: transparent;
+}
+
+.shape-1 {
+  width: 800px;
+  height: 800px;
+  top: -400px;
+  right: -400px;
+  border-radius: 50%;
+  animation: rotate-slow 60s linear infinite;
+}
+
+.shape-2 {
+  width: 600px;
+  height: 600px;
+  bottom: -300px;
+  left: -300px;
+  border-radius: 50%;
+  animation: rotate-reverse 90s linear infinite;
+}
+
+.shape-3 {
+  width: 1px;
+  height: 150vh;
+  top: -25vh;
+  left: 20%;
+  transform: rotate(15deg);
+  animation: slide-vertical 40s ease-in-out infinite;
+  background: linear-gradient(to bottom, 
+    transparent 0%, 
+    rgba(0, 0, 0, 0.03) 50%, 
+    transparent 100%);
+  border: none;
+}
+
+.shape-4 {
+  width: 1px;
+  height: 150vh;
+  top: -25vh;
+  right: 30%;
+  transform: rotate(-20deg);
+  animation: slide-vertical-reverse 35s ease-in-out infinite;
+  background: linear-gradient(to bottom, 
+    transparent 0%, 
+    rgba(0, 0, 0, 0.02) 50%, 
+    transparent 100%);
+  border: none;
+}
+
+/* Subtle floating dots */
+.dot {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+}
+
+.dot-1 {
+  top: 20%;
+  left: 10%;
+  animation: float-dot 20s ease-in-out infinite;
+}
+
+.dot-2 {
   top: 60%;
-  right: -25%;
-  transform: rotate(20deg);
-  animation: slide-2 45s linear infinite reverse;
+  right: 15%;
+  animation: float-dot 25s ease-in-out infinite reverse;
+  animation-delay: 5s;
 }
 
-.line-3 {
-  width: 180%;
-  height: 1px;
-  bottom: 25%;
-  left: -40%;
-  transform: rotate(-10deg);
-  animation: slide-3 55s linear infinite;
+.dot-3 {
+  bottom: 30%;
+  left: 40%;
+  animation: float-dot 30s ease-in-out infinite;
+  animation-delay: 10s;
 }
 
 /* Animations */
-@keyframes float-1 {
-  0%, 100% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
-  }
-  25% {
-    transform: translate(-50px, 50px) scale(1.1) rotate(90deg);
-  }
-  50% {
-    transform: translate(30px, -30px) scale(0.95) rotate(180deg);
-  }
-  75% {
-    transform: translate(-30px, -50px) scale(1.05) rotate(270deg);
-  }
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-@keyframes float-2 {
-  0%, 100% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
-  }
-  33% {
-    transform: translate(60px, -40px) scale(1.08) rotate(120deg);
-  }
-  66% {
-    transform: translate(-40px, 60px) scale(0.92) rotate(240deg);
-  }
+@keyframes rotate-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
 }
 
-@keyframes float-3 {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  20% {
-    transform: translate(40px, 40px) scale(1.15);
-  }
-  40% {
-    transform: translate(-60px, 20px) scale(0.9);
-  }
-  60% {
-    transform: translate(20px, -60px) scale(1.1);
-  }
-  80% {
-    transform: translate(-40px, -40px) scale(0.95);
-  }
+@keyframes slide-vertical {
+  0%, 100% { transform: translateY(0) rotate(15deg); }
+  50% { transform: translateY(100px) rotate(15deg); }
 }
 
-@keyframes slide-1 {
-  0% {
-    transform: translateX(0) rotate(-15deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.15;
-  }
-  90% {
-    opacity: 0.15;
-  }
-  100% {
-    transform: translateX(50%) rotate(-15deg);
-    opacity: 0;
-  }
+@keyframes slide-vertical-reverse {
+  0%, 100% { transform: translateY(0) rotate(-20deg); }
+  50% { transform: translateY(-80px) rotate(-20deg); }
 }
 
-@keyframes slide-2 {
-  0% {
-    transform: translateX(0) rotate(20deg);
-  }
-  100% {
-    transform: translateX(-50%) rotate(20deg);
-  }
-}
-
-@keyframes slide-3 {
-  0% {
-    transform: translateX(0) rotate(-10deg);
+@keyframes float-dot {
+  0%, 100% { 
+    transform: translate(0, 0);
     opacity: 0.1;
   }
-  50% {
+  25% { 
+    transform: translate(30px, -20px);
     opacity: 0.2;
   }
-  100% {
-    transform: translateX(40%) rotate(-10deg);
+  50% { 
+    transform: translate(-20px, 30px);
     opacity: 0.1;
+  }
+  75% { 
+    transform: translate(-30px, -10px);
+    opacity: 0.15;
   }
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .orb {
-    filter: blur(80px);
-  }
-  
-  .orb-1, .orb-2, .orb-3 {
-    animation-duration: 45s, 50s, 55s;
-  }
-  
-  .line {
-    opacity: 0.1;
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -5%); }
+  20% { transform: translate(-10%, 5%); }
+  30% { transform: translate(5%, -10%); }
+  40% { transform: translate(-5%, 15%); }
+  50% { transform: translate(-10%, 5%); }
+  60% { transform: translate(15%, 0); }
+  70% { transform: translate(0, 10%); }
+  80% { transform: translate(-15%, 0); }
+  90% { transform: translate(10%, 5%); }
+}
+
+/* Light mode adjustments */
+@media (prefers-color-scheme: light) {
+  .animated-background {
+    background: linear-gradient(to bottom, #fafafa, #ffffff);
   }
 }
 
-/* Reduced Motion */
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .shape {
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .shape-3,
+  .shape-4 {
+    background: linear-gradient(to bottom, 
+      transparent 0%, 
+      rgba(255, 255, 255, 0.03) 50%, 
+      transparent 100%);
+  }
+  
+  .dot {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .animated-background::before {
+    background-image: 
+      repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255, 255, 255, 0.01) 35px, rgba(255, 255, 255, 0.01) 70px);
+  }
+}
+
+/* Performance */
 @media (prefers-reduced-motion: reduce) {
-  .orb,
-  .line {
+  .shape,
+  .dot,
+  .animated-background::before {
     animation: none;
   }
-  
-  .orb-1 {
-    transform: translate(0, 0) scale(1);
-  }
-  
-  .orb-2 {
-    transform: translate(0, 0) scale(1);
-  }
-  
-  .orb-3 {
-    transform: translate(0, 0) scale(1);
-  }
 }
 
-/* Performance optimization */
-@media (max-width: 640px) {
-  .animated-background {
-    display: none; /* Hide on very small devices for better performance */
+/* Hide on small screens for performance */
+@media (max-width: 768px) {
+  .shape-3,
+  .shape-4,
+  .dot {
+    display: none;
   }
 }

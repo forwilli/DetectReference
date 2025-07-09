@@ -4,17 +4,16 @@ import './AnimatedBackground.css'
 const AnimatedBackground = () => {
   return (
     <div className="animated-background">
-      {/* Floating orbs with gradient */}
-      <div className="orb orb-1" />
-      <div className="orb orb-2" />
-      <div className="orb orb-3" />
+      {/* Minimal geometric shapes */}
+      <div className="shape shape-1" />
+      <div className="shape shape-2" />
+      <div className="shape shape-3" />
+      <div className="shape shape-4" />
       
-      {/* Geometric lines */}
-      <div className="geometric-lines">
-        <div className="line line-1" />
-        <div className="line line-2" />
-        <div className="line line-3" />
-      </div>
+      {/* Subtle floating dots */}
+      <div className="dot dot-1" />
+      <div className="dot dot-2" />
+      <div className="dot dot-3" />
     </div>
   )
 }
