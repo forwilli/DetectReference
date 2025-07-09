@@ -69,14 +69,16 @@ function App() {
         <div className="mx-auto max-w-[980px] py-4 md:py-6 lg:py-10 w-full">
           {verificationResults.length === 0 ? (
             <>
-              <div className="text-center space-y-6">
-                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
-                  <span className="block">{t('app.mainTitle')}</span>
-                  <span className="block mt-1 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light tracking-wide opacity-80">
+              <div className="text-center">
+                <div className="mb-8">
+                  <h1 className="hero-title text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-gray-900 mb-3">
+                    {t('app.mainTitle')}
+                  </h1>
+                  <h2 className="hero-subtitle text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
                     {t('app.mainSubtitle')}
-                  </span>
-                </h1>
-                <p className="mx-auto max-w-[600px] text-base text-muted-foreground sm:text-lg leading-relaxed">
+                  </h2>
+                </div>
+                <p className="hero-description mx-auto max-w-[680px] text-lg sm:text-xl mb-12">
                   {t('app.mainDescription')}
                 </p>
                 
