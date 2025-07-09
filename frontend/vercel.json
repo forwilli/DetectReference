@@ -2,13 +2,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "redirects": [
-    {
-      "source": "https://cite.alx37.com/:path*",
-      "destination": "https://swanref.org/:path*",
-      "permanent": true
-    }
-  ],
   "rewrites": [
     {
       "source": "/((?!google|sitemap|robots).*)",
