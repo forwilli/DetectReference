@@ -2,7 +2,7 @@
 
 A free web tool that detects AI hallucinations and fabricated references in academic papers. Verify citations with CrossRef and Google Scholar, then format them in APA, MLA, Chicago, or Harvard styles.
 
-🔗 **Live Demo**: [cite.alx37.com](https://cite.alx37.com)
+🔗 **Live Demo**: [swanref.org](https://swanref.org)
 
 ## Features
 
