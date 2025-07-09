@@ -25,12 +25,11 @@ function App() {
   const { t } = useTranslation()
 
   return (
-    <div className="min-h-screen bg-background flex flex-col relative">
+    <>
       {/* Animated Background */}
       <AnimatedBackground />
       
-      {/* Background Pattern - now subtle overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/30 via-white/50 to-gray-50/30 pointer-events-none -z-10" />
+      <div className="min-h-screen bg-transparent flex flex-col relative" style={{ isolation: 'isolate' }}>
       {/* Modern Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center">
@@ -150,6 +149,7 @@ function App() {
         </div>
       </footer>
     </div>
+    </>
   )
 }
 
