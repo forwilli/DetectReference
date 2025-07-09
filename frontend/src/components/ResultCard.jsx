@@ -3,10 +3,12 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import FormattedCitation from './FormattedCitation'
+import { useTranslation } from 'react-i18next'
 
 function ResultCard({ result }) {
   const [copied, setCopied] = useState(false)
   const [selectedFormat, setSelectedFormat] = useState('apa')
+  const { t } = useTranslation()
   
   // Copy citation with rich text formatting
   const copyRichText = async (htmlText, plainText) => {
@@ -59,17 +61,17 @@ function ResultCard({ result }) {
   const getStatusLabel = (status) => {
     switch (status) {
       case 'verified':
-        return 'VERIFIED'
+        return t('status.verified')
       case 'not_found':
-        return 'NOT FOUND'
+        return t('status.notFound')
       case 'mismatch':
-        return 'MISMATCH'
+        return t('status.suspicious')
       case 'ambiguous':
-        return 'AMBIGUOUS'
+        return t('status.suspicious')
       case 'error':
-        return 'ERROR'
+        return t('status.error')
       default:
-        return 'UNKNOWN'
+        return t('status.error')
     }
   }
 
@@ -105,7 +107,7 @@ function ResultCard({ result }) {
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:underline text-xs"
                 >
-                  View Source
+                  {t('buttons.viewSource')}
                 </a>
               )}
               <Button
@@ -114,7 +116,7 @@ function ResultCard({ result }) {
                 size="sm"
                 className="h-7 text-xs ml-auto"
               >
-                {copied ? 'Copied!' : 'Copy Reference'}
+                {copied ? t('buttons.copied') : t('buttons.copyReference')}
               </Button>
             </div>
           </div>

@@ -3,6 +3,12 @@
     "title": "Detector de Citas con IA",
     "subtitle": "Detecta referencias falsas de ChatGPT, Claude u otras herramientas de IA"
   },
+  "nav": {
+    "docs": "Documentos",
+    "components": "Componentes", 
+    "examples": "Ejemplos",
+    "github": "GitHub"
+  },
   "input": {
     "placeholder": "Pega aquí las referencias generadas por IA para verificar si son reales...\n\nEjemplo:\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
     "helperText": "Detecta citas falsas de ChatGPT, Claude u otras herramientas de IA",
@@ -16,7 +22,10 @@
     "stop": "Detener",
     "copyAll": "Copiar Todo",
     "exportResults": "Exportar Resultados",
-    "verifyMore": "Verificar Más Referencias"
+    "verifyMore": "Verificar Más Referencias",
+    "copyReference": "Copiar Referencia",
+    "copied": "¡Copiado!",
+    "viewSource": "Ver Fuente"
   },
   "status": {
     "verified": "Verificado",

@@ -3,6 +3,12 @@
     "title": "AI引用チェッカー",
     "subtitle": "ChatGPT、Claude、その他のAIツールからの偽の参考文献を検出"
   },
+  "nav": {
+    "docs": "ドキュメント",
+    "components": "コンポーネント", 
+    "examples": "例",
+    "github": "GitHub"
+  },
   "input": {
     "placeholder": "AI生成の参考文献をここに貼り付けて、実在するか確認してください...\n\n例：\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
     "helperText": "ChatGPT、Claude、その他のAIツールからの偽の引用を検出",
@@ -16,7 +22,10 @@
     "stop": "停止",
     "copyAll": "すべてコピー",
     "exportResults": "結果をエクスポート",
-    "verifyMore": "さらに参考文献を検証"
+    "verifyMore": "さらに参考文献を検証",
+    "copyReference": "参考文献をコピー",
+    "copied": "コピーしました！",
+    "viewSource": "ソースを表示"
   },
   "status": {
     "verified": "検証済み",

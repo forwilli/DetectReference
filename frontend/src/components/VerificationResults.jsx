@@ -2,9 +2,11 @@ import React from 'react'
 import useStore from '../store/useStore'
 import ResultCard from './ResultCard'
 import { Button } from '@/components/ui/button'
+import { useTranslation } from 'react-i18next'
 
 function VerificationResults() {
   const { verificationResults, resetState, progress, isVerifying } = useStore()
+  const { t } = useTranslation()
 
   const handleNewVerification = () => {
     resetState()
@@ -14,16 +16,16 @@ function VerificationResults() {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground mb-2">Verification Results</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground mb-2">{t('results.title')}</h2>
           <p className="text-muted-foreground">
-            Verified {verificationResults.filter(r => r.status === 'verified').length} of {verificationResults.length} references
+            {t('results.summary.verified')} {verificationResults.filter(r => r.status === 'verified').length} / {verificationResults.length} {t('results.summary.total')}
           </p>
         </div>
         <Button
           onClick={handleNewVerification}
           className="bg-primary hover:bg-primary/90 text-primary-foreground"
         >
-          New Verification
+          {t('buttons.verifyMore')}
         </Button>
       </div>
 
@@ -36,7 +38,7 @@ function VerificationResults() {
             />
           </div>
           <p className="text-sm text-muted-foreground text-center">
-            Processing references... {progress}%
+            {t('results.verifying')} {progress}%
           </p>
         </div>
       )}

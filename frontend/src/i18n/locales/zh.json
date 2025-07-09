@@ -3,6 +3,12 @@
     "title": "AI引用检测器",
     "subtitle": "检测ChatGPT、Claude等AI工具生成的虚假引用"
   },
+  "nav": {
+    "docs": "文档",
+    "components": "组件", 
+    "examples": "示例",
+    "github": "GitHub"
+  },
   "input": {
     "placeholder": "在此粘贴AI生成的参考文献，检查是否真实存在...\n\n示例：\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
     "helperText": "检测来自ChatGPT、Claude等AI工具的虚假引用",
@@ -16,7 +22,10 @@
     "stop": "停止",
     "copyAll": "复制全部",
     "exportResults": "导出结果",
-    "verifyMore": "验证更多引用"
+    "verifyMore": "验证更多引用",
+    "copyReference": "复制引用",
+    "copied": "已复制!",
+    "viewSource": "查看来源"
   },
   "status": {
     "verified": "已验证",

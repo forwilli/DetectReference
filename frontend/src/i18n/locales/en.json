@@ -3,6 +3,12 @@
     "title": "AI Citation Checker",
     "subtitle": "Detect fake references from ChatGPT, Claude, or other AI tools"
   },
+  "nav": {
+    "docs": "Docs",
+    "components": "Components", 
+    "examples": "Examples",
+    "github": "GitHub"
+  },
   "input": {
     "placeholder": "Paste AI-generated references here to check if they're real...\n\nExample:\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
     "helperText": "Detects fake citations from ChatGPT, Claude, or other AI tools",
@@ -16,7 +22,10 @@
     "stop": "Stop",
     "copyAll": "Copy All",
     "exportResults": "Export Results",
-    "verifyMore": "Verify More References"
+    "verifyMore": "Verify More References",
+    "copyReference": "Copy Reference",
+    "copied": "Copied!",
+    "viewSource": "View Source"
   },
   "status": {
     "verified": "Verified",
