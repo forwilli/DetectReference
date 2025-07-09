@@ -6,202 +6,80 @@
   height: 100vh;
   overflow: hidden;
   pointer-events: none;
+  background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
 }
 
-/* Subtle grain texture */
-.animated-background::before {
-  content: '';
+/* Single elegant circle */
+.circle {
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background-image: 
-    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0, 0, 0, 0.01) 35px, rgba(0, 0, 0, 0.01) 70px);
-  animation: grain 8s steps(10) infinite;
-  opacity: 0.4;
-}
-
-/* Minimal geometric shapes */
-.shape {
-  position: absolute;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+  border-radius: 50%;
   background: transparent;
 }
 
-.shape-1 {
-  width: 800px;
-  height: 800px;
-  top: -400px;
-  right: -400px;
-  border-radius: 50%;
-  animation: rotate-slow 60s linear infinite;
+.circle-1 {
+  width: 100vw;
+  height: 100vw;
+  max-width: 1200px;
+  max-height: 1200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: breathe 20s ease-in-out infinite;
 }
 
-.shape-2 {
-  width: 600px;
-  height: 600px;
-  bottom: -300px;
-  left: -300px;
-  border-radius: 50%;
-  animation: rotate-reverse 90s linear infinite;
-}
-
-.shape-3 {
-  width: 1px;
-  height: 150vh;
-  top: -25vh;
-  left: 20%;
-  transform: rotate(15deg);
-  animation: slide-vertical 40s ease-in-out infinite;
-  background: linear-gradient(to bottom, 
-    transparent 0%, 
-    rgba(0, 0, 0, 0.03) 50%, 
-    transparent 100%);
-  border: none;
-}
-
-.shape-4 {
-  width: 1px;
-  height: 150vh;
-  top: -25vh;
-  right: 30%;
-  transform: rotate(-20deg);
-  animation: slide-vertical-reverse 35s ease-in-out infinite;
-  background: linear-gradient(to bottom, 
-    transparent 0%, 
-    rgba(0, 0, 0, 0.02) 50%, 
-    transparent 100%);
-  border: none;
-}
-
-/* Subtle floating dots */
-.dot {
+/* Soft gradient overlay */
+.gradient-overlay {
   position: absolute;
-  width: 2px;
-  height: 2px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.01) 100%
+  );
 }
 
-.dot-1 {
-  top: 20%;
-  left: 10%;
-  animation: float-dot 20s ease-in-out infinite;
-}
-
-.dot-2 {
-  top: 60%;
-  right: 15%;
-  animation: float-dot 25s ease-in-out infinite reverse;
-  animation-delay: 5s;
-}
-
-.dot-3 {
-  bottom: 30%;
-  left: 40%;
-  animation: float-dot 30s ease-in-out infinite;
-  animation-delay: 10s;
-}
-
-/* Animations */
-@keyframes rotate-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes rotate-reverse {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
-}
-
-@keyframes slide-vertical {
-  0%, 100% { transform: translateY(0) rotate(15deg); }
-  50% { transform: translateY(100px) rotate(15deg); }
-}
-
-@keyframes slide-vertical-reverse {
-  0%, 100% { transform: translateY(0) rotate(-20deg); }
-  50% { transform: translateY(-80px) rotate(-20deg); }
-}
-
-@keyframes float-dot {
-  0%, 100% { 
-    transform: translate(0, 0);
-    opacity: 0.1;
+/* Minimal animations */
+@keyframes breathe {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
   }
-  25% { 
-    transform: translate(30px, -20px);
-    opacity: 0.2;
-  }
-  50% { 
-    transform: translate(-20px, 30px);
-    opacity: 0.1;
-  }
-  75% { 
-    transform: translate(-30px, -10px);
-    opacity: 0.15;
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 0.5;
   }
 }
 
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-5%, -5%); }
-  20% { transform: translate(-10%, 5%); }
-  30% { transform: translate(5%, -10%); }
-  40% { transform: translate(-5%, 15%); }
-  50% { transform: translate(-10%, 5%); }
-  60% { transform: translate(15%, 0); }
-  70% { transform: translate(0, 10%); }
-  80% { transform: translate(-15%, 0); }
-  90% { transform: translate(10%, 5%); }
-}
-
-/* Light mode adjustments */
-@media (prefers-color-scheme: light) {
-  .animated-background {
-    background: linear-gradient(to bottom, #fafafa, #ffffff);
-  }
-}
-
-/* Dark mode adjustments */
+/* Dark mode support */
 @media (prefers-color-scheme: dark) {
-  .shape {
-    border-color: rgba(255, 255, 255, 0.05);
+  .animated-background {
+    background: linear-gradient(to bottom, #0a0a0a 0%, #000000 100%);
   }
   
-  .shape-3,
-  .shape-4 {
-    background: linear-gradient(to bottom, 
-      transparent 0%, 
-      rgba(255, 255, 255, 0.03) 50%, 
-      transparent 100%);
+  .circle {
+    border-color: rgba(255, 255, 255, 0.02);
   }
   
-  .dot {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  .animated-background::before {
-    background-image: 
-      repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255, 255, 255, 0.01) 35px, rgba(255, 255, 255, 0.01) 70px);
+  .gradient-overlay {
+    background: radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
   }
 }
 
-/* Performance */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .shape,
-  .dot,
-  .animated-background::before {
+  .circle {
     animation: none;
   }
 }
 
-/* Hide on small screens for performance */
+/* Mobile optimization */
 @media (max-width: 768px) {
-  .shape-3,
-  .shape-4,
-  .dot {
+  .animated-background {
     display: none;
   }
 }
