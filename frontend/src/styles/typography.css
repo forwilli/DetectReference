@@ -3,34 +3,36 @@
 
 /* Typography System */
 :root {
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-serif: 'Times New Roman', Times, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', 'Inter', Arial, sans-serif;
+  --font-geometric: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
 }
 
 body {
   font-family: var(--font-sans);
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Hero Title Styles */
 .hero-title {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
+  font-family: var(--font-geometric);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
   color: #111827;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 .hero-subtitle {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
+  font-family: var(--font-geometric);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
   color: #4b5563;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 .hero-description {
