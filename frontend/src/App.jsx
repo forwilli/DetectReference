@@ -70,20 +70,20 @@ function App() {
           {verificationResults.length === 0 ? (
             <>
               <div className="text-center">
-                <div className="mb-10">
-                  <h1 className="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-3">
+                <div className="mb-6">
+                  <h1 className="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2">
                     {t('app.mainTitle')}
                   </h1>
                   <h2 className="hero-subtitle text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
                     {t('app.mainSubtitle')}
                   </h2>
                 </div>
-                <p className="hero-description mx-auto max-w-[680px] text-base sm:text-lg mb-12 opacity-75">
+                <p className="hero-description mx-auto max-w-[680px] text-base sm:text-lg mb-8 opacity-75">
                   {t('app.mainDescription')}
                 </p>
                 
                 {/* Tab Navigation */}
-                <div className="flex justify-center gap-4 pt-8 pb-10">
+                <div className="flex justify-center gap-4 pt-4 pb-6">
                   <button
                     onClick={() => setActiveTab('verify')}
                     className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-8 ${
