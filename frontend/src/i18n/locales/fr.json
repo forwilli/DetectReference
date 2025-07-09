@@ -1,0 +1,78 @@
+{
+  "app": {
+    "title": "Vérificateur de Citations IA",
+    "subtitle": "Détecter les fausses références de ChatGPT, Claude ou autres outils IA",
+    "mainTitle": "Vérificateur de Références Gratuit",
+    "mainSubtitle": "& Générateur de Citations",
+    "mainDescription": "Détectez les hallucinations IA et les références fabriquées dans les articles académiques. Vérifiez l'authenticité avec CrossRef et Google Scholar, puis formatez dans n'importe quel style de citation."
+  },
+  "nav": {
+    "docs": "Docs",
+    "components": "Composants", 
+    "examples": "Exemples",
+    "github": "GitHub"
+  },
+  "tabs": {
+    "verify": "Vérifier les Références",
+    "format": "Formater les Citations"
+  },
+  "input": {
+    "placeholder": "Collez ici les références générées par IA pour vérifier si elles sont réelles...\n\nExemple:\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
+    "helperText": "Détecte les fausses citations de ChatGPT, Claude ou autres outils IA",
+    "pasteYourReferences": "Collez les références générées par IA à vérifier",
+    "onePerLine": "Une par ligne",
+    "verifyWithDatabases": "Nous vérifions avec CrossRef et Google Scholar"
+  },
+  "buttons": {
+    "detectHallucinations": "Détecter les Hallucinations IA",
+    "tryExamples": "Tester avec des Exemples IA",
+    "stop": "Arrêter",
+    "copyAll": "Tout Copier",
+    "exportResults": "Exporter les Résultats",
+    "verifyMore": "Vérifier Plus de Références",
+    "copyReference": "Copier la Référence",
+    "copied": "Copié!",
+    "viewSource": "Voir la Source"
+  },
+  "status": {
+    "verified": "Vérifié",
+    "suspicious": "Suspect", 
+    "notFound": "Non Trouvé",
+    "error": "Erreur"
+  },
+  "results": {
+    "title": "Résultats de Vérification",
+    "verifying": "Vérification de vos références...",
+    "summary": {
+      "total": "Références Totales",
+      "verified": "Vérifiées",
+      "suspicious": "Suspectes",
+      "notFound": "Non Trouvées"
+    },
+    "messages": {
+      "found": "Trouvé dans les bases de données académiques",
+      "notFound": "Non trouvé dans aucune base de données académique - probablement une hallucination IA",
+      "suspicious": "Correspondance similaire mais pas exacte trouvée - vérifier manuellement",
+      "error": "Erreur lors de la vérification"
+    }
+  },
+  "features": {
+    "feature1": {
+      "title": "Vérification Instantanée",
+      "description": "Vérifier contre 150M+ articles académiques"
+    },
+    "feature2": {
+      "title": "Détection d'Hallucinations IA",
+      "description": "Identifier les fausses citations de ChatGPT et autres IA"
+    },
+    "feature3": {
+      "title": "Gratuit Pour Toujours",
+      "description": "Pas d'inscription, pas de limites, toujours gratuit"
+    }
+  },
+  "errors": {
+    "emptyInput": "Veuillez entrer au moins une référence",
+    "networkError": "Erreur réseau. Veuillez réessayer.",
+    "serverError": "Erreur serveur. Veuillez réessayer plus tard."
+  }
+}

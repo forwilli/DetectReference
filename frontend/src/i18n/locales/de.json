@@ -1,0 +1,78 @@
+{
+  "app": {
+    "title": "KI-Zitatprüfer",
+    "subtitle": "Erkennen Sie gefälschte Referenzen von ChatGPT, Claude oder anderen KI-Tools",
+    "mainTitle": "Kostenloser Referenzprüfer",
+    "mainSubtitle": "& Zitatgenerator",
+    "mainDescription": "Erkennen Sie KI-Halluzinationen und erfundene Referenzen in wissenschaftlichen Arbeiten. Überprüfen Sie die Echtheit mit CrossRef und Google Scholar und formatieren Sie in jedem Zitierstil."
+  },
+  "nav": {
+    "docs": "Dokumentation",
+    "components": "Komponenten", 
+    "examples": "Beispiele",
+    "github": "GitHub"
+  },
+  "tabs": {
+    "verify": "Referenzen Prüfen",
+    "format": "Zitate Formatieren"
+  },
+  "input": {
+    "placeholder": "Fügen Sie hier KI-generierte Referenzen ein, um zu prüfen, ob sie echt sind...\n\nBeispiel:\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
+    "helperText": "Erkennt gefälschte Zitate von ChatGPT, Claude oder anderen KI-Tools",
+    "pasteYourReferences": "Fügen Sie KI-generierte Referenzen zum Prüfen ein",
+    "onePerLine": "Eine pro Zeile",
+    "verifyWithDatabases": "Wir prüfen mit CrossRef und Google Scholar"
+  },
+  "buttons": {
+    "detectHallucinations": "KI-Halluzinationen Erkennen",
+    "tryExamples": "Mit KI-Beispielen Testen",
+    "stop": "Stopp",
+    "copyAll": "Alles Kopieren",
+    "exportResults": "Ergebnisse Exportieren",
+    "verifyMore": "Weitere Referenzen Prüfen",
+    "copyReference": "Referenz Kopieren",
+    "copied": "Kopiert!",
+    "viewSource": "Quelle Anzeigen"
+  },
+  "status": {
+    "verified": "Verifiziert",
+    "suspicious": "Verdächtig", 
+    "notFound": "Nicht Gefunden",
+    "error": "Fehler"
+  },
+  "results": {
+    "title": "Prüfergebnisse",
+    "verifying": "Ihre Referenzen werden überprüft...",
+    "summary": {
+      "total": "Referenzen Gesamt",
+      "verified": "Verifiziert",
+      "suspicious": "Verdächtig",
+      "notFound": "Nicht Gefunden"
+    },
+    "messages": {
+      "found": "In akademischen Datenbanken gefunden",
+      "notFound": "In keiner akademischen Datenbank gefunden - wahrscheinlich KI-Halluzination",
+      "suspicious": "Ähnliche aber nicht exakte Übereinstimmung gefunden - manuell überprüfen",
+      "error": "Fehler bei der Überprüfung"
+    }
+  },
+  "features": {
+    "feature1": {
+      "title": "Sofortige Überprüfung",
+      "description": "Prüfung gegen 150M+ akademische Artikel"
+    },
+    "feature2": {
+      "title": "KI-Halluzinationserkennung",
+      "description": "Identifiziert gefälschte Zitate von ChatGPT und anderen KIs"
+    },
+    "feature3": {
+      "title": "Für Immer Kostenlos",
+      "description": "Keine Registrierung, keine Grenzen, immer kostenlos"
+    }
+  },
+  "errors": {
+    "emptyInput": "Bitte geben Sie mindestens eine Referenz ein",
+    "networkError": "Netzwerkfehler. Bitte versuchen Sie es erneut.",
+    "serverError": "Serverfehler. Bitte versuchen Sie es später erneut."
+  }
+}

@@ -6,7 +6,11 @@ const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
   { code: 'zh', name: '中文', flag: '🇨🇳' },
   { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'ja', name: '日本語', flag: '🇯🇵' }
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'pt', name: 'Português', flag: '🇧🇷' },
+  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' }
 ];
 
 function LanguageSelector() {
@@ -42,7 +46,7 @@ function LanguageSelector() {
       </Button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg z-50">
+        <div className="absolute right-0 mt-2 w-48 max-h-80 overflow-y-auto bg-background border border-border rounded-lg shadow-lg z-50">
           {languages.map((lang) => (
             <button
               key={lang.code}

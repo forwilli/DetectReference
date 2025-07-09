@@ -1,13 +1,20 @@
 {
   "app": {
     "title": "AI Citation Checker",
-    "subtitle": "Detect fake references from ChatGPT, Claude, or other AI tools"
+    "subtitle": "Detect fake references from ChatGPT, Claude, or other AI tools",
+    "mainTitle": "Free Reference Verifier",
+    "mainSubtitle": "& Citation Generator",
+    "mainDescription": "Detect AI hallucinations and fabricated references in academic papers. Verify authenticity with CrossRef and Google Scholar, then format in any citation style."
   },
   "nav": {
     "docs": "Docs",
     "components": "Components", 
     "examples": "Examples",
     "github": "GitHub"
+  },
+  "tabs": {
+    "verify": "Verify References",
+    "format": "Format Citations"
   },
   "input": {
     "placeholder": "Paste AI-generated references here to check if they're real...\n\nExample:\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",

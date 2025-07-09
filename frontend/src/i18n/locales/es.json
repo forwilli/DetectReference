@@ -1,13 +1,20 @@
 {
   "app": {
     "title": "Detector de Citas con IA",
-    "subtitle": "Detecta referencias falsas de ChatGPT, Claude u otras herramientas de IA"
+    "subtitle": "Detecta referencias falsas de ChatGPT, Claude u otras herramientas de IA",
+    "mainTitle": "Verificador de Referencias Gratuito",
+    "mainSubtitle": "& Generador de Citas",
+    "mainDescription": "Detecta alucinaciones de IA y referencias fabricadas en artículos académicos. Verifica la autenticidad con CrossRef y Google Scholar, luego formatea en cualquier estilo de cita."
   },
   "nav": {
     "docs": "Documentos",
     "components": "Componentes", 
     "examples": "Ejemplos",
     "github": "GitHub"
+  },
+  "tabs": {
+    "verify": "Verificar Referencias",
+    "format": "Formatear Citas"
   },
   "input": {
     "placeholder": "Pega aquí las referencias generadas por IA para verificar si son reales...\n\nEjemplo:\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",

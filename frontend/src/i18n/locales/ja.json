@@ -1,13 +1,20 @@
 {
   "app": {
     "title": "AI引用チェッカー",
-    "subtitle": "ChatGPT、Claude、その他のAIツールからの偽の参考文献を検出"
+    "subtitle": "ChatGPT、Claude、その他のAIツールからの偽の参考文献を検出",
+    "mainTitle": "無料参考文献検証ツール",
+    "mainSubtitle": "＆ 引用ジェネレーター",
+    "mainDescription": "学術論文におけるAI幻覚や捏造された参考文献を検出します。CrossRefとGoogle Scholarで真正性を確認し、あらゆる引用スタイルでフォーマットします。"
   },
   "nav": {
     "docs": "ドキュメント",
     "components": "コンポーネント", 
     "examples": "例",
     "github": "GitHub"
+  },
+  "tabs": {
+    "verify": "参考文献を検証",
+    "format": "引用をフォーマット"
   },
   "input": {
     "placeholder": "AI生成の参考文献をここに貼り付けて、実在するか確認してください...\n\n例：\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",

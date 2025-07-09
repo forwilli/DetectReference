@@ -1,13 +1,20 @@
 {
   "app": {
     "title": "AI引用检测器",
-    "subtitle": "检测ChatGPT、Claude等AI工具生成的虚假引用"
+    "subtitle": "检测ChatGPT、Claude等AI工具生成的虚假引用",
+    "mainTitle": "免费参考文献验证器",
+    "mainSubtitle": "& 引用生成器",
+    "mainDescription": "检测学术论文中的AI幻觉和虚构引用。通过CrossRef和Google Scholar验证真实性，然后格式化为任何引用样式。"
   },
   "nav": {
     "docs": "文档",
     "components": "组件", 
     "examples": "示例",
     "github": "GitHub"
+  },
+  "tabs": {
+    "verify": "验证引用",
+    "format": "格式化引用"
   },
   "input": {
     "placeholder": "在此粘贴AI生成的参考文献，检查是否真实存在...\n\n示例：\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",

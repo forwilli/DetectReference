@@ -1,0 +1,78 @@
+{
+  "app": {
+    "title": "AI उद्धरण जांचकर्ता",
+    "subtitle": "ChatGPT, Claude या अन्य AI टूल्स से नकली संदर्भों का पता लगाएं",
+    "mainTitle": "मुफ्त संदर्भ सत्यापक",
+    "mainSubtitle": "और उद्धरण जनरेटर",
+    "mainDescription": "शैक्षणिक पत्रों में AI भ्रम और मनगढ़ंत संदर्भों का पता लगाएं। CrossRef और Google Scholar के साथ प्रामाणिकता सत्यापित करें, फिर किसी भी उद्धरण शैली में प्रारूपित करें।"
+  },
+  "nav": {
+    "docs": "दस्तावेज़",
+    "components": "घटक", 
+    "examples": "उदाहरण",
+    "github": "GitHub"
+  },
+  "tabs": {
+    "verify": "संदर्भ सत्यापित करें",
+    "format": "उद्धरण प्रारूपित करें"
+  },
+  "input": {
+    "placeholder": "AI द्वारा जनरेट किए गए संदर्भों को यहां पेस्ट करें कि वे वास्तविक हैं या नहीं...\n\nउदाहरण:\nSmith, J. (2020). Title of the article. Journal Name, 10(2), 123-145.\nJohnson, M. (2019). Book title. Publisher Name.",
+    "helperText": "ChatGPT, Claude या अन्य AI टूल्स से नकली उद्धरणों का पता लगाता है",
+    "pasteYourReferences": "जांच के लिए AI-जनरेटेड संदर्भ पेस्ट करें",
+    "onePerLine": "प्रति पंक्ति एक",
+    "verifyWithDatabases": "हम CrossRef और Google Scholar से सत्यापित करते हैं"
+  },
+  "buttons": {
+    "detectHallucinations": "AI भ्रम का पता लगाएं",
+    "tryExamples": "AI उदाहरणों के साथ परीक्षण करें",
+    "stop": "रोकें",
+    "copyAll": "सभी कॉपी करें",
+    "exportResults": "परिणाम निर्यात करें",
+    "verifyMore": "अधिक संदर्भ सत्यापित करें",
+    "copyReference": "संदर्भ कॉपी करें",
+    "copied": "कॉपी किया गया!",
+    "viewSource": "स्रोत देखें"
+  },
+  "status": {
+    "verified": "सत्यापित",
+    "suspicious": "संदिग्ध", 
+    "notFound": "नहीं मिला",
+    "error": "त्रुटि"
+  },
+  "results": {
+    "title": "सत्यापन परिणाम",
+    "verifying": "आपके संदर्भों को सत्यापित कर रहे हैं...",
+    "summary": {
+      "total": "कुल संदर्भ",
+      "verified": "सत्यापित",
+      "suspicious": "संदिग्ध",
+      "notFound": "नहीं मिले"
+    },
+    "messages": {
+      "found": "शैक्षणिक डेटाबेस में मिला",
+      "notFound": "किसी भी शैक्षणिक डेटाबेस में नहीं मिला - संभवतः AI भ्रम",
+      "suspicious": "समान लेकिन सटीक मिलान नहीं मिला - मैन्युअल रूप से सत्यापित करें",
+      "error": "सत्यापन के दौरान त्रुटि"
+    }
+  },
+  "features": {
+    "feature1": {
+      "title": "तत्काल सत्यापन",
+      "description": "150M+ शैक्षणिक लेखों के विरुद्ध जांच"
+    },
+    "feature2": {
+      "title": "AI भ्रम का पता लगाना",
+      "description": "ChatGPT और अन्य AI से नकली उद्धरणों की पहचान"
+    },
+    "feature3": {
+      "title": "हमेशा मुफ्त",
+      "description": "कोई पंजीकरण नहीं, कोई सीमा नहीं, हमेशा मुफ्त"
+    }
+  },
+  "errors": {
+    "emptyInput": "कृपया कम से कम एक संदर्भ दर्ज करें",
+    "networkError": "नेटवर्क त्रुटि। कृपया पुनः प्रयास करें।",
+    "serverError": "सर्वर त्रुटि। कृपया बाद में पुनः प्रयास करें।"
+  }
+}

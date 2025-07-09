@@ -78,13 +78,12 @@ function App() {
             <>
               <div className="text-center space-y-4">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                  Free Reference Verifier
+                  {t('app.mainTitle')}
                   <br className="hidden sm:inline" />
-                  <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">& Citation Generator</span>
+                  <span className="bg-gradient-to-r from-gray-600 to-gray-400 bg-clip-text text-transparent">{t('app.mainSubtitle')}</span>
                 </h1>
                 <p className="mx-auto max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-                  Detect AI hallucinations and fabricated references in academic papers. 
-                  Verify authenticity with CrossRef and Google Scholar, then format in any citation style.
+                  {t('app.mainDescription')}
                 </p>
                 
                 {/* Tab Navigation */}
@@ -97,7 +96,7 @@ function App() {
                         : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                     }`}
                   >
-                    Verify References
+                    {t('tabs.verify')}
                   </button>
                   <button
                     onClick={() => setActiveTab('format')}
@@ -107,7 +106,7 @@ function App() {
                         : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                     }`}
                   >
-                    Format Citations
+                    {t('tabs.format')}
                   </button>
                 </div>
               </div>
