@@ -163,12 +163,12 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
               </svg>
             </div>
             <div className="flex-1">
-              <p className="text-sm font-medium text-foreground">Paste your references</p>
-              <p className="text-xs text-muted-foreground">One per line • We verify with CrossRef & Google Scholar</p>
+              <p className="text-sm font-medium text-foreground">Paste AI-generated references to check</p>
+              <p className="text-xs text-muted-foreground">Detects fake citations from ChatGPT, Claude, or other AI tools</p>
             </div>
             <div className="flex-shrink-0 hidden sm:block">
               <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
-                Detects Hallucinations
+                AI Hallucination Detector
               </span>
             </div>
           </div>
@@ -195,7 +195,7 @@ Winn, M., Kirchgeorg, M., Griffiths, A., Linnenluecke, M. K., & Günther, E. (20
               <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M11 2C6.03 2 2 6.03 2 11C2 15.97 6.03 20 11 20C13.39 20 15.56 19.12 17.18 17.69L20.3 20.8C20.5 21 20.77 21.1 21.03 21.1C21.29 21.1 21.56 21 21.76 20.8C22.17 20.39 22.17 19.73 21.76 19.32L18.65 16.22C19.57 14.71 20.1 12.93 20.1 11C20.1 6.03 16.07 2 11.1 2H11ZM11 4C14.87 4 18 7.13 18 11C18 14.87 14.87 18 11 18C7.13 18 4 14.87 4 11C4 7.13 7.13 4 11 4Z" fill="currentColor"/>
               </svg>
-              Verify References
+              Detect AI Hallucinations
             </Button>
           ) : (
             <Button

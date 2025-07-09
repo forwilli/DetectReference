@@ -2,8 +2,6 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /_next/
-Disallow: /admin/
 
 # Sitemap
 Sitemap: https://swanref.org/sitemap.xml
