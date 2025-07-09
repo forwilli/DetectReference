@@ -2,9 +2,9 @@
   "app": {
     "title": "AI引用检测器",
     "subtitle": "检测ChatGPT、Claude等AI工具生成的虚假引用",
-    "mainTitle": "免费参考文献验证器",
-    "mainSubtitle": "& 引用生成器",
-    "mainDescription": "检测学术论文中的AI幻觉和虚构引用。通过CrossRef和Google Scholar验证真实性，然后格式化为任何引用样式。"
+    "mainTitle": "守护学术真实",
+    "mainSubtitle": "在AI时代",
+    "mainDescription": "当人工智能产生幻觉，学术诚信就会受损。即时验证引用，对比1.5亿+真实论文。"
   },
   "nav": {
     "docs": "文档",

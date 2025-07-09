@@ -2,9 +2,9 @@
   "app": {
     "title": "Vérificateur de Citations IA",
     "subtitle": "Détecter les fausses références de ChatGPT, Claude ou autres outils IA",
-    "mainTitle": "Vérificateur de Références Gratuit",
-    "mainSubtitle": "& Générateur de Citations",
-    "mainDescription": "Détectez les hallucinations IA et les références fabriquées dans les articles académiques. Vérifiez l'authenticité avec CrossRef et Google Scholar, puis formatez dans n'importe quel style de citation."
+    "mainTitle": "Vérifiez la Vérité Académique",
+    "mainSubtitle": "à l'Ère de l'IA",
+    "mainDescription": "Quand l'intelligence artificielle hallucine, l'intégrité académique souffre. Vérifiez instantanément les citations contre plus de 150M d'articles réels."
   },
   "nav": {
     "docs": "Docs",

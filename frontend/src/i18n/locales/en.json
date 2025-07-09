@@ -2,9 +2,9 @@
   "app": {
     "title": "AI Citation Checker",
     "subtitle": "Detect fake references from ChatGPT, Claude, or other AI tools",
-    "mainTitle": "Free Reference Verifier",
-    "mainSubtitle": "& Citation Generator",
-    "mainDescription": "Detect AI hallucinations and fabricated references in academic papers. Verify authenticity with CrossRef and Google Scholar, then format in any citation style."
+    "mainTitle": "Verify Academic Truth",
+    "mainSubtitle": "in the Age of AI",
+    "mainDescription": "When artificial intelligence hallucinates, academic integrity suffers. Instantly verify citations against 150M+ real papers."
   },
   "nav": {
     "docs": "Docs",

@@ -2,9 +2,9 @@
   "app": {
     "title": "AI引用チェッカー",
     "subtitle": "ChatGPT、Claude、その他のAIツールからの偽の参考文献を検出",
-    "mainTitle": "無料参考文献検証ツール",
-    "mainSubtitle": "＆ 引用ジェネレーター",
-    "mainDescription": "学術論文におけるAI幻覚や捏造された参考文献を検出します。CrossRefとGoogle Scholarで真正性を確認し、あらゆる引用スタイルでフォーマットします。"
+    "mainTitle": "学術的真実を検証せよ",
+    "mainSubtitle": "AI時代において",
+    "mainDescription": "人工知能が幻覚を見るとき、学術的誠実性が損なわれる。1億5000万以上の実在する論文と即座に引用を照合。"
   },
   "nav": {
     "docs": "ドキュメント",

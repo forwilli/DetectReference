@@ -2,9 +2,9 @@
   "app": {
     "title": "KI-Zitatprüfer",
     "subtitle": "Erkennen Sie gefälschte Referenzen von ChatGPT, Claude oder anderen KI-Tools",
-    "mainTitle": "Kostenloser Referenzprüfer",
-    "mainSubtitle": "& Zitatgenerator",
-    "mainDescription": "Erkennen Sie KI-Halluzinationen und erfundene Referenzen in wissenschaftlichen Arbeiten. Überprüfen Sie die Echtheit mit CrossRef und Google Scholar und formatieren Sie in jedem Zitierstil."
+    "mainTitle": "Prüfe die Akademische Wahrheit",
+    "mainSubtitle": "im Zeitalter der KI",
+    "mainDescription": "Wenn künstliche Intelligenz halluziniert, leidet die akademische Integrität. Prüfen Sie Zitate sofort gegen über 150M echte Artikel."
   },
   "nav": {
     "docs": "Dokumentation",
